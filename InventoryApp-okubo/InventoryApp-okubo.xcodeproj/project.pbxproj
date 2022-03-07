@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F5BA4CF27D64C0A00338C12 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5BA4CE27D64C0A00338C12 /* HomeView.swift */; };
+		7F5BA4D127D64C8800338C12 /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5BA4D027D64C8800338C12 /* FolderView.swift */; };
+		7F5BA4D327D64CE800338C12 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5BA4D227D64CE800338C12 /* SettingView.swift */; };
 		7F70E1CE27D1E55900C483B9 /* InventoryApp_okuboApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F70E1CD27D1E55900C483B9 /* InventoryApp_okuboApp.swift */; };
 		7F70E1D027D1E55900C483B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F70E1CF27D1E55900C483B9 /* ContentView.swift */; };
 		7F70E1D227D1E55A00C483B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F70E1D127D1E55A00C483B9 /* Assets.xcassets */; };
@@ -14,6 +17,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7F5BA4CE27D64C0A00338C12 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		7F5BA4D027D64C8800338C12 /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
+		7F5BA4D227D64CE800338C12 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		7F70E1CA27D1E55900C483B9 /* InventoryApp-okubo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "InventoryApp-okubo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F70E1CD27D1E55900C483B9 /* InventoryApp_okuboApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryApp_okuboApp.swift; sourceTree = "<group>"; };
 		7F70E1CF27D1E55900C483B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,6 +59,9 @@
 			children = (
 				7F70E1CD27D1E55900C483B9 /* InventoryApp_okuboApp.swift */,
 				7F70E1CF27D1E55900C483B9 /* ContentView.swift */,
+				7F5BA4CE27D64C0A00338C12 /* HomeView.swift */,
+				7F5BA4D027D64C8800338C12 /* FolderView.swift */,
+				7F5BA4D227D64CE800338C12 /* SettingView.swift */,
 				7F70E1D127D1E55A00C483B9 /* Assets.xcassets */,
 				7F70E1D327D1E55A00C483B9 /* Preview Content */,
 			);
@@ -137,7 +146,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F5BA4CF27D64C0A00338C12 /* HomeView.swift in Sources */,
+				7F5BA4D327D64CE800338C12 /* SettingView.swift in Sources */,
 				7F70E1D027D1E55900C483B9 /* ContentView.swift in Sources */,
+				7F5BA4D127D64C8800338C12 /* FolderView.swift in Sources */,
 				7F70E1CE27D1E55900C483B9 /* InventoryApp_okuboApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
