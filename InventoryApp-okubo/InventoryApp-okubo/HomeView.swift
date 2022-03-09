@@ -9,7 +9,14 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        Text("ホーム画面")
+        NavigationView {
+            VStack {
+                NavigationLink(destination: RegisterView()) {
+                    Text("登録画面へ")
+                }
+            }// VStack
+            .navigationTitle("ホーム")
+        }// NavigationView
     }
 }
 

@@ -9,7 +9,14 @@ import SwiftUI
 
 struct FolderView: View {
     var body: some View {
-        Text("フォルダ画面")
+        NavigationView {
+            Form {
+                NavigationLink(destination: ItemListView()) {
+                    Text("商品リスト")
+                }
+            }// Form
+            .navigationTitle("フォルダ")
+        }// NavigationView
     }
 }
 

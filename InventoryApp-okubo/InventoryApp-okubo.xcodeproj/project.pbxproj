@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F47C30127D742D9006343B4 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F47C30027D742D9006343B4 /* RegisterView.swift */; };
 		7F5BA4CF27D64C0A00338C12 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5BA4CE27D64C0A00338C12 /* HomeView.swift */; };
 		7F5BA4D127D64C8800338C12 /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5BA4D027D64C8800338C12 /* FolderView.swift */; };
 		7F5BA4D327D64CE800338C12 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5BA4D227D64CE800338C12 /* SettingView.swift */; };
@@ -14,9 +15,11 @@
 		7F70E1D027D1E55900C483B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F70E1CF27D1E55900C483B9 /* ContentView.swift */; };
 		7F70E1D227D1E55A00C483B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F70E1D127D1E55A00C483B9 /* Assets.xcassets */; };
 		7F70E1D527D1E55A00C483B9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F70E1D427D1E55A00C483B9 /* Preview Assets.xcassets */; };
+		7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7CD3E627D8EA8A005A953B /* ItemListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7F47C30027D742D9006343B4 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		7F5BA4CE27D64C0A00338C12 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		7F5BA4D027D64C8800338C12 /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
 		7F5BA4D227D64CE800338C12 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
@@ -25,6 +28,7 @@
 		7F70E1CF27D1E55900C483B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7F70E1D127D1E55A00C483B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7F70E1D427D1E55A00C483B9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7F7CD3E627D8EA8A005A953B /* ItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +66,8 @@
 				7F5BA4CE27D64C0A00338C12 /* HomeView.swift */,
 				7F5BA4D027D64C8800338C12 /* FolderView.swift */,
 				7F5BA4D227D64CE800338C12 /* SettingView.swift */,
+				7F47C30027D742D9006343B4 /* RegisterView.swift */,
+				7F7CD3E627D8EA8A005A953B /* ItemListView.swift */,
 				7F70E1D127D1E55A00C483B9 /* Assets.xcassets */,
 				7F70E1D327D1E55A00C483B9 /* Preview Content */,
 			);
@@ -149,8 +155,10 @@
 				7F5BA4CF27D64C0A00338C12 /* HomeView.swift in Sources */,
 				7F5BA4D327D64CE800338C12 /* SettingView.swift in Sources */,
 				7F70E1D027D1E55900C483B9 /* ContentView.swift in Sources */,
+				7F47C30127D742D9006343B4 /* RegisterView.swift in Sources */,
 				7F5BA4D127D64C8800338C12 /* FolderView.swift in Sources */,
 				7F70E1CE27D1E55900C483B9 /* InventoryApp_okuboApp.swift in Sources */,
+				7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
