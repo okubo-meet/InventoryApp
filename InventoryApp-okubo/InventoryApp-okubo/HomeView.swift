@@ -11,6 +11,9 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             VStack {
+                NavigationLink(destination: RecentItemsView()) {
+                    Text("最近の項目すべて表示")
+                }
                 NavigationLink(destination: RegisterView()) {
                     Text("登録画面へ")
                 }
