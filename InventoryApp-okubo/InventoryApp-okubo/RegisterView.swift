@@ -26,7 +26,7 @@ struct RegisterView: View {
                 Button("自分で撮影") {
                     showImagePicker = true
                 }
-                Button("画像を選択") {
+                Button("サンプル画像を選択") {
                     showLibrary = true
                 }
             } message: {
