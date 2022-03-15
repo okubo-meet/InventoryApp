@@ -27,6 +27,16 @@ struct ContentView: View {
                 }
         }
     }// body
+    
+    init() {
+        //SegmentedPickerStyleの設定
+        let segmentedAppearance = UISegmentedControl.appearance()
+        segmentedAppearance.selectedSegmentTintColor = UIColor.orange
+        //通常時の色
+        segmentedAppearance.setTitleTextAttributes([.foregroundColor: UIColor.orange], for: .normal)
+        //選択時の色
+        segmentedAppearance.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
