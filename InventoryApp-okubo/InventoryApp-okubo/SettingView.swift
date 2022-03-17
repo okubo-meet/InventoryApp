@@ -10,7 +10,10 @@ import SwiftUI
 struct SettingView: View {
     var body: some View {
         NavigationView {
-            Text("設定画面")
+            Form {
+                Text("設定画面")
+                
+            }//Form
             .navigationTitle("設定")
         }// NavigationView
     }
