@@ -23,6 +23,8 @@
 		7F70E1D527D1E55A00C483B9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F70E1D427D1E55A00C483B9 /* Preview Assets.xcassets */; };
 		7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7CD3E627D8EA8A005A953B /* ItemListView.swift */; };
 		7FA5698627DB194900AB0EEF /* SampleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5698527DB194900AB0EEF /* SampleImage.swift */; };
+		7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE8968227E4463B002E80B1 /* ListRowView.swift */; };
+		7FE8968527E44A57002E80B1 /* ItemStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE8968427E44A57002E80B1 /* ItemStatus.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +45,8 @@
 		7F70E1D427D1E55A00C483B9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7F7CD3E627D8EA8A005A953B /* ItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListView.swift; sourceTree = "<group>"; };
 		7FA5698527DB194900AB0EEF /* SampleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleImage.swift; sourceTree = "<group>"; };
+		7FE8968227E4463B002E80B1 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
+		7FE8968427E44A57002E80B1 /* ItemStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStatus.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +90,9 @@
 				7F0798FB27D9B630006BF1CF /* ImagePickerView.swift */,
 				7F0798FD27D9BF21006BF1CF /* ImageLibraryView.swift */,
 				7F7CD3E627D8EA8A005A953B /* ItemListView.swift */,
+				7FE8968227E4463B002E80B1 /* ListRowView.swift */,
 				7FA5698527DB194900AB0EEF /* SampleImage.swift */,
+				7FE8968427E44A57002E80B1 /* ItemStatus.swift */,
 				7F5A6B9227E2EC6900DCCE81 /* Icon.swift */,
 				7F317B6627E1C84300E1C2E1 /* Color.swift */,
 				7F70E1D127D1E55A00C483B9 /* Assets.xcassets */,
@@ -175,6 +181,7 @@
 			files = (
 				7F0798FA27D9B268006BF1CF /* BarcodeReaderView.swift in Sources */,
 				7F5BA4CF27D64C0A00338C12 /* HomeView.swift in Sources */,
+				7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */,
 				7F5A6B9327E2EC6900DCCE81 /* Icon.swift in Sources */,
 				7F5BA4D327D64CE800338C12 /* SettingView.swift in Sources */,
 				7F70E1D027D1E55900C483B9 /* ContentView.swift in Sources */,
@@ -186,6 +193,7 @@
 				7F70E1CE27D1E55900C483B9 /* InventoryApp_okuboApp.swift in Sources */,
 				7FA5698627DB194900AB0EEF /* SampleImage.swift in Sources */,
 				7F0798FE27D9BF21006BF1CF /* ImageLibraryView.swift in Sources */,
+				7FE8968527E44A57002E80B1 /* ItemStatus.swift in Sources */,
 				7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

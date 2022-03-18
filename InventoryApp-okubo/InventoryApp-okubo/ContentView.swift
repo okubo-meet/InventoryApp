@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var testData = TestData()
     var body: some View {
         TabView {
             HomeView()
@@ -15,7 +16,7 @@ struct ContentView: View {
                     Image(systemName: "house.fill")
                     Text("ホーム")
                 }
-            FolderView()
+            FolderView(testData: testData)
                 .tabItem {
                     Image(systemName: "folder.fill")
                     Text("フォルダ")
@@ -82,7 +83,7 @@ struct Folder: Identifiable {
     let icon: String?
 }
 // テストデータ
-class testData: ObservableObject {
+class TestData: ObservableObject {
     @Published var folders: [Folder] = [Folder(name: "食品", isStock: true, icon: "fork.knife"),
                                         Folder(name: "買い物リスト", isStock: false, icon: nil),
                                         Folder(name: "日用品", isStock: true, icon: "house.fill")]
