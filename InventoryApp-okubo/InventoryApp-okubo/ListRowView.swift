@@ -25,7 +25,7 @@ struct ListRowView: View {
                     .frame(width: imageSize, height: imageSize, alignment: .center)
                 VStack {
                     //商品名
-                    Text(item.namme)
+                    Text(item.name)
                         .fontWeight(.bold)
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity,alignment: .leading)
                     //賞味期限

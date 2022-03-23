@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-enum ItemStatus: String {
+enum ItemStatus: String, CaseIterable {
     case unOpened = "未開封"
     case opened = "開封済み"
     case low = "残りわずか"

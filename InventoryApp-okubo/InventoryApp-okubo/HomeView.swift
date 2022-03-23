@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
+    //仮のデータ
+    @EnvironmentObject var testData: TestData
     private let screenWidth = CGFloat(UIScreen.main.bounds.width)
     private let screenHeight = CGFloat(UIScreen.main.bounds.height)
     var body: some View {

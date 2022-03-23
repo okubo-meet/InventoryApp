@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct FolderView: View {
-    @ObservedObject var testData: TestData
+    //仮のデータ
+    @EnvironmentObject var testData: TestData
     var body: some View {
         NavigationView {
             Form {
@@ -18,8 +19,7 @@ struct FolderView: View {
                 //在庫リストのフォルダ
                 Section {
                     ForEach(stock) { folder in
-                        NavigationLink(destination: ItemListView(testData: testData,
-                                                                 folder: folder)) {
+                        NavigationLink(destination: ItemListView(folder: folder)) {
                             HStack {
                                 Image(systemName: folder.icon!)
                                     .foregroundColor(.orange)
@@ -33,8 +33,7 @@ struct FolderView: View {
                 //買い物リストのフォルダ
                 Section {
                     ForEach(buy) { folder in
-                        NavigationLink(destination: ItemListView(testData: testData,
-                                                                 folder: folder)) {
+                        NavigationLink(destination: ItemListView(folder: folder)) {
                             HStack {
                                 Text(folder.name)
                             }
@@ -51,6 +50,6 @@ struct FolderView: View {
 
 struct FolderView_Previews: PreviewProvider {
     static var previews: some View {
-        FolderView(testData: TestData())
+        FolderView()
     }
 }
