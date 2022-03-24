@@ -13,7 +13,7 @@ struct ItemDataView: View {
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 2
     var body: some View {
         VStack {
-            Image("pork-loin")
+            Image(uiImage: itemData.image)
                 .resizable()
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize, alignment: .center)
