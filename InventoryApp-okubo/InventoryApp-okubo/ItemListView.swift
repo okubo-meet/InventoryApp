@@ -14,6 +14,7 @@ struct ItemListView: View {
     @State var isActive = false
     //どの遷移先で表示するデータのインデックス番号
     @State var indexNum = 0
+    @State var isStock = true
     ///どのカテゴリのリストかを受け取る変数
     var folder: Folder
     var body: some View {
@@ -22,12 +23,13 @@ struct ItemListView: View {
                 List(folderItems(folderName: folder.name)) { item in
                     ListRowView(item: item, isStock: folder.isStock)
                         .onTapGesture {
+                            isStock = folder.isStock
                             showItemView(item: item)
                         }
                 }// List
                 .listStyle(.plain)
             }//VStack
-            NavigationLink(destination: ItemDataView(itemData: $testData.items[indexNum]), isActive: $isActive) {
+            NavigationLink(destination: ItemDataView(isStock: $isStock, itemData: $testData.items[indexNum]), isActive: $isActive) {
                 EmptyView()
             }
             .navigationTitle(folder.name)

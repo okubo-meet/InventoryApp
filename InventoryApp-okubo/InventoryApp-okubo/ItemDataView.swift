@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct ItemDataView: View {
+    //在庫か買い物かの判定
+    @Binding var isStock: Bool
     ///表示するデータ
     @Binding var itemData: ItemData
-    private let imageSize = CGFloat(UIScreen.main.bounds.width) / 2
+    private let imageSize = CGFloat(UIScreen.main.bounds.width) / 3
     var body: some View {
         VStack {
             Image(uiImage: itemData.image)
@@ -23,31 +25,45 @@ struct ItemDataView: View {
                     Text("商品名:")
                     TextField("入力してください", text: $itemData.name)
                 }
-                //DatePickerで選択できるようにする。期限無しも選択できるようにする
-                HStack {
-                    Text("期限:")
-                    Text(dateText(date: itemData.deadLine))
-                }
-                //期限の何日前か計算して表示する
-                HStack {
-                    Text("通知:")
-                    Text(dateText(date: itemData.notificationDate))
+                //期限と通知は在庫リストのみ表示
+                if isStock {
+                    //DatePickerで選択できるようにする。期限無しも選択できるようにする
+                    HStack {
+                        Text("期限:")
+                        Text(dateText(date: itemData.deadLine))
+                    }
+                    //期限の何日前か計算して表示する
+                    HStack {
+                        Text("通知:")
+                        Text(dateText(date: itemData.notificationDate))
+                    }
                 }
                 HStack {
                     Text("個数:")
-                    Stepper(value: $itemData.numberOfItems) {
+                    Stepper(value: $itemData.numberOfItems, in: 0...99) {
                         Text("\(itemData.numberOfItems)個")
                     }
                 }
                 //Pickerのデザインを検討
                 HStack{
-                    Text("状態:")
-                    Picker("選択", selection: $itemData.status) {
-                        ForEach(ItemStatus.allCases, id: \.self) { status in
-                            Text(status.rawValue).tag(status.rawValue)
+                    if isStock {
+                        //在庫リスト
+                        Text("状態:")
+                        Picker("", selection: $itemData.status) {
+                            ForEach(ItemStatus.allCases, id: \.self) { status in
+                                Text(status.rawValue).tag(status.rawValue)
+                            }
                         }
+                        .pickerStyle(.menu)
+                    } else {
+                        //買い物リスト
+                        Text("緊急性:")
+                        Picker("", selection: $itemData.isHurry) {
+                            Text("通常").tag(false)
+                            Text("緊急").tag(true)
+                        }
+                        .pickerStyle(.menu)
                     }
-                    .pickerStyle(.menu)
                 }
                 //保存先はCoreDataに登録されているフォルダから選択できるようにする
                 HStack {
@@ -79,6 +95,6 @@ struct ItemDataView: View {
 
 struct ItemDataView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemDataView(itemData: .constant(TestData().items[0]))
+        ItemDataView(isStock: .constant(true), itemData: .constant(TestData().items[0]))
     }
 }
