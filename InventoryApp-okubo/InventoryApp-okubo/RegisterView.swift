@@ -22,35 +22,8 @@ struct RegisterView: View {
                 Text("買い物リスト").tag(false)
             }
             .pickerStyle(.segmented)
-            Button("画像を追加する") {
-                showingDialog = true
-            }
             //商品データ
             ItemDataView(isStock: $isStock, itemData: $testData.items[0])
-            //ダイアログ
-            .confirmationDialog("画像を追加", isPresented: $showingDialog, titleVisibility: .visible) {
-                //アクションボタンリスト
-                Button("バーコード検索") {
-                    showBarcodeReader = true
-                }
-                Button("自分で撮影") {
-                    showImagePicker = true
-                }
-                Button("サンプル画像を選択") {
-                    showLibrary = true
-                }
-            } message: {
-                Text("画像を追加する方法を選択してください")
-            }
-        }
-        .sheet(isPresented: $showBarcodeReader) {
-            BarcodeReaderView()
-        }
-        .sheet(isPresented: $showImagePicker) {
-            ImagePickerView()
-        }
-        .sheet(isPresented: $showLibrary) {
-            ImageLibraryView()
         }
         .navigationTitle("商品登録")
     }

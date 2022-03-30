@@ -20,6 +20,8 @@ struct ItemDataView: View {
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize, alignment: .center)
                 .border(Color.black, width: 1)
+            //画像追加ボタン
+            AddImageButton()
             List {
                 HStack {
                     Text("商品名:")
