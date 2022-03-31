@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//商品登録画面
 struct RegisterView: View {
     //仮のデータ
     @EnvironmentObject var testData: TestData
@@ -25,6 +25,7 @@ struct RegisterView: View {
             //商品データ
             ItemDataView(isStock: $isStock, itemData: $testData.items[0])
         }
+        .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("商品登録")
     }
 }

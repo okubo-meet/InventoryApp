@@ -7,7 +7,7 @@
 
 import SwiftUI
 import AVFoundation
-
+//バーコードを読み取る画面　楽天APIを使用する予定
 struct BarcodeReaderView: UIViewControllerRepresentable {
     //環境変数で取得したdismissハンドラー
     @Environment(\.dismiss) var dismiss

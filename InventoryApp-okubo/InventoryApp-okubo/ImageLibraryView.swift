@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//サンプル画像を選択する画面
 struct ImageLibraryView: View {
     //サンプル画像のカテゴリ
     @State var sampleImage: SampleImage = .food

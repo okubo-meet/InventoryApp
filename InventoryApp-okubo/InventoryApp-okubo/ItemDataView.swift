@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//データの詳細を表示するView
 struct ItemDataView: View {
     //在庫か買い物かの判定
     @Binding var isStock: Bool
@@ -14,15 +14,20 @@ struct ItemDataView: View {
     @Binding var itemData: ItemData
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 3
     var body: some View {
-        VStack {
-            Image(uiImage: itemData.image)
-                .resizable()
-                .scaledToFit()
-                .frame(width: imageSize, height: imageSize, alignment: .center)
-                .border(Color.black, width: 1)
-            //画像追加ボタン
-            AddImageButton()
             List {
+                HStack {
+                    Spacer()
+                    VStack {
+                        Image(uiImage: itemData.image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: imageSize, height: imageSize, alignment: .center)
+                            .border(Color.black, width: 1)
+                        //画像追加ボタン
+                        AddImageButton()
+                    }// VStack
+                    Spacer()
+                }
                 HStack {
                     Text("商品名:")
                     TextField("入力してください", text: $itemData.name)
@@ -79,7 +84,7 @@ struct ItemDataView: View {
                 }
             }
             .listStyle(.plain)
-        }// VStack
+        
         
     }
     //日付フォーマットの関数

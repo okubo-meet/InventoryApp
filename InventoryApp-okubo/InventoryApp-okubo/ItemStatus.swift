@@ -7,8 +7,7 @@
 
 import Foundation
 import SwiftUI
-
-
+//在庫の状態の列挙型
 enum ItemStatus: String, CaseIterable {
     case unOpened = "未開封"
     case opened = "開封済み"

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//設定画面　TabViewで扱うView
 struct SettingView: View {
     var body: some View {
         NavigationView {

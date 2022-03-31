@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//ItemListViewでリスト表示するView
 struct ListRowView: View {
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 4
     private let rowHeight = CGFloat(UIScreen.main.bounds.height) / 8

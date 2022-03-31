@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+//サンプル画像の列挙型
 enum SampleImage: String, CaseIterable {
     case food = "食品"
     case daily = "日用品"

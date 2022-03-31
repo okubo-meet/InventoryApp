@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//カスタムカラー
 extension Color {
     //NavigationBarとTabViewの背景色
     static let tabBar: Color = Color("tabBar")

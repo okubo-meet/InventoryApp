@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//写真撮影する画面
 struct ImagePickerView: UIViewControllerRepresentable {
     let controller = UIImagePickerController()
     

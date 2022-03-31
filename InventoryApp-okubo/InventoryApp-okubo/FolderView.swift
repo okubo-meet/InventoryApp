@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//フォルダデータを扱う画面　TabViewで扱うView
 struct FolderView: View {
     //仮のデータ
     @EnvironmentObject var testData: TestData

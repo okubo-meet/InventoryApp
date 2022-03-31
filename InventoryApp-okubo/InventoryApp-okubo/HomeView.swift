@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//起動時の画面　TabViewで扱うView
 struct HomeView: View {
     //仮のデータ
     @EnvironmentObject var testData: TestData
@@ -26,12 +26,21 @@ struct HomeView: View {
                     }
                     .padding()
                 }// HStack
+                //最近の項目
                 ScrollView(.horizontal) {
-                    
-                }
+                    HStack {
+                        RecentRowView(category: "賞味期限通知")
+                        .frame(width: screenHeight / 4, height: screenHeight / 4, alignment: .center)
+                        RecentRowView(category: "買い物リスト")
+                        .frame(width: screenHeight / 4, height: screenHeight / 4, alignment: .center)
+                        RecentRowView(category: "今日")
+                        .frame(width: screenHeight / 4, height: screenHeight / 4, alignment: .center)
+                    }// HStack
+                }// ScrollView
                 .frame(width: screenWidth, height: screenHeight / 4, alignment: .center)
                 .background(Color.list)
                 Spacer()
+                //画面遷移ボタン
                 NavigationLink(destination: RegisterView()) {
                     Text("登録画面へ")
                         .font(.title2)

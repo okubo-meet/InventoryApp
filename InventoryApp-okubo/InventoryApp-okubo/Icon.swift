@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 //フォルダに使うアイコンの列挙型
 enum Icon: String {
     //家

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//カメラをやサンプル画像ライブラリを呼び出すボタン　ItemDataViewで使用
 struct AddImageButton: View {
     //ダイアログ表示トリガー
     @State var showingDialog = false
@@ -20,6 +20,7 @@ struct AddImageButton: View {
         Button("画像を追加する") {
             showingDialog = true
         }
+        .foregroundColor(.orange)
         //ダイアログ
         .confirmationDialog("画像を追加", isPresented: $showingDialog, titleVisibility: .visible) {
             //アクションボタンリスト

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//商品データをリスト表示する画面　「最近の項目」にも対応できるようにする予定
 struct ItemListView: View {
     //仮のデータ
     @EnvironmentObject var testData: TestData
