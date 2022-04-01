@@ -6,42 +6,26 @@
 //
 
 import SwiftUI
-
+//商品登録画面
 struct RegisterView: View {
+    //仮のデータ
+    @EnvironmentObject var testData: TestData
+    @State var isStock = true
     @State var showingDialog = false
     @State var showBarcodeReader = false
     @State var showImagePicker = false
     @State var showLibrary = false
     var body: some View {
         VStack {
-            Text("登録画面")
-            Button("画像追加ダイアログ") {
-                showingDialog = true
+            Picker("", selection: $isStock) {
+                Text("在庫リスト").tag(true)
+                Text("買い物リスト").tag(false)
             }
-            .confirmationDialog("画像を追加", isPresented: $showingDialog, titleVisibility: .visible) {
-                //アクションボタンリスト
-                Button("バーコード検索") {
-                    showBarcodeReader = true
-                }
-                Button("自分で撮影") {
-                    showImagePicker = true
-                }
-                Button("画像を選択") {
-                    showLibrary = true
-                }
-            } message: {
-                Text("画像を追加する方法を選択してください")
-            }
+            .pickerStyle(.segmented)
+            //商品データ
+            ItemDataView(isStock: $isStock, itemData: $testData.items[0])
         }
-        .sheet(isPresented: $showBarcodeReader) {
-            BarcodeReaderView()
-        }
-        .sheet(isPresented: $showImagePicker) {
-            ImagePickerView()
-        }
-        .sheet(isPresented: $showLibrary) {
-            ImageLibraryView()
-        }
+        .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("商品登録")
     }
 }

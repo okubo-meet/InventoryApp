@@ -6,11 +6,18 @@
 //
 
 import SwiftUI
-
+//「最近の項目」の全て表示で遷移してくる画面
 struct RecentItemsView: View {
+    let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
     var body: some View {
-        Text("最近の項目の画面")
-            .navigationTitle("最近の項目")
+        ScrollView {
+            LazyVGrid(columns: columns) {
+                RecentRowView(category: "賞味期限通知")
+                RecentRowView(category: "買い物リスト")
+                RecentRowView(category: "今日")
+            }
+        }
+        .navigationTitle("最近の項目")
     }
 }
 

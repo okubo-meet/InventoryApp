@@ -6,10 +6,30 @@
 //
 
 import SwiftUI
-
-struct ImagePickerView: View {
-    var body: some View {
-        Text("商品画像を自分で撮影する画面")
+//写真撮影する画面
+struct ImagePickerView: UIViewControllerRepresentable {
+    let controller = UIImagePickerController()
+    
+    // MARK: - Coordinator
+    class Coordinator:NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: ImagePickerView
+        init(_ parent: ImagePickerView) {
+            self.parent = parent
+        }
+    }
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    // MARK: - View
+    //生成時
+    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePickerView>) -> UIImagePickerController {
+        controller.delegate = context.coordinator
+        controller.sourceType = .camera
+        return controller
+    }
+    //更新時
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePickerView>) {
+        
     }
 }
 

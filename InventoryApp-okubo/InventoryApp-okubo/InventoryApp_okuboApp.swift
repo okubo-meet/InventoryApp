@@ -12,6 +12,7 @@ struct InventoryApp_okuboApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(TestData())
         }
     }
 }
