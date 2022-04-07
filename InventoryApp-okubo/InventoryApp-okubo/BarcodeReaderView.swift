@@ -21,11 +21,10 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     //ビデオデータ出力のインスタンス
     let videoDataOutput = AVCaptureVideoDataOutput()
     //メタデータ出力のインスタンス
-    let metaDataOutput = AVCaptureMetadataOutput()
+//    let metaDataOutput = AVCaptureMetadataOutput()
     
     // MARK: - Coordinator
-    class Coordinator: AVCaptureSession, AVCaptureMetadataOutputObjectsDelegate,
-                       AVCaptureVideoDataOutputSampleBufferDelegate {
+    class Coordinator: AVCaptureSession, AVCaptureVideoDataOutputSampleBufferDelegate {
         let parent: BarcodeReaderView
         init(_ parent: BarcodeReaderView) {
             self.parent = parent
@@ -46,6 +45,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
                 //読み取ったコードを出力
                 if let value = barcode.payloadStringValue {
                     print("読み取り：\(value)")
+                    print("タイプ：\(barcode.symbology)")
                 }
             }// VNDetectBarcodesRequest
             //バーコード検出開始
@@ -66,7 +66,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         //AVCaptureVideoDataOutputSampleBufferDelegateを呼び出す設定
         videoDataOutput.setSampleBufferDelegate(context.coordinator, queue: DispatchQueue(label: "camera_frame_processing_queue"))
         //AVCaptureMetadataOutputObjectsDelegateを呼び出す設定
-        metaDataOutput.setMetadataObjectsDelegate(context.coordinator, queue: .main)
+//        metaDataOutput.setMetadataObjectsDelegate(context.coordinator, queue: .main)
         //映像からメタデータを出力できるよう設定
         captureSession.addOutput(videoDataOutput)
         //キャプチャーセッション開始

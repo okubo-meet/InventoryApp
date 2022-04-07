@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>applicationId</key>
+	<string>applicationId=1061755325916421365</string>
+	<key>baseURL</key>
+	<string>https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706?</string>
+</dict>
+</plist>

@@ -29,3 +29,6 @@ Pods
 
 # Firebase
 GoogleService-Info.plist
+
+# API
+Api.plist

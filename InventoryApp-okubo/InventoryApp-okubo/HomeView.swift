@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     //仮のデータ
     @EnvironmentObject var testData: TestData
+    @ObservedObject var rakutenAPI = RakutenAPI()
     private let screenWidth = CGFloat(UIScreen.main.bounds.width)
     private let screenHeight = CGFloat(UIScreen.main.bounds.height)
     var body: some View {
@@ -21,6 +22,10 @@ struct HomeView: View {
                         .fontWeight(.bold)
                         .padding()
                     Spacer()
+                    //APIテスト
+                    Button("テスト"){
+                        rakutenAPI.searchItem(itemCode: "9784802613415")
+                    }
                     NavigationLink(destination: RecentItemsView()) {
                         Text("すべて表示")
                     }

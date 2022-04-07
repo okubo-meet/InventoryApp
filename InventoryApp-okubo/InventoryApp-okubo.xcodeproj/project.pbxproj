@@ -14,6 +14,8 @@
 		7F317B6727E1C84300E1C2E1 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F317B6627E1C84300E1C2E1 /* Color.swift */; };
 		7F47C30127D742D9006343B4 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F47C30027D742D9006343B4 /* RegisterView.swift */; };
 		7F4EFA5727EA187C0005461E /* ItemDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4EFA5627EA187C0005461E /* ItemDataView.swift */; };
+		7F55D64227F6C6A9004169C4 /* RakutenAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F55D64127F6C6A9004169C4 /* RakutenAPI.swift */; };
+		7F55D64427F6CAD5004169C4 /* Api.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7F55D64327F6CAD5004169C4 /* Api.plist */; };
 		7F5712A027F57E91005DE0BC /* RecentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F57129F27F57E91005DE0BC /* RecentRowView.swift */; };
 		7F5A6B9327E2EC6900DCCE81 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5A6B9227E2EC6900DCCE81 /* Icon.swift */; };
 		7F5BA4CF27D64C0A00338C12 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5BA4CE27D64C0A00338C12 /* HomeView.swift */; };
@@ -38,6 +40,8 @@
 		7F317B6627E1C84300E1C2E1 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		7F47C30027D742D9006343B4 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		7F4EFA5627EA187C0005461E /* ItemDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDataView.swift; sourceTree = "<group>"; };
+		7F55D64127F6C6A9004169C4 /* RakutenAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RakutenAPI.swift; sourceTree = "<group>"; };
+		7F55D64327F6CAD5004169C4 /* Api.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Api.plist; sourceTree = "<group>"; };
 		7F57129F27F57E91005DE0BC /* RecentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentRowView.swift; sourceTree = "<group>"; };
 		7F5A6B9227E2EC6900DCCE81 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		7F5BA4CE27D64C0A00338C12 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -100,10 +104,12 @@
 				7FE8968227E4463B002E80B1 /* ListRowView.swift */,
 				7F4EFA5627EA187C0005461E /* ItemDataView.swift */,
 				7F5C967327F4976D0079CD69 /* AddImageButton.swift */,
+				7F55D64127F6C6A9004169C4 /* RakutenAPI.swift */,
 				7FA5698527DB194900AB0EEF /* SampleImage.swift */,
 				7FE8968427E44A57002E80B1 /* ItemStatus.swift */,
 				7F5A6B9227E2EC6900DCCE81 /* Icon.swift */,
 				7F317B6627E1C84300E1C2E1 /* Color.swift */,
+				7F55D64327F6CAD5004169C4 /* Api.plist */,
 				7F70E1D127D1E55A00C483B9 /* Assets.xcassets */,
 				7F70E1D327D1E55A00C483B9 /* Preview Content */,
 			);
@@ -177,6 +183,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F70E1D527D1E55A00C483B9 /* Preview Assets.xcassets in Resources */,
+				7F55D64427F6CAD5004169C4 /* Api.plist in Resources */,
 				7F70E1D227D1E55A00C483B9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -199,6 +206,7 @@
 				7F317B6727E1C84300E1C2E1 /* Color.swift in Sources */,
 				7F0798FC27D9B630006BF1CF /* ImagePickerView.swift in Sources */,
 				7F47C30127D742D9006343B4 /* RegisterView.swift in Sources */,
+				7F55D64227F6C6A9004169C4 /* RakutenAPI.swift in Sources */,
 				7F07990027D9C291006BF1CF /* RecentItemsView.swift in Sources */,
 				7F5BA4D127D64C8800338C12 /* FolderView.swift in Sources */,
 				7F70E1CE27D1E55900C483B9 /* InventoryApp_okuboApp.swift in Sources */,
