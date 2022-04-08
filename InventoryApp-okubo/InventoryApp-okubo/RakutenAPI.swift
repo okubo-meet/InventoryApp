@@ -6,9 +6,15 @@
 //
 
 import SwiftUI
-import CoreAudioTypes
 
+// MARK: - プロトコル
+protocol SearchItemDelegate {
+    //商品検索が終わったときの処理
+    func searchItemDidfinish(isSuccess: Bool)
+}
+// MARK: -　クラス
 class RakutenAPI: ObservableObject {
+    // MARK: - 構造体
     ///JSONのデータ構造 （楽天市場API）
     struct IchibaJson: Codable {
         ///JSONのitems内のデータ構造
@@ -19,12 +25,15 @@ class RakutenAPI: ObservableObject {
             let smallImageUrls: [String]
             let mediumImageUrls: [String]
         }
-        //受け取ったデータを受ける変数
+        //データを受け取る変数
         let Items: [Items]
     }
+    // MARK: - プロパティ
+    //検索終了時のデリゲート
+    var delegate: SearchItemDelegate?
     //plistの値を受け取る変数
     private var property: Dictionary<String, Any> = [:]
-    
+    //初期化　変数'property'に'Api.plist'の値を入れる
     init() {
         //Api.plistのパス取得
         let path = Bundle.main.path(forResource: "Api", ofType: "plist")
@@ -35,7 +44,8 @@ class RakutenAPI: ObservableObject {
             print("plist:\(property)")
         }
     }
-           
+    
+    // MARK: - メソッド
     ///plistから文字列を取得する関数
     func getProperty(key: String) -> String {
         guard let value = property[key] as? String else {
@@ -74,12 +84,21 @@ class RakutenAPI: ObservableObject {
                     let decoder = JSONDecoder()
                     let jsonData = try decoder.decode(IchibaJson.self, from: itemData)
                     print("\(jsonData.Items[0])")
+                    //メインスレッドでアラートを起動
+                    DispatchQueue.main.async {
+                        self.delegate?.searchItemDidfinish(isSuccess: true)
+                    }
                 } else {
-                    print("\(String(describing: response))")
                     print("データがありません")
+                    DispatchQueue.main.async {
+                        self.delegate?.searchItemDidfinish(isSuccess: false)
+                    }
                 }
             } catch {
-                print(error.localizedDescription)
+                print("エラー：\(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.delegate?.searchItemDidfinish(isSuccess: false)
+                }
             }
         }
         //セッション開始

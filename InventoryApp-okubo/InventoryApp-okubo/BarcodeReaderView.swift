@@ -12,6 +12,8 @@ import Vision
 struct BarcodeReaderView: UIViewControllerRepresentable {
     //環境変数で取得したdismissハンドラー
     @Environment(\.dismiss) var dismiss
+    //楽天APIを扱うクラス
+    @ObservedObject var rakutenAPI = RakutenAPI()
     //UIViewControllerのインスタンス生成
     private let viewController = UIViewController()
     // セッションのインスタンス
@@ -24,12 +26,11 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
 //    let metaDataOutput = AVCaptureMetadataOutput()
     
     // MARK: - Coordinator
-    class Coordinator: AVCaptureSession, AVCaptureVideoDataOutputSampleBufferDelegate {
+    class Coordinator: AVCaptureSession, AVCaptureVideoDataOutputSampleBufferDelegate, SearchItemDelegate {
         let parent: BarcodeReaderView
         init(_ parent: BarcodeReaderView) {
             self.parent = parent
         }
-        
         //新たなビデオフレームが書き込むたびに呼び出されるデリゲートメソッド
         func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
             // フレームからImageBufferに変換
@@ -46,10 +47,20 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
                 if let value = barcode.payloadStringValue {
                     print("読み取り：\(value)")
                     print("タイプ：\(barcode.symbology)")
+                    self.parent.captureSession.stopRunning()
+                    self.parent.searchAlert(barcode: value)
                 }
             }// VNDetectBarcodesRequest
             //バーコード検出開始
             try? requestHandler.perform([barcodesRequest], on: pixelBuffer, orientation: .downMirrored)
+        }
+        //商品検索が終わったときのデリゲートメソッド
+        func searchItemDidfinish(isSuccess: Bool) {
+            if isSuccess {
+                parent.successAlert()
+            } else {
+                parent.failureAlert()
+            }
         }
     }
     func makeCoordinator() -> Coordinator {
@@ -63,8 +74,10 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         viewController.view.frame = UIScreen.main.bounds
         setCamera()
         setPreviewLayer()
+        //SearchItemDelegateを呼び出す設定
+        rakutenAPI.delegate = context.coordinator
         //AVCaptureVideoDataOutputSampleBufferDelegateを呼び出す設定
-        videoDataOutput.setSampleBufferDelegate(context.coordinator, queue: DispatchQueue(label: "camera_frame_processing_queue"))
+        videoDataOutput.setSampleBufferDelegate(context.coordinator, queue: .main)
         //AVCaptureMetadataOutputObjectsDelegateを呼び出す設定
 //        metaDataOutput.setMetadataObjectsDelegate(context.coordinator, queue: .main)
         //映像からメタデータを出力できるよう設定
@@ -97,6 +110,42 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         previewLayer.videoGravity = .resizeAspectFill
         //プレビューをViewに追加
         viewController.view.layer.addSublayer(previewLayer)
+    }
+    ///バーコードを検出した時にアラートを出す関数
+    func searchAlert(barcode: String) {
+        let alert = UIAlertController(title: "バーコードを検出しました", message: "楽天市場で検索します", preferredStyle: .alert)
+        let serch = UIAlertAction(title: "検索", style: .default, handler: { _ in
+            //API検索
+            self.rakutenAPI.searchItem(itemCode: barcode)
+        })
+        let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in
+            self.captureSession.startRunning()
+        })
+        alert.addAction(cancel)
+        alert.addAction(serch)
+        viewController.present(alert, animated: true, completion: nil)
+    }
+    ///商品検索に成功した場合のアラートを出す関数
+    func successAlert() {
+        let alert = UIAlertController(title: "商品を検索しました", message: "前の画面に戻りますか？", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "戻る", style: .default, handler: { _ in
+            dismiss()
+        })
+        let continuation = UIAlertAction(title: "続行", style: .default, handler: { _ in
+            self.captureSession.startRunning()
+        })
+        alert.addAction(ok)
+        alert.addAction(continuation)
+        viewController.present(alert, animated: true, completion: nil)
+    }
+    ///商品検索に失敗した場合のアラートを出す関数
+    func failureAlert() {
+        let alert = UIAlertController(title: "商品が見つかりませんでした", message: "楽天市場では扱っていない可能性があります", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default, handler: { _ in
+            self.captureSession.startRunning()
+        })
+        alert.addAction(ok)
+        viewController.present(alert, animated: true, completion: nil)
     }
 }
 
