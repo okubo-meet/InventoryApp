@@ -16,6 +16,8 @@ struct AddImageButton: View {
     @State var showImagePicker = false
     //サンプル画像リスト表示トリガー
     @State var showLibrary = false
+    //編集する商品データ
+    @Binding var item: ItemData
     var body: some View {
         Button("画像を追加する") {
             showingDialog = true
@@ -37,7 +39,7 @@ struct AddImageButton: View {
             Text("画像を追加する方法を選択してください")
         }
         .sheet(isPresented: $showBarcodeReader) {
-            BarcodeReaderView()
+            BarcodeReaderView(item: $item)
         }
         .sheet(isPresented: $showImagePicker) {
             ImagePickerView()
@@ -50,6 +52,6 @@ struct AddImageButton: View {
 
 struct AddImageButton_Previews: PreviewProvider {
     static var previews: some View {
-        AddImageButton()
+        AddImageButton(item: .constant(TestData().items[0]))
     }
 }

@@ -18,26 +18,43 @@ struct ItemDataView: View {
                 HStack {
                     Spacer()
                     VStack {
-                        Image(uiImage: itemData.image)
-                            .resizable()
+                        ItemImageView(imageData: $itemData.image)
                             .scaledToFit()
                             .frame(width: imageSize, height: imageSize, alignment: .center)
                             .border(Color.black, width: 1)
                         //画像追加ボタン
-                        AddImageButton()
+                        AddImageButton(item: $itemData)
                     }// VStack
                     Spacer()
                 }
                 HStack {
                     Text("商品名:")
-                    TextField("入力してください", text: $itemData.name)
+                    TextField("入力してください（必須）", text: $itemData.name)
                 }
                 //期限と通知は在庫リストのみ表示
                 if isStock {
-                    //DatePickerで選択できるようにする。期限無しも選択できるようにする
                     HStack {
                         Text("期限:")
-                        Text(dateText(date: itemData.deadLine))
+                        if itemData.deadLine == nil {
+                            //期限無し
+                            Text("無し")
+                        } else {
+                            DatePicker("", selection: Binding<Date>(get: {itemData.deadLine ?? Date()}, set: {itemData.deadLine = $0}), displayedComponents: .date)
+                                .labelsHidden()
+                        }
+                        Spacer()
+                        //期限の有り無しを選択するボタン
+                        Image(systemName: deadLineIcon())
+                            .foregroundColor(itemData.deadLine == nil ? .orange : .gray)
+                            .onTapGesture {
+                                //期限がnilなら現在の日付を代入し、すでに日付があればnilを代入する
+                                if itemData.deadLine == nil {
+                                    itemData.deadLine = Date()
+                                } else {
+                                    itemData.deadLine = nil
+                                }
+                            }
+                        
                     }
                     //期限の何日前か計算して表示する
                     HStack {
@@ -84,8 +101,6 @@ struct ItemDataView: View {
                 }
             }
             .listStyle(.plain)
-        
-        
     }
     //日付フォーマットの関数
     func dateText(date: Date?) -> String {
@@ -97,6 +112,14 @@ struct ItemDataView: View {
         dateFormatter.dateStyle = .medium
         dateFormatter.dateFormat = "yyyy/MM/dd"
         return dateFormatter.string(from: date)
+    }
+    //期限がある場合とない場合で違う画像を返す関数
+    func deadLineIcon() -> String {
+        if itemData.deadLine == nil {
+            return "calendar.badge.plus"
+        } else {
+            return "xmark.circle.fill"
+        }
     }
 }
 

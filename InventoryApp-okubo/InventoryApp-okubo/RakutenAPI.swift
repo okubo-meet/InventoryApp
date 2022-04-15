@@ -22,13 +22,17 @@ class RakutenAPI: ObservableObject {
             ///商品名
             let itemName: String
             ///画像URL
-            let smallImageUrls: [String]
+//            let smallImageUrls: [String]
             let mediumImageUrls: [String]
         }
         //データを受け取る変数
         let Items: [Items]
     }
     // MARK: - プロパティ
+    //取得した商品名
+    var resultItemName = ""
+    //取得した画像データ
+    var resultImageData: Data? = nil
     //検索終了時のデリゲート
     var delegate: SearchItemDelegate?
     //plistの値を受け取る変数
@@ -67,7 +71,7 @@ class RakutenAPI: ObservableObject {
         let params: KeyValuePairs = ["format" : "json",
                                      "formatVersion" : "2",
                                      "hits" : "1",
-                                     "elements" : "itemName,smallImageUrls,mediumImageUrls"]
+                                     "elements" : "itemName,mediumImageUrls"]
         //パラメータをURLの形につなげる
         for (key, value) in params {
             requestParams += "&" + key + "=" + value
@@ -83,7 +87,13 @@ class RakutenAPI: ObservableObject {
                 if let itemData = data {
                     let decoder = JSONDecoder()
                     let jsonData = try decoder.decode(IchibaJson.self, from: itemData)
-                    print("\(jsonData.Items[0])")
+                    //商品名を取得
+                    self.resultItemName = jsonData.Items[0].itemName
+                    print("商品名" + self.resultItemName)
+                    //画像を取得
+                    let imageURL = jsonData.Items[0].mediumImageUrls[0]
+                    print("画像URL:" + imageURL)
+                    self.downLoadImage(url: imageURL)
                     //メインスレッドでアラートを起動
                     DispatchQueue.main.async {
                         self.delegate?.searchItemDidfinish(isSuccess: true)
@@ -104,4 +114,16 @@ class RakutenAPI: ObservableObject {
         //セッション開始
         session.resume()
     }// searchItem
+    //取得したURLから画像を読み込む関数
+    func downLoadImage(url: String) {
+        guard let imageURL = URL(string: url) else { return }
+        DispatchQueue.global().async {
+            let data = try? Data(contentsOf: imageURL)
+            DispatchQueue.main.async {
+                self.resultImageData = data
+                print("画像データ：\(self.resultImageData!)")
+            }
+        }
+    }
+    
 }

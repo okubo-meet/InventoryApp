@@ -26,6 +26,7 @@
 		7F70E1D027D1E55900C483B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F70E1CF27D1E55900C483B9 /* ContentView.swift */; };
 		7F70E1D227D1E55A00C483B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F70E1D127D1E55A00C483B9 /* Assets.xcassets */; };
 		7F70E1D527D1E55A00C483B9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F70E1D427D1E55A00C483B9 /* Preview Assets.xcassets */; };
+		7F730DD528092600002EBD76 /* ItemImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F730DD428092600002EBD76 /* ItemImageView.swift */; };
 		7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7CD3E627D8EA8A005A953B /* ItemListView.swift */; };
 		7FA5698627DB194900AB0EEF /* SampleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5698527DB194900AB0EEF /* SampleImage.swift */; };
 		7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE8968227E4463B002E80B1 /* ListRowView.swift */; };
@@ -53,6 +54,7 @@
 		7F70E1CF27D1E55900C483B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7F70E1D127D1E55A00C483B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7F70E1D427D1E55A00C483B9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7F730DD428092600002EBD76 /* ItemImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemImageView.swift; sourceTree = "<group>"; };
 		7F7CD3E627D8EA8A005A953B /* ItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListView.swift; sourceTree = "<group>"; };
 		7FA5698527DB194900AB0EEF /* SampleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleImage.swift; sourceTree = "<group>"; };
 		7FE8968227E4463B002E80B1 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				7F7CD3E627D8EA8A005A953B /* ItemListView.swift */,
 				7FE8968227E4463B002E80B1 /* ListRowView.swift */,
 				7F4EFA5627EA187C0005461E /* ItemDataView.swift */,
+				7F730DD428092600002EBD76 /* ItemImageView.swift */,
 				7F5C967327F4976D0079CD69 /* AddImageButton.swift */,
 				7F55D64127F6C6A9004169C4 /* RakutenAPI.swift */,
 				7FA5698527DB194900AB0EEF /* SampleImage.swift */,
@@ -208,6 +211,7 @@
 				7F47C30127D742D9006343B4 /* RegisterView.swift in Sources */,
 				7F55D64227F6C6A9004169C4 /* RakutenAPI.swift in Sources */,
 				7F07990027D9C291006BF1CF /* RecentItemsView.swift in Sources */,
+				7F730DD528092600002EBD76 /* ItemImageView.swift in Sources */,
 				7F5BA4D127D64C8800338C12 /* FolderView.swift in Sources */,
 				7F70E1CE27D1E55900C483B9 /* InventoryApp_okuboApp.swift in Sources */,
 				7FA5698627DB194900AB0EEF /* SampleImage.swift in Sources */,

@@ -12,8 +12,12 @@ import Vision
 struct BarcodeReaderView: UIViewControllerRepresentable {
     //環境変数で取得したdismissハンドラー
     @Environment(\.dismiss) var dismiss
+    //仮のデータ
+    @EnvironmentObject var testData: TestData
     //楽天APIを扱うクラス
     @ObservedObject var rakutenAPI = RakutenAPI()
+    //編集中の商品データ
+    @Binding var item: ItemData
     //UIViewControllerのインスタンス生成
     private let viewController = UIViewController()
     // セッションのインスタンス
@@ -57,6 +61,10 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         //商品検索が終わったときのデリゲートメソッド
         func searchItemDidfinish(isSuccess: Bool) {
             if isSuccess {
+                DispatchQueue.main.async {
+                    self.parent.item.name = self.parent.rakutenAPI.resultItemName
+                    self.parent.item.image = self.parent.rakutenAPI.resultImageData
+                }
                 parent.successAlert()
             } else {
                 parent.failureAlert()
@@ -151,6 +159,6 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
 
 struct BarcodeReaderView_Previews: PreviewProvider {
     static var previews: some View {
-        BarcodeReaderView()
+        BarcodeReaderView(item: .constant(TestData().items[0]))
     }
 }

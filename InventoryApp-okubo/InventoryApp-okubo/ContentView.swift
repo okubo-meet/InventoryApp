@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var testData = TestData()
     var body: some View {
         TabView {
             HomeView()
@@ -53,19 +52,19 @@ struct ItemData: Identifiable {
     /// 識別ID
     let id = UUID()
     /// 商品名
-    var name: String
+    var name: String = ""
     /// 画像
-    var image: UIImage
+    var image: Data? = nil
     /// 期限
     var deadLine: Date?
     /// 登録日
-    var registrationDate: Date
+    var registrationDate: Date = Date()
     /// 個数
-    var numberOfItems: Int
+    var numberOfItems: Int = 1
     /// 状態
-    var status: String
+    var status: String = "未開封"
     /// 緊急性
-    var isHurry: Bool
+    var isHurry: Bool = false
     /// 通知する日付
     var notificationDate: Date?
     /// フォルダ
@@ -84,11 +83,12 @@ struct Folder: Identifiable {
 }
 // テストデータ
 class TestData: ObservableObject {
+    @Published var newItem = ItemData(folder: "食品")
     @Published var folders: [Folder] = [Folder(name: "食品", isStock: true, icon: "fork.knife"),
                                         Folder(name: "買い物リスト", isStock: false, icon: nil),
                                         Folder(name: "日用品", isStock: true, icon: "house.fill")]
     @Published var items: [ItemData] = [ItemData(name: "テスト",
-                                                 image: UIImage(imageLiteralResourceName: "pork-loin"),
+                                                 image: UIImage(imageLiteralResourceName: "pork-loin").pngData(),
                                                  deadLine: Date(), registrationDate: Date(),
                                                  numberOfItems: 1,
                                                  status: "未開封",
@@ -96,7 +96,7 @@ class TestData: ObservableObject {
                                                  notificationDate: nil,
                                                  folder: "食品"),
                                         ItemData(name: "テスト",
-                                                 image: UIImage(imageLiteralResourceName: "sardine"),
+                                                 image: UIImage(imageLiteralResourceName: "sardine").pngData(),
                                                  deadLine: Date(),
                                                  registrationDate: Date(),
                                                  numberOfItems: 1,
@@ -105,7 +105,7 @@ class TestData: ObservableObject {
                                                  notificationDate: nil,
                                                  folder: "食品"),
                                         ItemData(name: "テスト",
-                                                 image: UIImage(imageLiteralResourceName: "shampoo-hair-treatment"),
+                                                 image: UIImage(imageLiteralResourceName: "shampoo-hair-treatment").pngData(),
                                                  deadLine: nil,
                                                  registrationDate: Date(),
                                                  numberOfItems: 1,
@@ -114,7 +114,7 @@ class TestData: ObservableObject {
                                                  notificationDate: nil,
                                                  folder: "日用品"),
                                         ItemData(name: "テスト",
-                                                image: UIImage(imageLiteralResourceName: "shampoo-hair-treatment"),
+                                                 image: UIImage(imageLiteralResourceName: "shampoo-hair-treatment").pngData(),
                                                 deadLine: nil,
                                                 registrationDate: Date(),
                                                 numberOfItems: 1,
@@ -123,7 +123,7 @@ class TestData: ObservableObject {
                                                 notificationDate: nil,
                                                 folder: "買い物リスト"),
                                         ItemData(name: "テスト",
-                                                 image: UIImage(imageLiteralResourceName: "surgical-mask"),
+                                                 image: UIImage(imageLiteralResourceName: "surgical-mask").pngData(),
                                                  deadLine: nil,
                                                  registrationDate: Date(),
                                                  numberOfItems: 1,
