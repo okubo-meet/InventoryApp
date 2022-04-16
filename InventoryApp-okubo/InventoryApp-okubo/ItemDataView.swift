@@ -101,6 +101,9 @@ struct ItemDataView: View {
                 }
             }
             .listStyle(.plain)
+            .onAppear {
+                print("データ：　\(itemData)")
+            }
     }
     //日付フォーマットの関数
     func dateText(date: Date?) -> String {
