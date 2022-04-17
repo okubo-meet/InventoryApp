@@ -17,9 +17,9 @@ struct ListRowView: View {
     var body: some View {
         HStack {
             //画像
-//            ItemImageView(imageData: item.image)
-//                .scaledToFit()
-//                .frame(width: imageSize, height: imageSize, alignment: .center)
+            ItemImageView(imageData: item.image)
+                .scaledToFit()
+                .frame(width: imageSize, height: imageSize, alignment: .center)
             VStack {
                 //商品名
                 Text(item.name)

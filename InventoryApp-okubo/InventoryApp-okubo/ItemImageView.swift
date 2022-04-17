@@ -9,7 +9,7 @@ import SwiftUI
 ///画像データを読み込んで表示するView
 struct ItemImageView: View {
     ///画像データ
-    @Binding var imageData: Data?
+    var imageData: Data?
     var body: some View {
         if let data = imageData {
             //データをUIImage型に変換
@@ -28,6 +28,6 @@ struct ItemImageView: View {
 
 struct ItemImageView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemImageView(imageData: .constant(nil))
+        ItemImageView(imageData: nil)
     }
 }

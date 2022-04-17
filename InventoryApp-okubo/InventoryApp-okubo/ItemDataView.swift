@@ -18,7 +18,7 @@ struct ItemDataView: View {
                 HStack {
                     Spacer()
                     VStack {
-                        ItemImageView(imageData: $itemData.image)
+                        ItemImageView(imageData: itemData.image)
                             .scaledToFit()
                             .frame(width: imageSize, height: imageSize, alignment: .center)
                             .border(Color.black, width: 1)

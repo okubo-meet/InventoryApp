@@ -63,7 +63,6 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
             if isSuccess {
                 DispatchQueue.main.async {
                     self.parent.item.name = self.parent.rakutenAPI.resultItemName
-                    //URLから画像を読み込んでいる途中で代入してしまっているので値がnilになっている
                     self.parent.item.image = self.parent.rakutenAPI.resultImageData
                 }
                 parent.successAlert()

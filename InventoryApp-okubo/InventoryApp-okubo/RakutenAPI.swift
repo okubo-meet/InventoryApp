@@ -94,10 +94,6 @@ class RakutenAPI: ObservableObject {
                     let imageURL = jsonData.Items[0].mediumImageUrls[0]
                     print("画像URL:" + imageURL)
                     self.downLoadImage(url: imageURL)
-                    //メインスレッドでアラートを起動
-                    DispatchQueue.main.async {
-                        self.delegate?.searchItemDidfinish(isSuccess: true)
-                    }
                 } else {
                     print("データがありません")
                     DispatchQueue.main.async {
@@ -122,6 +118,8 @@ class RakutenAPI: ObservableObject {
             DispatchQueue.main.async {
                 self.resultImageData = data
                 print("画像データ：\(self.resultImageData!)")
+                //BarcodeReaderViewでアラート起動
+                self.delegate?.searchItemDidfinish(isSuccess: true)
             }
         }
     }

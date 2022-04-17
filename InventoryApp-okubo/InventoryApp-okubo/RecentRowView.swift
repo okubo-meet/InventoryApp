@@ -18,7 +18,7 @@ struct RecentRowView: View {
         //表示するカテゴリ
         VStack(alignment: .leading) {
             //カテゴリの先頭のデータの画像
-            ItemImageView(imageData: $testData.items[0].image)
+            ItemImageView(imageData: testData.items[0].image)
                 .scaledToFit()
                 .frame(width: screenHeight / 6, height: screenHeight / 6, alignment: .center)
                 .background(Color.white)
