@@ -11,6 +11,7 @@ import SwiftUI
 protocol SearchItemDelegate {
     //商品検索が終わったときの処理
     func searchItemDidfinish(isSuccess: Bool)
+    func searchItemError()
 }
 // MARK: -　クラス
 class RakutenAPI: ObservableObject {
@@ -22,7 +23,7 @@ class RakutenAPI: ObservableObject {
             ///商品名
             let itemName: String
             ///画像URL
-//            let smallImageUrls: [String]
+            //            let smallImageUrls: [String]
             let mediumImageUrls: [String]
         }
         //データを受け取る変数
@@ -81,11 +82,11 @@ class RakutenAPI: ObservableObject {
         print("リクエストURL: \(requestURL)")
         guard let url = URL(string: requestURL) else { return }
         //URLリクエストの生成
-        let request = URLRequest(url: url)
+        let request = URLRequest(url: url, timeoutInterval: 8.0)
         let session = URLSession.shared.dataTask(with: request) { data, response, error in
-            do {
-                if let itemData = data {
-                    let decoder = JSONDecoder()
+            if let itemData = data {
+                let decoder = JSONDecoder()
+                do {
                     let jsonData = try decoder.decode(IchibaJson.self, from: itemData)
                     //商品名を取得
                     self.resultItemName = jsonData.Items[0].itemName
@@ -94,16 +95,19 @@ class RakutenAPI: ObservableObject {
                     let imageURL = jsonData.Items[0].mediumImageUrls[0]
                     print("画像URL:" + imageURL)
                     self.downLoadImage(url: imageURL)
-                } else {
+                } catch {
                     print("データがありません")
                     DispatchQueue.main.async {
+                        //データがなかった場合のアラート
                         self.delegate?.searchItemDidfinish(isSuccess: false)
                     }
                 }
-            } catch {
-                print("エラー：\(error.localizedDescription)")
+            } else {
+                //接続エラー（タイムアウト含む）
+                print("接続エラー：\(String(describing: error?.localizedDescription))")
                 DispatchQueue.main.async {
-                    self.delegate?.searchItemDidfinish(isSuccess: false)
+                    //接続に失敗した場合のアラート
+                    self.delegate?.searchItemError()
                 }
             }
         }

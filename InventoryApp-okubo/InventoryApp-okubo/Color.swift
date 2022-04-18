@@ -11,5 +11,5 @@ extension Color {
     //NavigationBarとTabViewの背景色
     static let tabBar: Color = Color("tabBar")
     //リストの背景色
-    static let list: Color = Color("list")
+    static let background: Color = Color("background")
 }

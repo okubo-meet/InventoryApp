@@ -31,6 +31,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     
     // MARK: - Coordinator
     class Coordinator: AVCaptureSession, AVCaptureVideoDataOutputSampleBufferDelegate, SearchItemDelegate {
+        
         let parent: BarcodeReaderView
         init(_ parent: BarcodeReaderView) {
             self.parent = parent
@@ -69,6 +70,10 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
             } else {
                 parent.failureAlert()
             }
+        }
+        //APIでエラーが発生したときのデリゲートメソッド
+        func searchItemError() {
+            parent.errorAlert()
         }
     }
     func makeCoordinator() -> Coordinator {
@@ -146,9 +151,18 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         alert.addAction(continuation)
         viewController.present(alert, animated: true, completion: nil)
     }
-    ///商品検索に失敗した場合のアラートを出す関数
+    ///商品が見つからなかった場合のアラートを出す関数
     func failureAlert() {
-        let alert = UIAlertController(title: "商品が見つかりませんでした", message: "楽天市場では扱っていない可能性があります", preferredStyle: .alert)
+        let alert = UIAlertController(title: "商品が見つかりませんでした", message: "楽天市場では扱っていない可能性があります。", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default, handler: { _ in
+            self.captureSession.startRunning()
+        })
+        alert.addAction(ok)
+        viewController.present(alert, animated: true, completion: nil)
+    }
+    ///通信エラーが発生した場合のアラートを出す関数
+    func errorAlert() {
+        let alert = UIAlertController(title: "通信エラーが発生しました", message: "通信環境をご確認のうえ、再度実行してください。", preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default, handler: { _ in
             self.captureSession.startRunning()
         })
