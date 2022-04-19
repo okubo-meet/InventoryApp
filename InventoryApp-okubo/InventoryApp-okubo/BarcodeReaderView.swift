@@ -18,16 +18,18 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     @ObservedObject var rakutenAPI = RakutenAPI()
     //編集中の商品データ
     @Binding var item: ItemData
+    //インジケーター切り替えフラグ
+    @State var isLoading = false
     //UIViewControllerのインスタンス生成
     private let viewController = UIViewController()
+    //インジケーター
+    private let indicatorView = UIActivityIndicatorView()
     // セッションのインスタンス
     private let captureSession = AVCaptureSession()
     //カメラ映像のプレビューレイヤー
     private let previewLayer = AVCaptureVideoPreviewLayer()
     //ビデオデータ出力のインスタンス
     let videoDataOutput = AVCaptureVideoDataOutput()
-    //メタデータ出力のインスタンス
-//    let metaDataOutput = AVCaptureMetadataOutput()
     
     // MARK: - Coordinator
     class Coordinator: AVCaptureSession, AVCaptureVideoDataOutputSampleBufferDelegate, SearchItemDelegate {
@@ -61,6 +63,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         }
         //商品検索が終わったときのデリゲートメソッド
         func searchItemDidfinish(isSuccess: Bool) {
+            //インジケーター停止
+            parent.isLoading = false
             if isSuccess {
                 DispatchQueue.main.async {
                     self.parent.item.name = self.parent.rakutenAPI.resultItemName
@@ -73,6 +77,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         }
         //APIでエラーが発生したときのデリゲートメソッド
         func searchItemError() {
+            //インジケーター停止
+            parent.isLoading = false
             parent.errorAlert()
         }
     }
@@ -87,12 +93,11 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         viewController.view.frame = UIScreen.main.bounds
         setCamera()
         setPreviewLayer()
+        setIndicator()
         //SearchItemDelegateを呼び出す設定
         rakutenAPI.delegate = context.coordinator
         //AVCaptureVideoDataOutputSampleBufferDelegateを呼び出す設定
         videoDataOutput.setSampleBufferDelegate(context.coordinator, queue: .main)
-        //AVCaptureMetadataOutputObjectsDelegateを呼び出す設定
-//        metaDataOutput.setMetadataObjectsDelegate(context.coordinator, queue: .main)
         //映像からメタデータを出力できるよう設定
         captureSession.addOutput(videoDataOutput)
         //キャプチャーセッション開始
@@ -101,7 +106,13 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     }
     //画面更新時
     func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<BarcodeReaderView>) {
-        
+        if isLoading {
+//            print("インジケーター起動")
+            indicatorView.startAnimating()
+        } else {
+//            print("インジケーター停止")
+            indicatorView.stopAnimating()
+        }
     }
     // MARK: - メソッド
     ///カメラの設定をする関数
@@ -124,10 +135,25 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         //プレビューをViewに追加
         viewController.view.layer.addSublayer(previewLayer)
     }
+    ///インジケーターをViewにセットする関数
+    func setIndicator() {
+        //インジケーター設定
+        indicatorView.style = .large
+        indicatorView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        indicatorView.center = viewController.view.center
+        indicatorView.color = .orange
+        indicatorView.backgroundColor = .white
+        indicatorView.layer.cornerRadius = 25
+        indicatorView.layer.opacity = 0.6
+        //Viewに追加
+        viewController.view.addSubview(indicatorView)
+    }
     ///バーコードを検出した時にアラートを出す関数
     func searchAlert(barcode: String) {
         let alert = UIAlertController(title: "バーコードを検出しました", message: "楽天市場で検索します", preferredStyle: .alert)
         let serch = UIAlertAction(title: "検索", style: .default, handler: { _ in
+            //インジケーター起動
+            self.isLoading = true
             //API検索
             self.rakutenAPI.searchItem(itemCode: barcode)
         })
