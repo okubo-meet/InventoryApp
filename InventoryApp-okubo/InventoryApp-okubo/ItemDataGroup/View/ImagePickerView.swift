@@ -8,7 +8,8 @@
 import SwiftUI
 //写真撮影する画面
 struct ImagePickerView: UIViewControllerRepresentable {
-    let controller = UIImagePickerController()
+    // MARK: - プロパティ
+    private let controller = UIImagePickerController()
     
     // MARK: - Coordinator
     class Coordinator:NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -20,6 +21,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
+    
     // MARK: - View
     //生成時
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePickerView>) -> UIImagePickerController {

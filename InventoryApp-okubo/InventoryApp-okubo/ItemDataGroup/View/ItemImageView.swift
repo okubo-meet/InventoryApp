@@ -8,8 +8,11 @@
 import SwiftUI
 ///画像データを読み込んで表示するView
 struct ItemImageView: View {
+    // MARK: - プロパティ
     ///画像データ
     var imageData: Data?
+    
+    // MARK: - View
     var body: some View {
         if let data = imageData {
             //データをUIImage型に変換
@@ -19,7 +22,7 @@ struct ItemImageView: View {
                 .resizable()
         } else {
             //データがない場合のアイコン表示
-            Image(systemName: "photo")
+            Image(systemName: "photo")//アイコンのサイズ指定が必要
                 .foregroundColor(.orange)
         }
     }

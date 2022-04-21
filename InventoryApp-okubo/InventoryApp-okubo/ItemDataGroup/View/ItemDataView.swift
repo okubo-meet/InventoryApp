@@ -8,11 +8,15 @@
 import SwiftUI
 //データの詳細を表示するView
 struct ItemDataView: View {
-    //在庫か買い物かの判定
+    // MARK: - プロパティ
+    ///在庫か買い物かの判定
     @Binding var isStock: Bool
     ///表示するデータ
     @Binding var itemData: ItemData
+    //画像のサイズ
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 3
+    
+    // MARK: - View
     var body: some View {
             List {
                 HStack {
@@ -105,8 +109,10 @@ struct ItemDataView: View {
                 print("データ：　\(itemData)")
             }
     }
+    
+    // MARK: - メソッド
     //日付フォーマットの関数
-    func dateText(date: Date?) -> String {
+    private func dateText(date: Date?) -> String {
         guard let date = date else {
             return "なし"
         }
@@ -117,7 +123,7 @@ struct ItemDataView: View {
         return dateFormatter.string(from: date)
     }
     //期限がある場合とない場合で違う画像を返す関数
-    func deadLineIcon() -> String {
+    private func deadLineIcon() -> String {
         if itemData.deadLine == nil {
             return "calendar.badge.plus"
         } else {

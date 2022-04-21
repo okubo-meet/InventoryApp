@@ -10,6 +10,7 @@ import AVFoundation
 import Vision
 //バーコードを読み取る画面　楽天APIを使用する予定
 struct BarcodeReaderView: UIViewControllerRepresentable {
+    // MARK: - プロパティ
     //環境変数で取得したdismissハンドラー
     @Environment(\.dismiss) var dismiss
     //仮のデータ
@@ -25,9 +26,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     //カメラ映像のプレビューレイヤー
     private let previewLayer = AVCaptureVideoPreviewLayer()
     //ビデオデータ出力のインスタンス
-    let videoDataOutput = AVCaptureVideoDataOutput()
-    //メタデータ出力のインスタンス
-//    let metaDataOutput = AVCaptureMetadataOutput()
+    private let videoDataOutput = AVCaptureVideoDataOutput()
     
     // MARK: - Coordinator
     class Coordinator: AVCaptureSession, AVCaptureVideoDataOutputSampleBufferDelegate, SearchItemDelegate {
@@ -91,8 +90,6 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         rakutenAPI.delegate = context.coordinator
         //AVCaptureVideoDataOutputSampleBufferDelegateを呼び出す設定
         videoDataOutput.setSampleBufferDelegate(context.coordinator, queue: .main)
-        //AVCaptureMetadataOutputObjectsDelegateを呼び出す設定
-//        metaDataOutput.setMetadataObjectsDelegate(context.coordinator, queue: .main)
         //映像からメタデータを出力できるよう設定
         captureSession.addOutput(videoDataOutput)
         //キャプチャーセッション開始
@@ -103,27 +100,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<BarcodeReaderView>) {
         
     }
+    
     // MARK: - メソッド
-    ///カメラの設定をする関数
-    func setCamera() {
-        guard let captureDevice = AVCaptureDevice.default(for: .video),
-              let deviceInput = try? AVCaptureDeviceInput(device: captureDevice) else { return }
-        //撮影している情報をセッションに渡す
-        if captureSession.canAddInput(deviceInput) {
-            captureSession.addInput(deviceInput)
-        }
-    }
-    ///カメラのキャプチャ映像をViewにセットする関数
-    func setPreviewLayer() {
-        //プレビューするキャプチャを設定
-        previewLayer.session = captureSession
-        //プレビューの画面サイズ
-        previewLayer.frame = viewController.view.bounds
-        //矩形領域の表示
-        previewLayer.videoGravity = .resizeAspectFill
-        //プレビューをViewに追加
-        viewController.view.layer.addSublayer(previewLayer)
-    }
     ///バーコードを検出した時にアラートを出す関数
     func searchAlert(barcode: String) {
         let alert = UIAlertController(title: "バーコードを検出しました", message: "楽天市場で検索します", preferredStyle: .alert)
@@ -168,6 +146,26 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         })
         alert.addAction(ok)
         viewController.present(alert, animated: true, completion: nil)
+    }
+    ///カメラの設定をする関数
+    private func setCamera() {
+        guard let captureDevice = AVCaptureDevice.default(for: .video),
+              let deviceInput = try? AVCaptureDeviceInput(device: captureDevice) else { return }
+        //撮影している情報をセッションに渡す
+        if captureSession.canAddInput(deviceInput) {
+            captureSession.addInput(deviceInput)
+        }
+    }
+    ///カメラのキャプチャ映像をViewにセットする関数
+    private func setPreviewLayer() {
+        //プレビューするキャプチャを設定
+        previewLayer.session = captureSession
+        //プレビューの画面サイズ
+        previewLayer.frame = viewController.view.bounds
+        //矩形領域の表示
+        previewLayer.videoGravity = .resizeAspectFill
+        //プレビューをViewに追加
+        viewController.view.layer.addSublayer(previewLayer)
     }
 }
 

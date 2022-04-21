@@ -8,10 +8,13 @@
 import SwiftUI
 //起動時の画面　TabViewで扱うView
 struct HomeView: View {
+    // MARK: - プロパティ
     //仮のデータ
     @EnvironmentObject var testData: TestData
     private let screenWidth = CGFloat(UIScreen.main.bounds.width)
     private let screenHeight = CGFloat(UIScreen.main.bounds.height)
+    
+    // MARK: - View
     var body: some View {
         NavigationView {
             VStack {

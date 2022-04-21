@@ -72,6 +72,68 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7F18DA8528111A30005472AC /* HomeGroup */ = {
+			isa = PBXGroup;
+			children = (
+				7F5BA4CE27D64C0A00338C12 /* HomeView.swift */,
+				7F0798FF27D9C291006BF1CF /* RecentItemsView.swift */,
+				7F57129F27F57E91005DE0BC /* RecentRowView.swift */,
+				7F47C30027D742D9006343B4 /* RegisterView.swift */,
+			);
+			path = HomeGroup;
+			sourceTree = "<group>";
+		};
+		7F18DA8628111B6A005472AC /* FolderGroup */ = {
+			isa = PBXGroup;
+			children = (
+				7F18DA8A28111D55005472AC /* View */,
+				7F5A6B9227E2EC6900DCCE81 /* Icon.swift */,
+			);
+			path = FolderGroup;
+			sourceTree = "<group>";
+		};
+		7F18DA8728111BF6005472AC /* ItemDataGroup */ = {
+			isa = PBXGroup;
+			children = (
+				7F18DA8828111C41005472AC /* View */,
+				7F18DA8928111C5F005472AC /* ViewModel */,
+			);
+			path = ItemDataGroup;
+			sourceTree = "<group>";
+		};
+		7F18DA8828111C41005472AC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7F4EFA5627EA187C0005461E /* ItemDataView.swift */,
+				7F730DD428092600002EBD76 /* ItemImageView.swift */,
+				7F5C967327F4976D0079CD69 /* AddImageButton.swift */,
+				7F0798F927D9B268006BF1CF /* BarcodeReaderView.swift */,
+				7F0798FB27D9B630006BF1CF /* ImagePickerView.swift */,
+				7F0798FD27D9BF21006BF1CF /* ImageLibraryView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		7F18DA8928111C5F005472AC /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				7F55D64127F6C6A9004169C4 /* RakutenAPI.swift */,
+				7FE8968427E44A57002E80B1 /* ItemStatus.swift */,
+				7FA5698527DB194900AB0EEF /* SampleImage.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		7F18DA8A28111D55005472AC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7F5BA4D027D64C8800338C12 /* FolderView.swift */,
+				7F7CD3E627D8EA8A005A953B /* ItemListView.swift */,
+				7FE8968227E4463B002E80B1 /* ListRowView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		7F70E1C127D1E55900C483B9 = {
 			isa = PBXGroup;
 			children = (
@@ -93,24 +155,10 @@
 			children = (
 				7F70E1CD27D1E55900C483B9 /* InventoryApp_okuboApp.swift */,
 				7F70E1CF27D1E55900C483B9 /* ContentView.swift */,
-				7F5BA4CE27D64C0A00338C12 /* HomeView.swift */,
-				7F5BA4D027D64C8800338C12 /* FolderView.swift */,
+				7F18DA8528111A30005472AC /* HomeGroup */,
+				7F18DA8628111B6A005472AC /* FolderGroup */,
+				7F18DA8728111BF6005472AC /* ItemDataGroup */,
 				7F5BA4D227D64CE800338C12 /* SettingView.swift */,
-				7F0798FF27D9C291006BF1CF /* RecentItemsView.swift */,
-				7F57129F27F57E91005DE0BC /* RecentRowView.swift */,
-				7F47C30027D742D9006343B4 /* RegisterView.swift */,
-				7F0798F927D9B268006BF1CF /* BarcodeReaderView.swift */,
-				7F0798FB27D9B630006BF1CF /* ImagePickerView.swift */,
-				7F0798FD27D9BF21006BF1CF /* ImageLibraryView.swift */,
-				7F7CD3E627D8EA8A005A953B /* ItemListView.swift */,
-				7FE8968227E4463B002E80B1 /* ListRowView.swift */,
-				7F4EFA5627EA187C0005461E /* ItemDataView.swift */,
-				7F730DD428092600002EBD76 /* ItemImageView.swift */,
-				7F5C967327F4976D0079CD69 /* AddImageButton.swift */,
-				7F55D64127F6C6A9004169C4 /* RakutenAPI.swift */,
-				7FA5698527DB194900AB0EEF /* SampleImage.swift */,
-				7FE8968427E44A57002E80B1 /* ItemStatus.swift */,
-				7F5A6B9227E2EC6900DCCE81 /* Icon.swift */,
 				7F317B6627E1C84300E1C2E1 /* Color.swift */,
 				7F55D64327F6CAD5004169C4 /* Api.plist */,
 				7F70E1D127D1E55A00C483B9 /* Assets.xcassets */,

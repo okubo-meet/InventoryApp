@@ -8,12 +8,17 @@
 import SwiftUI
 //ItemListViewでリスト表示するView
 struct ListRowView: View {
-    private let imageSize = CGFloat(UIScreen.main.bounds.width) / 4
-    private let rowHeight = CGFloat(UIScreen.main.bounds.height) / 8
+    // MARK: - プロパティ
     //商品データ
     var item: ItemData
     //在庫か買い物か
     var isStock: Bool
+    //画像サイズ
+    private let imageSize = CGFloat(UIScreen.main.bounds.width) / 4
+    //行の高さ
+    private let rowHeight = CGFloat(UIScreen.main.bounds.height) / 8
+    
+    // MARK: - View
     var body: some View {
         HStack {
             //画像
@@ -61,8 +66,10 @@ struct ListRowView: View {
         }// HStack
         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: rowHeight, alignment: .leading)
     }
+    
+    // MARK: - メソッド
     //日付フォーマットの関数
-    func dateText(date: Date?) -> String {
+    private func dateText(date: Date?) -> String {
         guard let date = date else {
             return "なし"
         }

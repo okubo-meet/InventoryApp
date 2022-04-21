@@ -9,15 +9,19 @@ import SwiftUI
 
 // MARK: - プロトコル
 protocol SearchItemDelegate {
-    //商品検索が終わったときの処理
+    /// 商品検索が終わったときの処理
+    /// - Parameter isSuccess: 商品の有無
     func searchItemDidfinish(isSuccess: Bool)
+    ///商品検索でエラーが起きたときの処理
     func searchItemError()
 }
+
 // MARK: -　クラス
 class RakutenAPI: ObservableObject {
+    
     // MARK: - 構造体
     ///JSONのデータ構造 （楽天市場API）
-    struct IchibaJson: Codable {
+    private struct IchibaJson: Codable {
         ///JSONのitems内のデータ構造
         struct Items: Codable {
             ///商品名
@@ -29,15 +33,18 @@ class RakutenAPI: ObservableObject {
         //データを受け取る変数
         let Items: [Items]
     }
+    
     // MARK: - プロパティ
-    //取得した商品名
+    ///APIで取得した商品名
     var resultItemName = ""
-    //取得した画像データ
+    ///APIで取得した画像データ
     var resultImageData: Data? = nil
-    //検索終了時のデリゲート
+    ///商品検索終了時のデリゲート
     var delegate: SearchItemDelegate?
     //plistの値を受け取る変数
     private var property: Dictionary<String, Any> = [:]
+    
+    // MARK: - イニシャライザ
     //初期化　変数'property'に'Api.plist'の値を入れる
     init() {
         //Api.plistのパス取得
@@ -51,15 +58,6 @@ class RakutenAPI: ObservableObject {
     }
     
     // MARK: - メソッド
-    ///plistから文字列を取得する関数
-    func getProperty(key: String) -> String {
-        guard let value = property[key] as? String else {
-            print("plist: エラー")
-            return ""
-        }
-        print("plist: \(value)")
-        return value
-    }
     ///楽天市場APIを使用する関数
     func searchItem(itemCode: String) {
         //ベースURL
@@ -113,9 +111,18 @@ class RakutenAPI: ObservableObject {
         }
         //セッション開始
         session.resume()
-    }// searchItem
-    //取得したURLから画像を読み込む関数
-    func downLoadImage(url: String) {
+    }
+    ///plistから文字列を取得する関数
+    private func getProperty(key: String) -> String {
+        guard let value = property[key] as? String else {
+            print("plist: エラー")
+            return ""
+        }
+        print("plist: \(value)")
+        return value
+    }
+    ///取得したURLから画像を読み込む関数
+    private func downLoadImage(url: String) {
         guard let imageURL = URL(string: url) else { return }
         DispatchQueue.global().async {
             let data = try? Data(contentsOf: imageURL)
