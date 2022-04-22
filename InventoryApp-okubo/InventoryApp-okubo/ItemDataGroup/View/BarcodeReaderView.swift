@@ -21,6 +21,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     @Binding var item: ItemData
     //インジケーター切り替えフラグ
     @State var isLoading = false
+    //バーコードの位置に表示する線
+    var barcodeBorder = CAShapeLayer()
     //UIViewControllerのインスタンス生成
     private let viewController = UIViewController()
     //インジケーター
@@ -31,7 +33,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     private let previewLayer = AVCaptureVideoPreviewLayer()
     //ビデオデータ出力のインスタンス
     private let videoDataOutput = AVCaptureVideoDataOutput()
-
+    
     
     // MARK: - Coordinator
     class Coordinator: AVCaptureSession, AVCaptureVideoDataOutputSampleBufferDelegate, SearchItemDelegate {
@@ -48,17 +50,24 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
             let requestHandler = VNSequenceRequestHandler()
             //画像内のバーコードを検出するVsionリクエスト
             let barcodesRequest = VNDetectBarcodesRequest { result, _ in
-                //バーコードがなければ処理なし
-                guard let barcode = result.results?.first as? VNBarcodeObservation else {
-                    return
+                DispatchQueue.main.async {
+                    //バーコードがなければ処理なし
+                    guard let barcode = result.results?.first as? VNBarcodeObservation else {
+                        //バーコードを検知していないとき枠線を非表示にする
+                        self.parent.barcodeBorder.removeFromSuperlayer()
+                        return
+                    }
+                    //線を表示
+                    self.parent.showBorder(barcode: barcode)
+                    //読み取ったコードを出力
+                    if let value = barcode.payloadStringValue {
+                        print("読み取り：\(value)")
+                        print("タイプ：\(barcode.symbology)")
+                        self.parent.captureSession.stopRunning()
+                        self.parent.searchAlert(barcode: value)
+                    }
                 }
-                //読み取ったコードを出力
-                if let value = barcode.payloadStringValue {
-                    print("読み取り：\(value)")
-                    print("タイプ：\(barcode.symbology)")
-                    self.parent.captureSession.stopRunning()
-                    self.parent.searchAlert(barcode: value)
-                }
+                
             }// VNDetectBarcodesRequest
             //バーコード検出開始
             try? requestHandler.perform([barcodesRequest], on: pixelBuffer, orientation: .downMirrored)
@@ -99,7 +108,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         //SearchItemDelegateを呼び出す設定
         rakutenAPI.delegate = context.coordinator
         //AVCaptureVideoDataOutputSampleBufferDelegateを呼び出す設定
-        videoDataOutput.setSampleBufferDelegate(context.coordinator, queue: .main)
+        videoDataOutput.setSampleBufferDelegate(context.coordinator, queue: DispatchQueue(label: "camera_frame_processing_queue"))
         //映像からメタデータを出力できるよう設定
         captureSession.addOutput(videoDataOutput)
         //キャプチャーセッション開始
@@ -109,15 +118,26 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     //画面更新時
     func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<BarcodeReaderView>) {
         if isLoading {
-//            print("インジケーター起動")
+            //            print("インジケーター起動")
             indicatorView.startAnimating()
         } else {
-//            print("インジケーター停止")
+            //            print("インジケーター停止")
             indicatorView.stopAnimating()
         }
     }
     
     // MARK: - メソッド
+    ///検知したバーコードの位置に線を表示する関数
+    func showBorder(barcode: VNBarcodeObservation) {
+        let boxOnScreen = previewLayer.layerRectConverted(fromMetadataOutputRect: barcode.boundingBox)
+        let boxPath = CGPath(rect: boxOnScreen, transform: nil)
+        barcodeBorder.path = boxPath
+        barcodeBorder.lineWidth = 5
+        barcodeBorder.fillColor = UIColor.clear.cgColor
+        barcodeBorder.strokeColor = UIColor.orange.cgColor
+        //表示
+        previewLayer.addSublayer(barcodeBorder)
+    }
     ///バーコードを検出した時にアラートを出す関数
     func searchAlert(barcode: String) {
         let alert = UIAlertController(title: "バーコードを検出しました", message: "楽天市場で検索します", preferredStyle: .alert)
