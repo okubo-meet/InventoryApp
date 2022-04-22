@@ -8,6 +8,7 @@
 import SwiftUI
 //設定画面　TabViewで扱うView
 struct SettingView: View {
+    // MARK: - View
     var body: some View {
         NavigationView {
             Form {

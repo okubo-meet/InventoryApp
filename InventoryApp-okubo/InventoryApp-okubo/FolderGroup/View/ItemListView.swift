@@ -8,15 +8,19 @@
 import SwiftUI
 //商品データをリスト表示する画面　「最近の項目」にも対応できるようにする予定
 struct ItemListView: View {
+    // MARK: - プロパティ
     //仮のデータ
     @EnvironmentObject var testData: TestData
+    //遷移先で表示するデータのインデックス番号
+    @State private var indexNum = 0
+    //タップした商品が在庫か買い物リストなのかを遷移先に渡す変数
+    @State private var isStock = true
     //リストから遷移するフラグ
-    @State var isActive = false
-    //どの遷移先で表示するデータのインデックス番号
-    @State var indexNum = 0
-    @State var isStock = true
+    @State private var isActive = false
     ///どのカテゴリのリストかを受け取る変数
     var folder: Folder
+    
+    // MARK: - View
     var body: some View {
         ZStack {
             VStack {
@@ -35,13 +39,15 @@ struct ItemListView: View {
             .navigationTitle(folder.name)
         }// ZStack
     }
+    
+    // MARK: - メソッド
     //フォルダ名から商品リストを検索して返す関数
-    func folderItems(folderName: String) -> [ItemData] {
+    private func folderItems(folderName: String) -> [ItemData] {
         let items = testData.items.filter({$0.folder == folderName})
         return items
     }
     //データから配列のインデックス番号を検索し、NavigationLinkを起動する関数
-    func showItemView(item: ItemData) {
+    private func showItemView(item: ItemData) {
         if let index = testData.items.firstIndex(where: { $0.id == item.id }) {
             indexNum = index
             print("インデックス番号: \(indexNum)")

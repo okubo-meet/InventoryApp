@@ -8,36 +8,57 @@
 import SwiftUI
 //データの詳細を表示するView
 struct ItemDataView: View {
-    //在庫か買い物かの判定
+    // MARK: - プロパティ
+    ///在庫か買い物かの判定
     @Binding var isStock: Bool
     ///表示するデータ
     @Binding var itemData: ItemData
+    //画像のサイズ
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 3
+    
+    // MARK: - View
     var body: some View {
             List {
                 HStack {
                     Spacer()
                     VStack {
-                        Image(uiImage: itemData.image)
-                            .resizable()
+                        ItemImageView(imageData: itemData.image)
                             .scaledToFit()
                             .frame(width: imageSize, height: imageSize, alignment: .center)
                             .border(Color.black, width: 1)
                         //画像追加ボタン
-                        AddImageButton()
+                        AddImageButton(item: $itemData)
                     }// VStack
                     Spacer()
                 }
                 HStack {
                     Text("商品名:")
-                    TextField("入力してください", text: $itemData.name)
+                    TextField("入力してください（必須）", text: $itemData.name)
                 }
                 //期限と通知は在庫リストのみ表示
                 if isStock {
-                    //DatePickerで選択できるようにする。期限無しも選択できるようにする
                     HStack {
                         Text("期限:")
-                        Text(dateText(date: itemData.deadLine))
+                        if itemData.deadLine == nil {
+                            //期限無し
+                            Text("無し")
+                        } else {
+                            DatePicker("", selection: Binding<Date>(get: {itemData.deadLine ?? Date()}, set: {itemData.deadLine = $0}), displayedComponents: .date)
+                                .labelsHidden()
+                        }
+                        Spacer()
+                        //期限の有り無しを選択するボタン
+                        Image(systemName: deadLineIcon())
+                            .foregroundColor(itemData.deadLine == nil ? .orange : .gray)
+                            .onTapGesture {
+                                //期限がnilなら現在の日付を代入し、すでに日付があればnilを代入する
+                                if itemData.deadLine == nil {
+                                    itemData.deadLine = Date()
+                                } else {
+                                    itemData.deadLine = nil
+                                }
+                            }
+                        
                     }
                     //期限の何日前か計算して表示する
                     HStack {
@@ -84,11 +105,14 @@ struct ItemDataView: View {
                 }
             }
             .listStyle(.plain)
-        
-        
+            .onAppear {
+                print("データ：　\(itemData)")
+            }
     }
+    
+    // MARK: - メソッド
     //日付フォーマットの関数
-    func dateText(date: Date?) -> String {
+    private func dateText(date: Date?) -> String {
         guard let date = date else {
             return "なし"
         }
@@ -97,6 +121,14 @@ struct ItemDataView: View {
         dateFormatter.dateStyle = .medium
         dateFormatter.dateFormat = "yyyy/MM/dd"
         return dateFormatter.string(from: date)
+    }
+    //期限がある場合とない場合で違う画像を返す関数
+    private func deadLineIcon() -> String {
+        if itemData.deadLine == nil {
+            return "calendar.badge.plus"
+        } else {
+            return "xmark.circle.fill"
+        }
     }
 }
 

@@ -8,18 +8,21 @@
 import SwiftUI
 //「最近の項目」で並べるView　ここからItemListViewに遷移させる予定
 struct RecentRowView: View {
+    // MARK: - プロパティ
     //仮のデータ
     @EnvironmentObject var testData: TestData
+    //画面サイズ
     private let screenWidth = CGFloat(UIScreen.main.bounds.width)
     private let screenHeight = CGFloat(UIScreen.main.bounds.height)
     //カテゴリ名　後で列挙型で作る可能性あり
     var category: String
+    
+    // MARK: - View
     var body: some View {
         //表示するカテゴリ
         VStack(alignment: .leading) {
             //カテゴリの先頭のデータの画像
-            Image(uiImage: testData.items[0].image)
-                .resizable()
+            ItemImageView(imageData: testData.items[0].image)
                 .scaledToFit()
                 .frame(width: screenHeight / 6, height: screenHeight / 6, alignment: .center)
                 .background(Color.white)

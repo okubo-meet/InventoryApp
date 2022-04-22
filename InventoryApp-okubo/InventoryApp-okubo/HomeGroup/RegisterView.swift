@@ -8,13 +8,13 @@
 import SwiftUI
 //商品登録画面
 struct RegisterView: View {
+    // MARK: - プロパティ
     //仮のデータ
     @EnvironmentObject var testData: TestData
-    @State var isStock = true
-    @State var showingDialog = false
-    @State var showBarcodeReader = false
-    @State var showImagePicker = false
-    @State var showLibrary = false
+    //在庫リストか買い物リストどちらに登録するかの判定
+    @State private var isStock = true
+    
+    // MARK: - View
     var body: some View {
         VStack {
             Picker("", selection: $isStock) {
@@ -23,7 +23,7 @@ struct RegisterView: View {
             }
             .pickerStyle(.segmented)
             //商品データ
-            ItemDataView(isStock: $isStock, itemData: $testData.items[0])
+            ItemDataView(isStock: $isStock, itemData: $testData.newItem)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("商品登録")
