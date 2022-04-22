@@ -8,11 +8,14 @@
 import SwiftUI
 //サンプル画像を選択する画面
 struct ImageLibraryView: View {
+    // MARK: - プロパティ
     //サンプル画像のカテゴリ
     @State var sampleImage: SampleImage = .food
     //グリッドのカラム
     private let rows: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     private let gridWidth = UIScreen.main.bounds.width / 3.5
+    
+    // MARK: - View
     var body: some View {
         NavigationView {
             VStack {

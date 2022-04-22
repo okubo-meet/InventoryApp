@@ -8,9 +8,13 @@
 import SwiftUI
 //商品登録画面
 struct RegisterView: View {
+    // MARK: - プロパティ
     //仮のデータ
     @EnvironmentObject var testData: TestData
-    @State var isStock = true
+    //在庫リストか買い物リストどちらに登録するかの判定
+    @State private var isStock = true
+    
+    // MARK: - View
     var body: some View {
         VStack {
             Picker("", selection: $isStock) {

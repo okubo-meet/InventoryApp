@@ -8,8 +8,11 @@
 import SwiftUI
 //フォルダデータを扱う画面　TabViewで扱うView
 struct FolderView: View {
+    // MARK: - プロパティ
     //仮のデータ
     @EnvironmentObject var testData: TestData
+    
+    // MARK: - View
     var body: some View {
         NavigationView {
             Form {
