@@ -105,6 +105,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         setCamera()
         setPreviewLayer()
         setIndicator()
+        setClose()
+        //読み取り成功ラベル
         //SearchItemDelegateを呼び出す設定
         rakutenAPI.delegate = context.coordinator
         //AVCaptureVideoDataOutputSampleBufferDelegateを呼び出す設定
@@ -217,6 +219,18 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         indicatorView.layer.opacity = 0.6
         //Viewに追加
         viewController.view.addSubview(indicatorView)
+    }
+    ///画面を閉じるボタンをViewにセットする関数
+    private func setClose() {
+        //ボタンのアイコン
+        let closeIcon = UIImage(systemName: "xmark.circle.fill")
+        //戻るボタンの設定
+        let closeButton = UIButton()
+        closeButton.setImage(closeIcon, for: .normal)
+        closeButton.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        closeButton.tintColor = .gray
+        //Viewに追加
+        viewController.view.addSubview(closeButton)
     }
 }
 
