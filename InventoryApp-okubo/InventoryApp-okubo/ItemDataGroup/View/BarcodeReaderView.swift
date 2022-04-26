@@ -222,8 +222,10 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     }
     ///画面を閉じるボタンをViewにセットする関数
     private func setClose() {
+        //アイコンのサイズ
+        let config = UIImage.SymbolConfiguration(pointSize: 50)
         //ボタンのアイコン
-        let closeIcon = UIImage(systemName: "xmark.circle.fill")
+        let closeIcon = UIImage(systemName: "xmark.circle.fill", withConfiguration: config)
         //戻るボタンの設定
         let closeButton = UIButton()
         closeButton.setImage(closeIcon, for: .normal)
