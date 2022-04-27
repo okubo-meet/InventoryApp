@@ -231,6 +231,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         closeButton.setImage(closeIcon, for: .normal)
         closeButton.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         closeButton.tintColor = .gray
+        closeButton.addAction(.init { _ in dismiss() }, for: .touchUpInside)
         //Viewに追加
         viewController.view.addSubview(closeButton)
     }
