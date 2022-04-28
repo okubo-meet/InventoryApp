@@ -235,6 +235,10 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         //Viewに追加
         viewController.view.addSubview(closeButton)
     }
+    ///商品検索に関するラベルをViewにセットする関数
+    private func setSearchLabel() {
+        
+    }
 }
 
 struct BarcodeReaderView_Previews: PreviewProvider {
