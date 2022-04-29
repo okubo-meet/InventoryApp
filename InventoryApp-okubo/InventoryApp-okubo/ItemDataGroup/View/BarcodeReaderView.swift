@@ -19,8 +19,10 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     @ObservedObject var rakutenAPI = RakutenAPI()
     //編集中の商品データ
     @Binding var item: ItemData
-    //インジケーター切り替えフラグ
+    ///インジケーター切り替えフラグ
     @State var isLoading = false
+    //
+    @State var labelText = "読み取り完了"
     //バーコードの位置に表示する線
     var barcodeBorder = CAShapeLayer()
     //UIViewControllerのインスタンス生成
@@ -33,7 +35,9 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     private let previewLayer = AVCaptureVideoPreviewLayer()
     //ビデオデータ出力のインスタンス
     private let videoDataOutput = AVCaptureVideoDataOutput()
-    
+    //画面サイズ
+    private let screenWidth = CGFloat(UIScreen.main.bounds.width)
+    private let screenHeight = CGFloat(UIScreen.main.bounds.height)
     
     // MARK: - Coordinator
     class Coordinator: AVCaptureSession, AVCaptureVideoDataOutputSampleBufferDelegate, SearchItemDelegate {
@@ -106,6 +110,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         setPreviewLayer()
         setIndicator()
         setClose()
+        setSearchLabel()
         //読み取り成功ラベル
         //SearchItemDelegateを呼び出す設定
         rakutenAPI.delegate = context.coordinator
@@ -120,10 +125,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     //画面更新時
     func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<BarcodeReaderView>) {
         if isLoading {
-            //            print("インジケーター起動")
             indicatorView.startAnimating()
         } else {
-            //            print("インジケーター停止")
             indicatorView.stopAnimating()
         }
     }
@@ -223,21 +226,44 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     ///画面を閉じるボタンをViewにセットする関数
     private func setClose() {
         //アイコンのサイズ
-        let config = UIImage.SymbolConfiguration(pointSize: 50)
+        let iconSize = screenWidth / 9
+        //アイコンのサイズを適用
+        var config = UIImage.SymbolConfiguration(pointSize: iconSize)
+        //色の設定を追加
+        config = config.applying(UIImage.SymbolConfiguration(paletteColors: [.white, .lightGray]))
         //ボタンのアイコン
         let closeIcon = UIImage(systemName: "xmark.circle.fill", withConfiguration: config)
+        //ボタンの位置
+        let position = screenWidth / 15
         //戻るボタンの設定
         let closeButton = UIButton()
         closeButton.setImage(closeIcon, for: .normal)
-        closeButton.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        closeButton.tintColor = .gray
+        closeButton.frame = CGRect(x: position, y: position, width: iconSize, height: iconSize)
         closeButton.addAction(.init { _ in dismiss() }, for: .touchUpInside)
         //Viewに追加
         viewController.view.addSubview(closeButton)
     }
     ///商品検索に関するラベルをViewにセットする関数
     private func setSearchLabel() {
-        
+        //ラベルの位置
+        let x = screenWidth - screenWidth / 2.5
+        let y = screenWidth / 15
+        //ラベルの大きさ
+        let width = screenWidth / 3
+        let height = screenHeight / 15
+        //ラベル設定
+        let label = UILabel()
+        label.frame = CGRect(x: x, y: y, width: width, height: height)
+        label.text = labelText
+        label.textAlignment = .center
+        label.textColor = .orange
+        label.backgroundColor = .white
+        label.layer.borderColor = UIColor.orange.cgColor
+        label.layer.borderWidth = 2
+        label.layer.masksToBounds = true
+        label.layer.cornerRadius = height / 2
+        //Viewに追加
+        viewController.view.addSubview(label)
     }
 }
 
