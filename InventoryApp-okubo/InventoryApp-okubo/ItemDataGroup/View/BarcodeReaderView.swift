@@ -21,10 +21,10 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     @Binding var item: ItemData
     ///インジケーター切り替えフラグ
     @State var isLoading = false
-    //
-    @State var labelText = "読み取り完了"
     //バーコードの位置に表示する線
     var barcodeBorder = CAShapeLayer()
+    //バーコード検索の状態を表示するラベル
+    private let label = UILabel()
     //UIViewControllerのインスタンス生成
     private let viewController = UIViewController()
     //インジケーター
@@ -126,6 +126,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<BarcodeReaderView>) {
         if isLoading {
             indicatorView.startAnimating()
+            
         } else {
             indicatorView.stopAnimating()
         }
@@ -149,6 +150,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         let serch = UIAlertAction(title: "検索", style: .default, handler: { _ in
             //インジケーター起動
             self.isLoading = true
+            //ラベルのテキスト変更
+            self.label.text = "検索中..."
             //API検索
             self.rakutenAPI.searchItem(itemCode: barcode)
         })
@@ -161,6 +164,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     }
     ///商品検索に成功した場合のアラートを出す関数
     func successAlert() {
+        //ラベルのテキスト変更
+        label.text = "読み取り完了"
         let alert = UIAlertController(title: "商品を検索しました", message: "前の画面に戻りますか？", preferredStyle: .alert)
         let ok = UIAlertAction(title: "戻る", style: .default, handler: { _ in
             dismiss()
@@ -252,9 +257,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         let width = screenWidth / 3
         let height = screenHeight / 15
         //ラベル設定
-        let label = UILabel()
         label.frame = CGRect(x: x, y: y, width: width, height: height)
-        label.text = labelText
+        label.text = "読み取り中"
         label.textAlignment = .center
         label.textColor = .orange
         label.backgroundColor = .white
