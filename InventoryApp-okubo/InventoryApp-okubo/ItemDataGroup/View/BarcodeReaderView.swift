@@ -73,6 +73,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
                 }
                 
             }// VNDetectBarcodesRequest
+            //検出するバーコードの種類を制限
+            barcodesRequest.symbologies = [.ean8, .ean13]
             //バーコード検出開始
             try? requestHandler.perform([barcodesRequest], on: pixelBuffer, orientation: .downMirrored)
         }
@@ -271,8 +273,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     }
 }
 
-struct BarcodeReaderView_Previews: PreviewProvider {
-    static var previews: some View {
-        BarcodeReaderView(item: .constant(TestData().items[0]))
-    }
-}
+//struct BarcodeReaderView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        BarcodeReaderView(item: .constant(TestData().items[0]))
+//    }
+//}
