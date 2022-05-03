@@ -68,7 +68,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
                         print("読み取り：\(value)")
                         print("タイプ：\(barcode.symbology)")
                         self.parent.captureSession.stopRunning()
-                        self.parent.searchAlert(barcode: value)
+                        self.parent.findBarcode(barcode: value)
                     }
                 }
                 
@@ -140,29 +140,36 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         let boxOnScreen = previewLayer.layerRectConverted(fromMetadataOutputRect: barcode.boundingBox)
         let boxPath = CGPath(rect: boxOnScreen, transform: nil)
         barcodeBorder.path = boxPath
-        barcodeBorder.lineWidth = 5
+        barcodeBorder.lineWidth = 3
         barcodeBorder.fillColor = UIColor.clear.cgColor
         barcodeBorder.strokeColor = UIColor.orange.cgColor
         //表示
         previewLayer.addSublayer(barcodeBorder)
     }
-    ///バーコードを検出した時にアラートを出す関数
-    func searchAlert(barcode: String) {
-        let alert = UIAlertController(title: "バーコードを検出しました", message: "楽天市場で検索します", preferredStyle: .alert)
-        let serch = UIAlertAction(title: "検索", style: .default, handler: { _ in
-            //インジケーター起動
-            self.isLoading = true
-            //ラベルのテキスト変更
-            self.label.text = "検索中..."
-            //API検索
-            self.rakutenAPI.searchItem(itemCode: barcode)
-        })
-        let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in
-            self.captureSession.startRunning()
-        })
-        alert.addAction(cancel)
-        alert.addAction(serch)
-        viewController.present(alert, animated: true, completion: nil)
+    ///バーコードを検出した時にAPIを起動する
+    func findBarcode(barcode: String) {
+        // TODO: - バーコードを検知した瞬間、商品検索の成否のサウンドを探す -
+        //インジケーター起動
+        isLoading = true
+        //ラベルのテキスト変更
+        label.text = "検索中..."
+        //API検索
+        rakutenAPI.searchItem(itemCode: barcode)
+//        let alert = UIAlertController(title: "バーコードを検出しました", message: "楽天市場で検索します", preferredStyle: .alert)
+//        let serch = UIAlertAction(title: "検索", style: .default, handler: { _ in
+//            //インジケーター起動
+//            self.isLoading = true
+//            //ラベルのテキスト変更
+//            self.label.text = "検索中..."
+//            //API検索
+//            self.rakutenAPI.searchItem(itemCode: barcode)
+//        })
+//        let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in
+//            self.captureSession.startRunning()
+//        })
+//        alert.addAction(cancel)
+//        alert.addAction(serch)
+//        viewController.present(alert, animated: true, completion: nil)
     }
     ///商品検索に成功した場合のアラートを出す関数
     func successAlert() {
