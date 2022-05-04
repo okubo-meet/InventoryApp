@@ -35,6 +35,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     private let previewLayer = AVCaptureVideoPreviewLayer()
     //ビデオデータ出力のインスタンス
     private let videoDataOutput = AVCaptureVideoDataOutput()
+    //商品検索終了時の振動のインスタンス
+    private let finishImpact = UINotificationFeedbackGenerator()
     //画面サイズ
     private let screenWidth = CGFloat(UIScreen.main.bounds.width)
     private let screenHeight = CGFloat(UIScreen.main.bounds.height)
@@ -148,7 +150,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     }
     ///バーコードを検出した時にAPIを起動する
     func findBarcode(barcode: String) {
-        // TODO: - バーコードを検知した瞬間、商品検索の成否のサウンドを探す -
+        // TODO: - バーコードを検知した瞬間のサウンドを探す -
         //インジケーター起動
         isLoading = true
         //ラベルのテキスト変更
@@ -184,6 +186,9 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         })
         alert.addAction(ok)
         alert.addAction(continuation)
+        //バイブレーション起動
+        finishImpact.notificationOccurred(.success)
+        //アラート表示
         viewController.present(alert, animated: true, completion: nil)
     }
     ///商品が見つからなかった場合のアラートを出す関数
@@ -193,6 +198,9 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
             self.captureSession.startRunning()
         })
         alert.addAction(ok)
+        //バイブレーション起動
+        finishImpact.notificationOccurred(.warning)
+        //アラート表示
         viewController.present(alert, animated: true, completion: nil)
     }
     ///通信エラーが発生した場合のアラートを出す関数
@@ -202,6 +210,9 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
             self.captureSession.startRunning()
         })
         alert.addAction(ok)
+        //バイブレーション起動
+        finishImpact.notificationOccurred(.error)
+        //アラート表示
         viewController.present(alert, animated: true, completion: nil)
     }
     ///カメラの設定をする関数
@@ -260,14 +271,14 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     ///商品検索に関するラベルをViewにセットする関数
     private func setSearchLabel() {
         //ラベルの位置
-        let x = screenWidth - screenWidth / 2.5
+        let x = screenWidth - screenWidth / 2.3
         let y = screenWidth / 15
         //ラベルの大きさ
-        let width = screenWidth / 3
+        let width = screenWidth / 2.5
         let height = screenHeight / 15
         //ラベル設定
         label.frame = CGRect(x: x, y: y, width: width, height: height)
-        label.text = "読み取り中"
+        label.text = "バーコード検索"
         label.textAlignment = .center
         label.textColor = .orange
         label.backgroundColor = .white
