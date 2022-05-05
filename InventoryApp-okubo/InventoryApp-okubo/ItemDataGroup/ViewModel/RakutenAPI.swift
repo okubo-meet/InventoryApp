@@ -70,6 +70,7 @@ class RakutenAPI: ObservableObject {
         let params: KeyValuePairs = ["format" : "json",
                                      "formatVersion" : "2",
                                      "hits" : "1",
+                                     "imageFlag" : "1",
                                      "elements" : "itemName,mediumImageUrls"]
         //パラメータをURLの形につなげる
         for (key, value) in params {
@@ -128,7 +129,6 @@ class RakutenAPI: ObservableObject {
             let data = try? Data(contentsOf: imageURL)
             DispatchQueue.main.async {
                 self.resultImageData = data
-                print("画像データ：\(self.resultImageData!)")
                 //BarcodeReaderViewでアラート起動
                 self.delegate?.searchItemDidfinish(isSuccess: true)
             }

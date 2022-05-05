@@ -37,6 +37,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     private let videoDataOutput = AVCaptureVideoDataOutput()
     //商品検索終了時の振動のインスタンス
     private let finishImpact = UINotificationFeedbackGenerator()
+    //効果音を扱うクラスのインスタンス
+    private let soundPlayer = SoundPlayer()
     //画面サイズ
     private let screenWidth = CGFloat(UIScreen.main.bounds.width)
     private let screenHeight = CGFloat(UIScreen.main.bounds.height)
@@ -69,7 +71,11 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
                     if let value = barcode.payloadStringValue {
                         print("読み取り：\(value)")
                         print("タイプ：\(barcode.symbology)")
+                        //効果音再生
+                        self.parent.soundPlayer.detectSound_play()
+                        //キャプチャ停止
                         self.parent.captureSession.stopRunning()
+                        //バーコード検索開始
                         self.parent.findBarcode(barcode: value)
                     }
                 }

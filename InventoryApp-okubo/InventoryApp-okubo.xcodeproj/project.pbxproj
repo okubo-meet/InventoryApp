@@ -29,6 +29,7 @@
 		7F730DD528092600002EBD76 /* ItemImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F730DD428092600002EBD76 /* ItemImageView.swift */; };
 		7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7CD3E627D8EA8A005A953B /* ItemListView.swift */; };
 		7FA5698627DB194900AB0EEF /* SampleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5698527DB194900AB0EEF /* SampleImage.swift */; };
+		7FDFDB112823C43800D56402 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FDFDB102823C43800D56402 /* SoundPlayer.swift */; };
 		7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE8968227E4463B002E80B1 /* ListRowView.swift */; };
 		7FE8968527E44A57002E80B1 /* ItemStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE8968427E44A57002E80B1 /* ItemStatus.swift */; };
 /* End PBXBuildFile section */
@@ -57,6 +58,7 @@
 		7F730DD428092600002EBD76 /* ItemImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemImageView.swift; sourceTree = "<group>"; };
 		7F7CD3E627D8EA8A005A953B /* ItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListView.swift; sourceTree = "<group>"; };
 		7FA5698527DB194900AB0EEF /* SampleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleImage.swift; sourceTree = "<group>"; };
+		7FDFDB102823C43800D56402 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		7FE8968227E4463B002E80B1 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
 		7FE8968427E44A57002E80B1 /* ItemStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStatus.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -159,6 +161,7 @@
 				7F18DA8628111B6A005472AC /* FolderGroup */,
 				7F18DA8728111BF6005472AC /* ItemDataGroup */,
 				7F5BA4D227D64CE800338C12 /* SettingView.swift */,
+				7FDFDB102823C43800D56402 /* SoundPlayer.swift */,
 				7F317B6627E1C84300E1C2E1 /* Color.swift */,
 				7F55D64327F6CAD5004169C4 /* Api.plist */,
 				7F70E1D127D1E55A00C483B9 /* Assets.xcassets */,
@@ -257,6 +260,7 @@
 				7F317B6727E1C84300E1C2E1 /* Color.swift in Sources */,
 				7F0798FC27D9B630006BF1CF /* ImagePickerView.swift in Sources */,
 				7F47C30127D742D9006343B4 /* RegisterView.swift in Sources */,
+				7FDFDB112823C43800D56402 /* SoundPlayer.swift in Sources */,
 				7F55D64227F6C6A9004169C4 /* RakutenAPI.swift in Sources */,
 				7F07990027D9C291006BF1CF /* RecentItemsView.swift in Sources */,
 				7F730DD528092600002EBD76 /* ItemImageView.swift in Sources */,
