@@ -71,6 +71,7 @@ class RakutenAPI: ObservableObject {
                                      "formatVersion" : "2",
                                      "hits" : "1",
                                      "imageFlag" : "1",
+                                     "sort" : "-updateTimestamp",
                                      "elements" : "itemName,mediumImageUrls"]
         //パラメータをURLの形につなげる
         for (key, value) in params {
