@@ -24,7 +24,9 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     //バーコードの位置に表示する線
     var barcodeBorder = CAShapeLayer()
     //バーコード検索の状態を表示するラベル
-    private let label = UILabel()
+    private let searchLabel = UILabel()
+    //動作の説明を表示するラベル
+    private let guideLabel = UILabel()
     //UIViewControllerのインスタンス生成
     private let viewController = UIViewController()
     //インジケーター
@@ -39,9 +41,6 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     private let finishImpact = UINotificationFeedbackGenerator()
     //効果音を扱うクラスのインスタンス
     private let soundPlayer = SoundPlayer()
-    //画面サイズ
-    private let screenWidth = CGFloat(UIScreen.main.bounds.width)
-    private let screenHeight = CGFloat(UIScreen.main.bounds.height)
     
     // MARK: - Coordinator
     class Coordinator: AVCaptureSession, AVCaptureVideoDataOutputSampleBufferDelegate, SearchItemDelegate {
@@ -114,13 +113,16 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     // MARK: - View
     //画面起動時
     func makeUIViewController(context: UIViewControllerRepresentableContext<BarcodeReaderView>) -> UIViewController {
-        //Viewのサイズ(画面全体)
-        viewController.view.frame = UIScreen.main.bounds
+        //Viewのサイズ(幅)
+        let windowWidth = viewController.view.bounds.width
+        //Viewのサイズ(高さ)
+        let windowHeight = viewController.view.bounds.height
         setCamera()
         setPreviewLayer()
         setIndicator()
-        setClose()
-        setSearchLabel()
+        setClose(windowWidth: windowWidth)
+        setSearchLabel(windowWidth: windowWidth, windowHeight: windowHeight)
+        setGuideLabel(windowWidth: windowWidth, windowHeight: windowHeight)
         //読み取り成功ラベル
         //SearchItemDelegateを呼び出す設定
         rakutenAPI.delegate = context.coordinator
@@ -160,35 +162,21 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         //インジケーター起動
         isLoading = true
         //ラベルのテキスト変更
-        label.text = "検索中..."
+        guideLabel.text = "検索中..."
         //API検索
         rakutenAPI.searchItem(itemCode: barcode)
-//        let alert = UIAlertController(title: "バーコードを検出しました", message: "楽天市場で検索します", preferredStyle: .alert)
-//        let serch = UIAlertAction(title: "検索", style: .default, handler: { _ in
-//            //インジケーター起動
-//            self.isLoading = true
-//            //ラベルのテキスト変更
-//            self.label.text = "検索中..."
-//            //API検索
-//            self.rakutenAPI.searchItem(itemCode: barcode)
-//        })
-//        let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: { _ in
-//            self.captureSession.startRunning()
-//        })
-//        alert.addAction(cancel)
-//        alert.addAction(serch)
-//        viewController.present(alert, animated: true, completion: nil)
     }
     ///商品検索に成功した場合のアラートを出す関数
     func successAlert() {
         //ラベルのテキスト変更
-        label.text = "読み取り完了"
+        guideLabel.text = rakutenAPI.resultItemName
         let alert = UIAlertController(title: "商品を検索しました", message: "前の画面に戻りますか？", preferredStyle: .alert)
         let ok = UIAlertAction(title: "戻る", style: .default, handler: { _ in
             dismiss()
         })
-        let continuation = UIAlertAction(title: "続行", style: .default, handler: { _ in
+        let continuation = UIAlertAction(title: "続ける", style: .default, handler: { _ in
             self.captureSession.startRunning()
+            self.guideLabel.text = "バーコードを写してください"
         })
         alert.addAction(ok)
         alert.addAction(continuation)
@@ -202,6 +190,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         let alert = UIAlertController(title: "商品が見つかりませんでした", message: "楽天市場では扱っていない可能性があります。", preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default, handler: { _ in
             self.captureSession.startRunning()
+            self.guideLabel.text = "バーコードを写してください"
         })
         alert.addAction(ok)
         //バイブレーション起動
@@ -211,9 +200,10 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     }
     ///通信エラーが発生した場合のアラートを出す関数
     func errorAlert() {
-        let alert = UIAlertController(title: "通信エラーが発生しました", message: "通信環境をご確認のうえ、再度実行してください。", preferredStyle: .alert)
+        let alert = UIAlertController(title: "エラーが発生しました", message: "通信環境をご確認のうえ、再度実行してください。", preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default, handler: { _ in
             self.captureSession.startRunning()
+            self.guideLabel.text = "バーコードを写してください"
         })
         alert.addAction(ok)
         //バイブレーション起動
@@ -255,9 +245,9 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         viewController.view.addSubview(indicatorView)
     }
     ///画面を閉じるボタンをViewにセットする関数
-    private func setClose() {
+    private func setClose(windowWidth: CGFloat) {
         //アイコンのサイズ
-        let iconSize = screenWidth / 9
+        let iconSize = windowWidth * 0.1
         //アイコンのサイズを適用
         var config = UIImage.SymbolConfiguration(pointSize: iconSize)
         //色の設定を追加
@@ -265,7 +255,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         //ボタンのアイコン
         let closeIcon = UIImage(systemName: "xmark.circle.fill", withConfiguration: config)
         //ボタンの位置
-        let position = screenWidth / 15
+        let position = windowWidth * 0.05
         //戻るボタンの設定
         let closeButton = UIButton()
         closeButton.setImage(closeIcon, for: .normal)
@@ -275,25 +265,35 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         viewController.view.addSubview(closeButton)
     }
     ///商品検索に関するラベルをViewにセットする関数
-    private func setSearchLabel() {
+    private func setSearchLabel(windowWidth: CGFloat, windowHeight: CGFloat) {
         //ラベルの位置
-        let x = screenWidth - screenWidth / 2.3
-        let y = screenWidth / 15
+        let x = windowWidth * 0.5
+        let y = windowWidth * 0.05
         //ラベルの大きさ
-        let width = screenWidth / 2.5
-        let height = screenHeight / 15
+        let width = windowWidth * 0.45
+        let height = windowHeight * 0.06
         //ラベル設定
-        label.frame = CGRect(x: x, y: y, width: width, height: height)
-        label.text = "バーコード検索"
-        label.textAlignment = .center
-        label.textColor = .orange
-        label.backgroundColor = .white
-        label.layer.borderColor = UIColor.orange.cgColor
-        label.layer.borderWidth = 2
-        label.layer.masksToBounds = true
-        label.layer.cornerRadius = height / 2
+        searchLabel.frame = CGRect(x: x, y: y, width: width, height: height)
+        searchLabel.text = "読み取った商品：0"
+        searchLabel.textAlignment = .center
+        searchLabel.textColor = .orange
+        searchLabel.backgroundColor = .white
+        searchLabel.layer.borderColor = UIColor.orange.cgColor
+        searchLabel.layer.borderWidth = 2
+        searchLabel.layer.masksToBounds = true
+        searchLabel.layer.cornerRadius = height / 2
         //Viewに追加
-        viewController.view.addSubview(label)
+        viewController.view.addSubview(searchLabel)
+    }
+    ///
+    private func setGuideLabel(windowWidth: CGFloat, windowHeight: CGFloat) {
+        
+        guideLabel.frame = CGRect(x: windowWidth * 0.1, y: windowHeight * 0.8, width: windowWidth * 0.8, height: windowHeight * 0.05)
+        guideLabel.text = "バーコードを写してください"
+        guideLabel.textAlignment = .center
+        guideLabel.textColor = .white
+        guideLabel.backgroundColor = .black.withAlphaComponent(0.4)
+        viewController.view.addSubview(guideLabel)
     }
 }
 
