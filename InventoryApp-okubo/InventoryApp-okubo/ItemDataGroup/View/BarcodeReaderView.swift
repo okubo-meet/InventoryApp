@@ -170,6 +170,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     func successAlert() {
         //ラベルのテキスト変更
         guideLabel.text = rakutenAPI.resultItemName
+        searchLabel.text = "読み取った商品：\(rakutenAPI.resultItem.count)"
         let alert = UIAlertController(title: "商品を検索しました", message: "前の画面に戻りますか？", preferredStyle: .alert)
         let ok = UIAlertAction(title: "戻る", style: .default, handler: { _ in
             dismiss()

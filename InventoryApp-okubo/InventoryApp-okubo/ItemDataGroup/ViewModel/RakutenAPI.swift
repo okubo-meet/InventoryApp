@@ -39,6 +39,8 @@ class RakutenAPI: ObservableObject {
     var resultItemName = ""
     ///APIで取得した画像データ
     var resultImageData: Data? = nil
+    ///APIで取得したデータの配列
+    var resultItem: [(name: String, image: Data?)] = []
     ///商品検索終了時のデリゲート
     var delegate: SearchItemDelegate?
     //plistの値を受け取る変数
@@ -130,6 +132,7 @@ class RakutenAPI: ObservableObject {
             let data = try? Data(contentsOf: imageURL)
             DispatchQueue.main.async {
                 self.resultImageData = data
+                self.resultItem.append((name: self.resultItemName, image: self.resultImageData))
                 //BarcodeReaderViewでアラート起動
                 self.delegate?.searchItemDidfinish(isSuccess: true)
             }
