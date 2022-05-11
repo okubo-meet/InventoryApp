@@ -45,7 +45,7 @@ struct AddImageButton: View {
             BarcodeReaderView(item: $item)
         }
         .sheet(isPresented: $showImagePicker) {
-            ImagePickerView()
+            ImagePickerView(item: $item)
         }
         .sheet(isPresented: $showLibrary) {
             ImageLibraryView()
