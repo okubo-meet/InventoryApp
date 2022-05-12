@@ -28,7 +28,6 @@ struct ImagePickerView: UIViewControllerRepresentable {
             if let pickedImage = info[.originalImage] as? UIImage {
                 let imageData = pickedImage.pngData()
                 parent.item.image = imageData
-                // TODO: - 撮影した画像が横向きになってしまう
             }
             //画面を閉じる
             parent.dismiss()
@@ -48,6 +47,14 @@ struct ImagePickerView: UIViewControllerRepresentable {
     //更新時
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePickerView>) {
         
+    }
+    
+    // MARK: - メソッド
+    func imageEdit(image: UIImage) -> UIImage {
+        var newImage = UIImage()
+        // TODO: - 本のカメラアプリを参考に画像の向きとサイズを編集する
+        
+        return newImage
     }
 }
 
