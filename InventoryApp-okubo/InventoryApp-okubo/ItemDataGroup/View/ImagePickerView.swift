@@ -14,7 +14,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
     //編集中の商品データ
     @Binding var item: ItemData
     //UIImagePickerControllerのインスタンス
-    private let controller = UIImagePickerController()
+    private let imagePickerController = UIImagePickerController()
     
     // MARK: - Coordinator
     class Coordinator:NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -25,8 +25,10 @@ struct ImagePickerView: UIViewControllerRepresentable {
         }
         //撮影して[Use Photo]を押したときに呼ばれるデリゲートメソッド
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let pickedImage = info[.originalImage] as? UIImage {
-                let imageData = pickedImage.pngData()
+            //トリミングした画像を使う
+            if let pickedImage = info[.editedImage] as? UIImage {
+                //画像データをpngからjpegに変えたら画像の向きの不具合は解決した
+                let imageData = pickedImage.jpegData(compressionQuality: 1.0)
                 parent.item.image = imageData
             }
             //画面を閉じる
@@ -40,21 +42,15 @@ struct ImagePickerView: UIViewControllerRepresentable {
     // MARK: - View
     //生成時
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePickerView>) -> UIImagePickerController {
-        controller.delegate = context.coordinator
-        controller.sourceType = .camera
-        return controller
+        imagePickerController.delegate = context.coordinator
+        imagePickerController.sourceType = .camera
+        //撮影後のトリミングを有効
+        imagePickerController.allowsEditing = true
+        return imagePickerController
     }
     //更新時
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePickerView>) {
         
-    }
-    
-    // MARK: - メソッド
-    func imageEdit(image: UIImage) -> UIImage {
-        var newImage = UIImage()
-        // TODO: - 本のカメラアプリを参考に画像の向きとサイズを編集する
-        
-        return newImage
     }
 }
 

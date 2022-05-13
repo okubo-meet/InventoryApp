@@ -22,7 +22,7 @@ struct ItemImageView: View {
                 .resizable()
         } else {
             //データがない場合のアイコン表示
-            Image(systemName: "photo")//アイコンのサイズ指定が必要
+            Image(systemName: "photo")
                 .font(.largeTitle)
                 .foregroundColor(.orange)
         }
