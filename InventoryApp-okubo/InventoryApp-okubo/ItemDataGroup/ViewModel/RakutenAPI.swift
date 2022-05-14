@@ -8,6 +8,7 @@
 import SwiftUI
 
 // MARK: - プロトコル
+// TODO: - デリゲートではなくクロージャーでの実装
 protocol SearchItemDelegate {
     /// 商品検索が終わったときの処理
     /// - Parameter isSuccess: 商品の有無
@@ -116,6 +117,7 @@ class RakutenAPI: ObservableObject {
         //セッション開始
         session.resume()
     }
+    // TODO: - 関数の是非を検討
     ///plistから文字列を取得する関数
     private func getProperty(key: String) -> String {
         guard let value = property[key] as? String else {
@@ -125,9 +127,11 @@ class RakutenAPI: ObservableObject {
         print("plist: \(value)")
         return value
     }
+    // TODO: - この関数も不要
     ///取得したURLから画像を読み込む関数
     private func downLoadImage(url: String) {
         guard let imageURL = URL(string: url) else { return }
+        // TODO: - 非同期処理にasync/awaitを使う
         DispatchQueue.global().async {
             let data = try? Data(contentsOf: imageURL)
             DispatchQueue.main.async {
