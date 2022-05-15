@@ -18,7 +18,7 @@ protocol SearchItemDelegate {
 }
 
 // MARK: -　クラス
-class RakutenAPI: ObservableObject {
+class RakutenAPI {
     
     // MARK: - 構造体
     ///JSONのデータ構造 （楽天市場API）
@@ -94,10 +94,21 @@ class RakutenAPI: ObservableObject {
                     //商品名を取得
                     self.resultItemName = jsonData.Items[0].itemName
                     print("商品名" + self.resultItemName)
-                    //画像を取得
+                    //画像URLを取得
                     let imageURL = jsonData.Items[0].mediumImageUrls[0]
                     print("画像URL:" + imageURL)
-                    self.downLoadImage(url: imageURL)
+                    //取得したURLから画像を読み込む
+                    guard let url = URL(string: imageURL) else { return }
+                    // TODO: - 非同期処理にasync/awaitを使う
+                    DispatchQueue.global().async {
+                        let data = try? Data(contentsOf: url)
+                        DispatchQueue.main.async {
+                            self.resultImageData = data
+                            self.resultItem.append((name: self.resultItemName, image: self.resultImageData))
+                            //BarcodeReaderViewでアラート起動
+                            self.delegate?.searchItemDidfinish(isSuccess: true)
+                        }
+                    }
                 } catch {
                     print("データがありません")
                     DispatchQueue.main.async {
@@ -117,7 +128,6 @@ class RakutenAPI: ObservableObject {
         //セッション開始
         session.resume()
     }
-    // TODO: - 関数の是非を検討
     ///plistから文字列を取得する関数
     private func getProperty(key: String) -> String {
         guard let value = property[key] as? String else {
@@ -127,20 +137,4 @@ class RakutenAPI: ObservableObject {
         print("plist: \(value)")
         return value
     }
-    // TODO: - この関数も不要
-    ///取得したURLから画像を読み込む関数
-    private func downLoadImage(url: String) {
-        guard let imageURL = URL(string: url) else { return }
-        // TODO: - 非同期処理にasync/awaitを使う
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: imageURL)
-            DispatchQueue.main.async {
-                self.resultImageData = data
-                self.resultItem.append((name: self.resultItemName, image: self.resultImageData))
-                //BarcodeReaderViewでアラート起動
-                self.delegate?.searchItemDidfinish(isSuccess: true)
-            }
-        }
-    }
-    
 }

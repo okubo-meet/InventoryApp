@@ -15,8 +15,6 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     @Environment(\.dismiss) var dismiss
     //仮のデータ
     @EnvironmentObject var testData: TestData
-    //楽天APIを扱うクラス
-    @ObservedObject var rakutenAPI = RakutenAPI()
     //編集中の商品データ
     @Binding var item: ItemData
     ///インジケーター切り替えフラグ
@@ -37,6 +35,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     private let previewLayer = AVCaptureVideoPreviewLayer()
     //商品検索終了時の振動のインスタンス
     private let finishImpact = UINotificationFeedbackGenerator()
+    //楽天APIを扱うクラス
+    private let rakutenAPI = RakutenAPI()
     //効果音を扱うクラスのインスタンス
     private let soundPlayer = SoundPlayer()
     
