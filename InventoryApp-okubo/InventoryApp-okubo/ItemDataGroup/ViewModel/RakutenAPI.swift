@@ -7,16 +7,6 @@
 
 import SwiftUI
 
-// MARK: - プロトコル
-// TODO: - デリゲートではなくクロージャーでの実装
-protocol SearchItemDelegate {
-    /// 商品検索が終わったときの処理
-    /// - Parameter isSuccess: 商品の有無
-    func searchItemDidfinish(isSuccess: Bool)
-    ///商品検索でエラーが起きたときの処理
-    func searchItemError()
-}
-
 // MARK: -　クラス
 class RakutenAPI {
     
@@ -42,8 +32,6 @@ class RakutenAPI {
     var resultImageData: Data? = nil
     ///APIで取得したデータの配列
     var resultItem: [(name: String, image: Data?)] = []
-    ///商品検索終了時のデリゲート
-    var delegate: SearchItemDelegate?
     //plistの値を受け取る変数
     private var property: Dictionary<String, Any> = [:]
     
@@ -62,7 +50,7 @@ class RakutenAPI {
     
     // MARK: - メソッド
     ///楽天市場APIを使用する関数
-    func searchItem(itemCode: String) {
+    func searchItem(itemCode: String, finish: @escaping(_ : SearchResult) -> Void ) {
         //ベースURL
         let baseURL = getProperty(key: "baseURL")
         //アプリケーションID
@@ -106,14 +94,16 @@ class RakutenAPI {
                             self.resultImageData = data
                             self.resultItem.append((name: self.resultItemName, image: self.resultImageData))
                             //BarcodeReaderViewでアラート起動
-                            self.delegate?.searchItemDidfinish(isSuccess: true)
+                            //クロージャ起動
+                            finish(SearchResult.success)
                         }
                     }
                 } catch {
                     print("データがありません")
                     DispatchQueue.main.async {
                         //データがなかった場合のアラート
-                        self.delegate?.searchItemDidfinish(isSuccess: false)
+                        //クロージャ起動
+                        finish(SearchResult.failure)
                     }
                 }
             } else {
@@ -121,7 +111,8 @@ class RakutenAPI {
                 print("接続エラー：\(String(describing: error?.localizedDescription))")
                 DispatchQueue.main.async {
                     //接続に失敗した場合のアラート
-                    self.delegate?.searchItemError()
+                    //クロージャ起動
+                    finish(SearchResult.error)
                 }
             }
         }

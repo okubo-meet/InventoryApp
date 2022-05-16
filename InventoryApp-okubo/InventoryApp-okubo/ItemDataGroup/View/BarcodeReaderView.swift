@@ -41,7 +41,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     private let soundPlayer = SoundPlayer()
     
     // MARK: - Coordinator
-    class Coordinator: AVCaptureSession, AVCaptureVideoDataOutputSampleBufferDelegate, SearchItemDelegate {
+    class Coordinator: AVCaptureSession, AVCaptureVideoDataOutputSampleBufferDelegate {
         
         let parent: BarcodeReaderView
         init(_ parent: BarcodeReaderView) {
@@ -77,7 +77,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
                         //ラベルのテキスト変更
                         self.parent.guideLabel.text = "検索中..."
                         //API検索開始
-                        self.parent.rakutenAPI.searchItem(itemCode: value)
+                        self.parent.rakutenAPI.searchItem(itemCode: value, finish: self.parent.searchFinished(result:))
                     }
                 }
                 
@@ -86,26 +86,6 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
             barcodesRequest.symbologies = [.ean8, .ean13]
             //バーコード検出開始
             try? requestHandler.perform([barcodesRequest], on: pixelBuffer, orientation: .downMirrored)
-        }
-        //商品検索が終わったときのデリゲートメソッド
-        func searchItemDidfinish(isSuccess: Bool) {
-            //インジケーター停止
-            parent.isLoading = false
-            if isSuccess {
-                DispatchQueue.main.async {
-                    self.parent.item.name = self.parent.rakutenAPI.resultItemName
-                    self.parent.item.image = self.parent.rakutenAPI.resultImageData
-                }
-                parent.successAlert()
-            } else {
-                parent.failureAlert()
-            }
-        }
-        //APIでエラーが発生したときのデリゲートメソッド
-        func searchItemError() {
-            //インジケーター停止
-            parent.isLoading = false
-            parent.errorAlert()
         }
     }
     func makeCoordinator() -> Coordinator {
@@ -186,7 +166,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         viewController.view.addSubview(guideLabel)
         
         //SearchItemDelegateを呼び出す設定
-        rakutenAPI.delegate = context.coordinator
+//        rakutenAPI.delegate = context.coordinator
         //ビデオデータ出力のインスタンス
         let videoDataOutput = AVCaptureVideoDataOutput()
         //AVCaptureVideoDataOutputSampleBufferDelegateを呼び出す設定
@@ -209,7 +189,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     
     // MARK: - メソッド
     ///検知したバーコードの位置に線を表示する関数
-    func showBorder(barcode: VNBarcodeObservation) {
+    private func showBorder(barcode: VNBarcodeObservation) {
         let boxOnScreen = previewLayer.layerRectConverted(fromMetadataOutputRect: barcode.boundingBox)
         let boxPath = CGPath(rect: boxOnScreen, transform: nil)
         barcodeBorder.path = boxPath
@@ -219,8 +199,25 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         //表示
         previewLayer.addSublayer(barcodeBorder)
     }
+    ///商品検索終了時に呼び出される関数 クロージャの引数として扱う
+    private func searchFinished(result: SearchResult) {
+        isLoading = false
+        switch result {
+        case .success:
+            print("成功")
+            item.name = rakutenAPI.resultItemName
+            item.image = rakutenAPI.resultImageData
+            successAlert()
+        case .failure:
+            print("商品無し")
+            failureAlert()
+        case .error:
+            print("エラー")
+            errorAlert()
+        }
+    }
     ///商品検索に成功した場合のアラートを出す関数
-    func successAlert() {
+    private func successAlert() {
         //ラベルのテキスト変更
         guideLabel.text = rakutenAPI.resultItemName
         searchLabel.text = "読み取った商品：\(rakutenAPI.resultItem.count)"
@@ -240,7 +237,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         viewController.present(alert, animated: true, completion: nil)
     }
     ///商品が見つからなかった場合のアラートを出す関数
-    func failureAlert() {
+    private func failureAlert() {
         let alert = UIAlertController(title: "商品が見つかりませんでした", message: "楽天市場では扱っていない可能性があります。", preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default, handler: { _ in
             self.captureSession.startRunning()
@@ -253,7 +250,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         viewController.present(alert, animated: true, completion: nil)
     }
     ///通信エラーが発生した場合のアラートを出す関数
-    func errorAlert() {
+    private func errorAlert() {
         let alert = UIAlertController(title: "エラーが発生しました", message: "通信環境をご確認のうえ、再度実行してください。", preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default, handler: { _ in
             self.captureSession.startRunning()
