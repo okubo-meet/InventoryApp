@@ -77,7 +77,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
                         //ラベルのテキスト変更
                         self.parent.guideLabel.text = "検索中..."
                         //API検索開始
-                        self.parent.rakutenAPI.searchItem(itemCode: value, finish: self.parent.searchFinished(result:))
+                        self.parent.rakutenAPI.searchItem(itemCode: value, completion: self.parent.searchFinished(result:))
                     }
                 }
                 

@@ -50,7 +50,7 @@ class RakutenAPI {
     
     // MARK: - メソッド
     ///楽天市場APIを使用する関数
-    func searchItem(itemCode: String, finish: @escaping(_ : SearchResult) -> Void ) {
+    func searchItem(itemCode: String, completion: @escaping(_ : SearchResult) -> Void ) {
         //ベースURL
         let baseURL = getProperty(key: "baseURL")
         //アプリケーションID
@@ -72,52 +72,64 @@ class RakutenAPI {
         let requestURL = baseURL + applicationId + requestParams
         print("リクエストURL: \(requestURL)")
         guard let url = URL(string: requestURL) else { return }
-        //URLリクエストの生成
-        let request = URLRequest(url: url, timeoutInterval: 8.0)
-        let session = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let itemData = data {
+        //非同期処理
+        Task {
+            print("データ取得開始")
+            let (data, response) = try await URLSession.shared.data(from: url)
+            if (response as? HTTPURLResponse)?.statusCode == 200 {
                 let decoder = JSONDecoder()
-                do {
-                    let jsonData = try decoder.decode(IchibaJson.self, from: itemData)
-                    //商品名を取得
-                    self.resultItemName = jsonData.Items[0].itemName
-                    print("商品名" + self.resultItemName)
-                    //画像URLを取得
-                    let imageURL = jsonData.Items[0].mediumImageUrls[0]
-                    print("画像URL:" + imageURL)
-                    //取得したURLから画像を読み込む
-                    guard let url = URL(string: imageURL) else { return }
-                    // TODO: - 非同期処理にasync/awaitを使う
-                    DispatchQueue.global().async {
-                        let data = try? Data(contentsOf: url)
-                        DispatchQueue.main.async {
-                            self.resultImageData = data
-                            self.resultItem.append((name: self.resultItemName, image: self.resultImageData))
-                            //BarcodeReaderViewでアラート起動
-                            //クロージャ起動
-                            finish(SearchResult.success)
-                        }
-                    }
-                } catch {
-                    print("データがありません")
-                    DispatchQueue.main.async {
-                        //データがなかった場合のアラート
-                        //クロージャ起動
-                        finish(SearchResult.failure)
-                    }
-                }
-            } else {
-                //接続エラー（タイムアウト含む）
-                print("接続エラー：\(String(describing: error?.localizedDescription))")
-                DispatchQueue.main.async {
-                    //接続に失敗した場合のアラート
-                    //クロージャ起動
-                    finish(SearchResult.error)
-                }
+                let jsonData = try await decoder.decode(IchibaJson.self, from: data)
+                self.resultItemName = jsonData.Items[0].itemName
+                print("商品名" + self.resultItemName)
+                //画像URLを取得
+                let imageURL = jsonData.Items[0].mediumImageUrls[0]
+                print("画像URL:" + imageURL)
+                //取得したURLから画像を読み込む
+                guard let image = URL(string: imageURL) else { return }
+                let data = try? Data(contentsOf: image)
+                self.resultImageData = data
+                //配列に加える
+                self.resultItem.append((name: self.resultItemName, image: self.resultImageData))
+                //クロージャ起動
+                completion(SearchResult.success)
+                print("取得完了")
             }
         }
-        //セッション開始
-        session.resume()
+//        //URLリクエストの生成
+//        let request = URLRequest(url: url, timeoutInterval: 8.0)
+//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//            if let itemData = data {
+//                let decoder = JSONDecoder()
+//                do {
+//                    let jsonData = try decoder.decode(IchibaJson.self, from: itemData)
+//                    //商品名を取得
+//                    self.resultItemName = jsonData.Items[0].itemName
+//                    print("商品名" + self.resultItemName)
+//                    //画像URLを取得
+//                    let imageURL = jsonData.Items[0].mediumImageUrls[0]
+//                    print("画像URL:" + imageURL)
+//                    //取得したURLから画像を読み込む
+//                    guard let url = URL(string: imageURL) else { return }
+//                    let data = try? Data(contentsOf: url)
+//                    self.resultImageData = data
+//                    self.resultItem.append((name: self.resultItemName, image: self.resultImageData))
+//                    //クロージャ起動
+//                    completion(SearchResult.success)
+//
+//                } catch {
+//                    print("データがありません")
+//                    //クロージャ起動
+//                    completion(SearchResult.failure)
+//                }
+//            } else {
+//                //接続エラー（タイムアウト含む）
+//                print("接続エラー：\(String(describing: error?.localizedDescription))")
+//                    //クロージャ起動
+//                    completion(SearchResult.error)
+//            }
+//        }
+//        //タスク実行
+//        task.resume()
     }
     ///plistから文字列を取得する関数
     private func getProperty(key: String) -> String {
@@ -128,4 +140,5 @@ class RakutenAPI {
         print("plist: \(value)")
         return value
     }
+    //APIを非同期処理
 }
