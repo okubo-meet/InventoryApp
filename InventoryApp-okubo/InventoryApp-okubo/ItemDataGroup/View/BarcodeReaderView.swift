@@ -201,19 +201,22 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     }
     ///商品検索終了時に呼び出される関数 クロージャの引数として扱う
     private func searchFinished(result: SearchResult) {
-        isLoading = false
-        switch result {
-        case .success:
-            print("成功")
-            item.name = rakutenAPI.resultItemName
-            item.image = rakutenAPI.resultImageData
-            successAlert()
-        case .failure:
-            print("商品無し")
-            failureAlert()
-        case .error:
-            print("エラー")
-            errorAlert()
+        //非同期処理
+        Task {
+            isLoading = false
+            switch result {
+            case .success:
+                print("成功")
+                item.name = rakutenAPI.resultItemName
+                item.image = rakutenAPI.resultImageData
+                successAlert()
+            case .failure:
+                print("商品無し")
+                failureAlert()
+            case .error:
+                print("エラー")
+                errorAlert()
+            }
         }
     }
     ///商品検索に成功した場合のアラートを出す関数

@@ -9,10 +9,10 @@ import Foundation
 
 ///API検索結果の列挙型
 enum SearchResult {
-    //成功
+    ///成功
     case success
-    //該当商品無し
+    ///該当商品無し
     case failure
-    //エラー
+    ///エラー
     case error
 }
