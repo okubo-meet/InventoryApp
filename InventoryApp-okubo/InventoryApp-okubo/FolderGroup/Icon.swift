@@ -6,30 +6,30 @@
 //
 
 import Foundation
-//フォルダに使うアイコンの列挙型
+// フォルダに使うアイコンの列挙型
 enum Icon: String {
-    //家
+    // 家
     case house = "house.fill"
-    //フォークとナイフ
+    // フォークとナイフ
     case food = "fork.knife"
-    //鞄
+    // 鞄
     case bag = "bag.fill"
-    //ペン
+    // ペン
     case pencil = "pencil"
-    //ハサミ
+    // ハサミ
     case scissors = "scissors"
-    //救急箱
+    // 救急箱
     case crossCase = "cross.case.fill"
-    //絆創膏
+    // 絆創膏
     case bandage = "bandage"
-    //シャツ
+    // シャツ
     case tshirt = "tshirt.fill"
-    //本
+    // 本
     case book = "book.fill"
-    //ゲーム
+    // ゲーム
     case game = "gamecontroller.fill"
-    //音楽
+    // 音楽
     case music = "music.note.list"
-    //犬の足跡
+    // 犬の足跡
     case pawprint = "pawprint.fill"
 }

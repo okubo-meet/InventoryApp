@@ -6,14 +6,14 @@
 //
 
 import Foundation
-//サンプル画像の列挙型
+// サンプル画像の列挙型
 enum SampleImage: String, CaseIterable {
     case food = "食品"
     case daily = "日用品"
     case medical = "医薬品"
     case lifestyle = "娯楽"
     case fasion = "衣類"
-    //それぞれのカテゴリの画像ファイル名の配列を返す
+    // それぞれのカテゴリの画像ファイル名の配列を返す
     func toImageString() -> [String] {
         switch self {
         case .food:

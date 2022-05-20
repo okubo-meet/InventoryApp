@@ -6,36 +6,36 @@
 //
 
 import SwiftUI
-//ItemListViewでリスト表示するView
+// ItemListViewでリスト表示するView
 struct ListRowView: View {
     // MARK: - プロパティ
-    //商品データ
+    // 商品データ
     var item: ItemData
-    //在庫か買い物か
+    // 在庫か買い物か
     var isStock: Bool
-    //画像サイズ
+    // 画像サイズ
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 4
-    //行の高さ
+    // 行の高さ
     private let rowHeight = CGFloat(UIScreen.main.bounds.height) / 8
-    
     // MARK: - View
     var body: some View {
         HStack {
-            //画像
+            // 画像
             ItemImageView(imageData: item.image)
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize, alignment: .center)
             VStack {
-                //商品名
+                // 商品名
                 Text(item.name)
                     .fontWeight(.bold)
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity,alignment: .leading)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity,
+                           alignment: .leading)
                 if isStock {
-                    //在庫リストの表示
+                    // 在庫リストの表示
                     Text("期限：" + dateText(date: item.deadLine))
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 } else {
-                    //買い物リストの表示
+                    // 買い物リストの表示
                     Text("登録日：" + dateText(date: item.registrationDate))
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 }
@@ -43,12 +43,12 @@ struct ListRowView: View {
             Spacer()
             VStack {
                 if isStock {
-                    //在庫リストの表示
+                    // 在庫リストの表示
                     Text(item.status)
                         .overlay(RoundedRectangle(cornerRadius: 10).stroke())
                         .foregroundColor(ItemStatus(rawValue: item.status)?.toStatusColor())
                 } else {
-                    //買い物リストの表示
+                    // 買い物リストの表示
                     if item.isHurry {
                         Text("緊急")
                             .overlay(RoundedRectangle(cornerRadius: 10).stroke())
@@ -59,16 +59,15 @@ struct ListRowView: View {
                             .foregroundColor(.blue)
                     }
                 }
-                //個数
+                // 個数
                 Text("×\(item.numberOfItems)")
             }// VStack
             .padding(.trailing)
         }// HStack
         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: rowHeight, alignment: .leading)
     }
-    
     // MARK: - メソッド
-    //日付フォーマットの関数
+    // 日付フォーマットの関数
     private func dateText(date: Date?) -> String {
         guard let date = date else {
             return "なし"

@@ -6,29 +6,28 @@
 //
 
 import SwiftUI
-//カメラをやサンプル画像ライブラリを呼び出すボタン　ItemDataViewで使用
+// カメラをやサンプル画像ライブラリを呼び出すボタン　ItemDataViewで使用
 struct AddImageButton: View {
     // MARK: - プロパティ
-    //編集する商品データ
+    // 編集する商品データ
     @Binding var item: ItemData
-    //ダイアログ表示トリガー
+    // ダイアログ表示トリガー
     @State private var showingDialog = false
-    //バーコードリーダー表示トリガー
+    // バーコードリーダー表示トリガー
     @State private var showBarcodeReader = false
-    //撮影カメラ表示トリガー
+    // 撮影カメラ表示トリガー
     @State private var showImagePicker = false
-    //サンプル画像リスト表示トリガー
+    // サンプル画像リスト表示トリガー
     @State private var showLibrary = false
-    
     // MARK: - View
     var body: some View {
         Button("画像を設定する") {
             showingDialog = true
         }
         .foregroundColor(.orange)
-        //ダイアログ
+        // ダイアログ
         .confirmationDialog("画像を追加", isPresented: $showingDialog, titleVisibility: .visible) {
-            //アクションボタンリスト
+            // アクションボタンリスト
             Button("バーコード検索") {
                 showBarcodeReader = true
             }

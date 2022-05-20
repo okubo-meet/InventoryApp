@@ -6,20 +6,19 @@
 //
 
 import SwiftUI
-//サンプル画像を選択する画面
+// サンプル画像を選択する画面
 struct ImageLibraryView: View {
     // MARK: - プロパティ
-    //サンプル画像のカテゴリ
+    // サンプル画像のカテゴリ
     @State var sampleImage: SampleImage = .food
-    //グリッドのカラム
+    // グリッドのカラム
     private let rows: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     private let gridWidth = UIScreen.main.bounds.width / 3.5
-    
     // MARK: - View
     var body: some View {
         NavigationView {
             VStack {
-                //カテゴリ別に表示する画像を入れ替える
+                // カテゴリ別に表示する画像を入れ替える
                 Picker("", selection: $sampleImage) {
                     ForEach(SampleImage.allCases, id: \.self) { index in
                         Text(index.rawValue)
@@ -27,14 +26,15 @@ struct ImageLibraryView: View {
                 }
                 .pickerStyle(.segmented)
                 ScrollView {
-                    //サンプル画像のグリッド
+                    // サンプル画像のグリッド
                     LazyVGrid(columns: rows, alignment: .center, spacing: 10) {
                         ForEach(sampleImage.toImageString(), id: \.self) { image in
                             Image(image)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: gridWidth, height: gridWidth, alignment: .center)
-                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                                .frame(minWidth: 0, maxWidth: .infinity,
+                                       minHeight: 0, maxHeight: .infinity, alignment: .center)
                                 .border(Color.black)
                         }
                     }// LazyVGrid
@@ -43,7 +43,7 @@ struct ImageLibraryView: View {
             }// VStack
             .navigationTitle("サンプル画像")
         }// NavigationView
-    }//body
+    }// body
 }
 
 struct ImageLibraryView_Previews: PreviewProvider {

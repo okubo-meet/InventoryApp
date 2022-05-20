@@ -6,11 +6,10 @@
 //
 
 import SwiftUI
-//「最近の項目」の全て表示で遷移してくる画面
+// 「最近の項目」の全て表示で遷移してくる画面
 struct RecentItemsView: View {
     // MARK: - プロパティ
     private let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
-    
     // MARK: - View
     var body: some View {
         ScrollView {
