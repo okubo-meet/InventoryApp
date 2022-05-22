@@ -100,8 +100,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         //Viewのサイズ(高さ)
         let windowHeight = viewController.view.bounds.height
         
-        //カメラの使用許可をリクエスト
-        cameraRequest()
+        //カメラへのアクセス許可をリクエスト
+        CameraManager.cameraRequest(viewController: viewController, dismiss: dismiss)
         //カメラの設定
         if let captureDevice = AVCaptureDevice.default(for: .video),
            let deviceInput = try? AVCaptureDeviceInput(device: captureDevice) {
@@ -187,57 +187,6 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     }
     
     // MARK: - メソッド
-    ///カメラの使用許可をチェックする関数
-    private func cameraRequest() {
-        switch AVCaptureDevice.authorizationStatus(for: .video) {
-            
-        case .notDetermined:
-            print("許可も拒否もしていない")
-            //初回のカメラ使用許可はinfoの'Privacy - Camera Usage Description'で対応
-        case .restricted:
-            print("アクセス出来ない")
-            deniedAlert(isDenied: false)
-        case .denied:
-            print("許可されていない")
-            deniedAlert(isDenied: true)
-        case .authorized:
-            print("許可されている")
-            //処理なし
-        @unknown default:
-            print("カメラのエラー")
-            deniedAlert(isDenied: true)
-        }
-    }
-    /// カメラへのアクセスが許可されていない場合のアラートを出す関数
-    /// - Parameter isDenied: カメラへのアクセス拒否がユーザーによるものかどうか
-    private func deniedAlert(isDenied: Bool) {
-        var message: String
-        if isDenied {
-            message = "設定アプリでカメラへのアクセスを許可してください。"
-        } else {
-            message = "カメラへのアクセスを試みましたが失敗しました。"
-        }
-        let alert = UIAlertController(title: "カメラを使用できません", message: message, preferredStyle: .alert)
-        let back = UIAlertAction(title: "戻る", style: .default, handler: { _ in
-            dismiss()
-        })
-        let setting = UIAlertAction(title: "設定", style: .default, handler: { _ in
-            let url = URL(string: UIApplication.openSettingsURLString)
-            UIApplication.shared.open(url!)
-        })
-        alert.addAction(back)
-        if isDenied {
-            alert.addAction(setting)
-        }
-        //非同期処理
-        Task {
-            let granted = await AVCaptureDevice.requestAccess(for: .video)
-            if granted == false {
-                //アラート表示
-                viewController.present(alert, animated: true, completion: nil)
-            }
-        }
-    }
     ///検知したバーコードの位置に線を表示する関数
     private func showBorder(barcode: VNBarcodeObservation) {
         let boxOnScreen = previewLayer.layerRectConverted(fromMetadataOutputRect: barcode.boundingBox)
@@ -316,9 +265,3 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         viewController.present(alert, animated: true, completion: nil)
     }
 }
-
-//struct BarcodeReaderView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        BarcodeReaderView(item: .constant(TestData().items[0]))
-//    }
-//}
