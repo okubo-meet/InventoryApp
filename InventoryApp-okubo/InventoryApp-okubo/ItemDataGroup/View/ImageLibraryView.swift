@@ -9,6 +9,8 @@ import SwiftUI
 // サンプル画像を選択する画面
 struct ImageLibraryView: View {
     // MARK: - プロパティ
+    // 環境変数で取得したdismissハンドラー
+    @Environment(\.dismiss) var dismiss
     // サンプル画像のカテゴリ
     @State var sampleImage: SampleImage = .food
     // グリッドのカラム
@@ -42,6 +44,18 @@ struct ImageLibraryView: View {
                 }
             }// VStack
             .navigationTitle("サンプル画像")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        HStack {
+                            Image(systemName: "chevron.backward")
+                            Text("閉じる")
+                        }
+                    })
+                }
+            }
         }// NavigationView
     }// body
 }
