@@ -47,7 +47,7 @@ struct AddImageButton: View {
             ImagePickerView(item: $item)
         }
         .sheet(isPresented: $showLibrary) {
-            ImageLibraryView()
+            ImageLibraryView(item: $item)
         }
     }
 }

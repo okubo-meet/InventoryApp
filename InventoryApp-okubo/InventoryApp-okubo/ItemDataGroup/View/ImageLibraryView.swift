@@ -9,6 +9,8 @@ import SwiftUI
 // サンプル画像を選択する画面
 struct ImageLibraryView: View {
     // MARK: - プロパティ
+    // 編集中の商品データ
+    @Binding var item: ItemData
     // 環境変数で取得したdismissハンドラー
     @Environment(\.dismiss) var dismiss
     // サンプル画像のカテゴリ
@@ -31,13 +33,25 @@ struct ImageLibraryView: View {
                     // サンプル画像のグリッド
                     LazyVGrid(columns: rows, alignment: .center, spacing: 10) {
                         ForEach(sampleImage.toImageString(), id: \.self) { image in
-                            Image(image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: gridWidth, height: gridWidth, alignment: .center)
-                                .frame(minWidth: 0, maxWidth: .infinity,
-                                       minHeight: 0, maxHeight: .infinity, alignment: .center)
-                                .border(Color.black)
+                            Button(action: {
+                                //　文字列からUIImageを作成
+                                let uiImage = UIImage(imageLiteralResourceName: image)
+                                // 画像をpngに変換
+                                if let imageData = uiImage.pngData() {
+                                    // 編集中のデータに代入
+                                    item.image = imageData
+                                    // 画面を閉じる
+                                    dismiss()
+                                }
+                            }, label: {
+                                Image(image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: gridWidth, height: gridWidth, alignment: .center)
+                                    .frame(minWidth: 0, maxWidth: .infinity,
+                                           minHeight: 0, maxHeight: .infinity, alignment: .center)
+                                    .border(Color.black)
+                            })
                         }
                     }// LazyVGrid
                     .padding(.all)
@@ -62,6 +76,6 @@ struct ImageLibraryView: View {
 
 struct ImageLibraryView_Previews: PreviewProvider {
     static var previews: some View {
-        ImageLibraryView()
+        ImageLibraryView(item: .constant(TestData().items[0]))
     }
 }
