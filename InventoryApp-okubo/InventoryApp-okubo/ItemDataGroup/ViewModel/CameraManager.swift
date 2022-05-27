@@ -11,9 +11,9 @@ import AVFoundation
 class CameraManager {
     /// カメラのアクセス許可を確認して拒否されているときアラートを返す関数
     static func cameraRequest(viewController: UIViewController, dismiss: DismissAction) {
-        //非同期処理
+        // 非同期処理
         Task {
-            //カメラへのアクセス許可をリクエスト
+            // カメラへのアクセス許可をリクエスト
             let granted = await AVCaptureDevice.requestAccess(for: .video)
             // アクセスが拒否された場合アラート表示
             if granted {
