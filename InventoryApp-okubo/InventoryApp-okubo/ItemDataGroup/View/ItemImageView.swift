@@ -23,6 +23,7 @@ struct ItemImageView: View {
         } else {
             //データがない場合のアイコン表示
             Image(systemName: "photo")//アイコンのサイズ指定が必要
+                .font(.largeTitle)
                 .foregroundColor(.orange)
         }
     }

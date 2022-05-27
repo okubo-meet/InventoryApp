@@ -22,7 +22,7 @@ struct AddImageButton: View {
     
     // MARK: - View
     var body: some View {
-        Button("画像を追加する") {
+        Button("画像を設定する") {
             showingDialog = true
         }
         .foregroundColor(.orange)
