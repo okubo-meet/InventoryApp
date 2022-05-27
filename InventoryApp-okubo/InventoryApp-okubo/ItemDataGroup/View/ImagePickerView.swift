@@ -45,6 +45,8 @@ struct ImagePickerView: UIViewControllerRepresentable {
         imagePickerController.sourceType = .camera
         // 撮影後のトリミングを有効
         imagePickerController.allowsEditing = true
+        // カメラへのアクセス許可をリクエスト
+        CameraManager.cameraRequest(viewController: imagePickerController, dismiss: dismiss)
         return imagePickerController
     }
     // 更新時
