@@ -21,55 +21,59 @@ struct ImageLibraryView: View {
     // MARK: - View
     var body: some View {
         NavigationView {
-            VStack {
-                // カテゴリ別に表示する画像を入れ替える
-                Picker("", selection: $sampleImage) {
-                    ForEach(SampleImage.allCases, id: \.self) { index in
-                        Text(index.rawValue)
+            ZStack {
+                // 背景色
+                Color.background.ignoresSafeArea()
+                VStack {
+                    // カテゴリ別に表示する画像を入れ替える
+                    Picker("", selection: $sampleImage) {
+                        ForEach(SampleImage.allCases, id: \.self) { index in
+                            Text(index.rawValue)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    ScrollView {
+                        // サンプル画像のグリッド
+                        LazyVGrid(columns: rows, alignment: .center, spacing: 10) {
+                            ForEach(sampleImage.toImageString(), id: \.self) { image in
+                                Button(action: {
+                                    //　文字列からUIImageを作成
+                                    let uiImage = UIImage(imageLiteralResourceName: image)
+                                    // 画像をpngに変換
+                                    if let imageData = uiImage.pngData() {
+                                        // 編集中のデータに代入
+                                        item.image = imageData
+                                        // 画面を閉じる
+                                        dismiss()
+                                    }
+                                }, label: {
+                                    Image(image)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: gridWidth, height: gridWidth, alignment: .center)
+                                        .frame(minWidth: 0, maxWidth: .infinity,
+                                               minHeight: 0, maxHeight: .infinity, alignment: .center)
+                                        .background(Color.white)
+                                })
+                            }
+                        }// LazyVGrid
+                        .padding(.all)
+                    }
+                }// VStack
+                .navigationTitle("サンプル画像")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            dismiss()
+                        }, label: {
+                            HStack {
+                                Image(systemName: "chevron.backward")
+                                Text("閉じる")
+                            }
+                        })
                     }
                 }
-                .pickerStyle(.segmented)
-                ScrollView {
-                    // サンプル画像のグリッド
-                    LazyVGrid(columns: rows, alignment: .center, spacing: 10) {
-                        ForEach(sampleImage.toImageString(), id: \.self) { image in
-                            Button(action: {
-                                //　文字列からUIImageを作成
-                                let uiImage = UIImage(imageLiteralResourceName: image)
-                                // 画像をpngに変換
-                                if let imageData = uiImage.pngData() {
-                                    // 編集中のデータに代入
-                                    item.image = imageData
-                                    // 画面を閉じる
-                                    dismiss()
-                                }
-                            }, label: {
-                                Image(image)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: gridWidth, height: gridWidth, alignment: .center)
-                                    .frame(minWidth: 0, maxWidth: .infinity,
-                                           minHeight: 0, maxHeight: .infinity, alignment: .center)
-                                    .border(Color.black)
-                            })
-                        }
-                    }// LazyVGrid
-                    .padding(.all)
-                }
-            }// VStack
-            .navigationTitle("サンプル画像")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        dismiss()
-                    }, label: {
-                        HStack {
-                            Image(systemName: "chevron.backward")
-                            Text("閉じる")
-                        }
-                    })
-                }
-            }
+            }// ZStack
         }// NavigationView
     }// body
 }
