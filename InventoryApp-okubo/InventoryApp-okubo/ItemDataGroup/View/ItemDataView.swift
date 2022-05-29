@@ -24,7 +24,8 @@ struct ItemDataView: View {
                         ItemImageView(imageData: itemData.image)
                             .scaledToFit()
                             .frame(width: imageSize, height: imageSize, alignment: .center)
-                            .border(Color.black, width: 1)
+                            .background(Color.imageBackground)
+                            .border(Color.orange, width: 1)
                         // 画像追加ボタン
                         AddImageButton(item: $itemData)
                     }// VStack

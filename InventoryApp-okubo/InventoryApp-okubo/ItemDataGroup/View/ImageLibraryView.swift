@@ -16,14 +16,14 @@ struct ImageLibraryView: View {
     // サンプル画像のカテゴリ
     @State var sampleImage: SampleImage = .food
     // グリッドのカラム
-    private let rows: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
-    private let gridWidth = UIScreen.main.bounds.width / 3.5
+    private let rows: [GridItem] = Array(repeating: .init(.flexible(), spacing: 10), count: 3)
+    private let gridSize = UIScreen.main.bounds.width / 3.5
     // MARK: - View
     var body: some View {
         NavigationView {
             ZStack {
                 // 背景色
-                Color.background.ignoresSafeArea()
+                Color.backgroundGray.ignoresSafeArea()
                 VStack {
                     // カテゴリ別に表示する画像を入れ替える
                     Picker("", selection: $sampleImage) {
@@ -50,10 +50,11 @@ struct ImageLibraryView: View {
                                     Image(image)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: gridWidth, height: gridWidth, alignment: .center)
+                                        .frame(width: gridSize, height: gridSize, alignment: .center)
                                         .frame(minWidth: 0, maxWidth: .infinity,
                                                minHeight: 0, maxHeight: .infinity, alignment: .center)
-                                        .background(Color.white)
+                                        .background(Color.imageBackground)
+                                        .border(Color.gray, width: 1)
                                 })
                             }
                         }// LazyVGrid
@@ -66,10 +67,7 @@ struct ImageLibraryView: View {
                         Button(action: {
                             dismiss()
                         }, label: {
-                            HStack {
-                                Image(systemName: "chevron.backward")
-                                Text("閉じる")
-                            }
+                            Text("閉じる")
                         })
                     }
                 }
