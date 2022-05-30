@@ -27,16 +27,15 @@ struct ContentView: View {
                 }
         }
     }// body
-    
     init() {
-        //TabViewの背景色の設定
+        // TabViewの背景色の設定
         UITabBar.appearance().backgroundColor = UIColor(Color.tabBar)
-        //SegmentedPickerStyleの設定
+        // SegmentedPickerStyleの設定
         let segmentedAppearance = UISegmentedControl.appearance()
         segmentedAppearance.selectedSegmentTintColor = UIColor.orange
-        //通常時の色
+        // 通常時の色
         segmentedAppearance.setTitleTextAttributes([.foregroundColor: UIColor.orange], for: .normal)
-        //選択時の色
+        // 選択時の色
         segmentedAppearance.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
     }
 }
@@ -47,14 +46,14 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-//商品データ（テスト）
+// 商品データ（テスト）
 struct ItemData: Identifiable {
     /// 識別ID
     let id = UUID()
     /// 商品名
     var name: String = ""
     /// 画像
-    var image: Data? = nil
+    var image: Data?
     /// 期限
     var deadLine: Date?
     /// 登録日
@@ -70,7 +69,7 @@ struct ItemData: Identifiable {
     /// フォルダ
     var folder: String
 }
-//フォルダのデータ（テスト）
+// フォルダのデータ（テスト）
 struct Folder: Identifiable {
     /// 識別ID
     let id = UUID()
@@ -105,7 +104,8 @@ class TestData: ObservableObject {
                                                  notificationDate: nil,
                                                  folder: "食品"),
                                         ItemData(name: "テスト",
-                                                 image: UIImage(imageLiteralResourceName: "shampoo-hair-treatment").pngData(),
+                                                 image: UIImage(imageLiteralResourceName:
+                                                                    "shampoo-hair-treatment").pngData(),
                                                  deadLine: nil,
                                                  registrationDate: Date(),
                                                  numberOfItems: 1,
@@ -114,7 +114,8 @@ class TestData: ObservableObject {
                                                  notificationDate: nil,
                                                  folder: "日用品"),
                                         ItemData(name: "テスト",
-                                                 image: UIImage(imageLiteralResourceName: "shampoo-hair-treatment").pngData(),
+                                                 image: UIImage(imageLiteralResourceName:
+                                                                    "shampoo-hair-treatment").pngData(),
                                                 deadLine: nil,
                                                 registrationDate: Date(),
                                                 numberOfItems: 1,

@@ -1,0 +1,10 @@
+# Swiftlint Rules
+
+# 無効にするルール
+disabled_rules:
+ # タイプ名違反
+ - type_name
+ # 識別子名違反
+ - identifier_name
+ # 関数本体の長さ違反
+ - function_body_length

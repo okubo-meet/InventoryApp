@@ -6,10 +6,10 @@
 //
 
 import SwiftUI
-//カスタムカラー
+// カスタムカラー
 extension Color {
-    //NavigationBarとTabViewの背景色
+    // NavigationBarとTabViewの背景色
     static let tabBar: Color = Color("tabBar")
-    //リストの背景色
+    // リストの背景色
     static let background: Color = Color("background")
 }

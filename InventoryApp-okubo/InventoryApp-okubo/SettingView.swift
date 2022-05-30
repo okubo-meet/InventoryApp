@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-//設定画面　TabViewで扱うView
+// 設定画面　TabViewで扱うView
 struct SettingView: View {
     // MARK: - View
     var body: some View {
@@ -23,7 +23,7 @@ struct SettingView: View {
                 Section {
                     Text("広告の非表示")
                 }
-            }//Form
+            }// Form
             .navigationTitle("設定")
         }// NavigationView
     }

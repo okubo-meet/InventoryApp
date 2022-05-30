@@ -48,6 +48,7 @@
 		7F55D64127F6C6A9004169C4 /* RakutenAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RakutenAPI.swift; sourceTree = "<group>"; };
 		7F55D64327F6CAD5004169C4 /* Api.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Api.plist; sourceTree = "<group>"; };
 		7F57129F27F57E91005DE0BC /* RecentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentRowView.swift; sourceTree = "<group>"; };
+		7F5A4583282E1DC9002AFD2B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7F5A6B9227E2EC6900DCCE81 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		7F5BA4CE27D64C0A00338C12 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		7F5BA4D027D64C8800338C12 /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
@@ -169,6 +170,7 @@
 				7F5BA4D227D64CE800338C12 /* SettingView.swift */,
 				7FDFDB102823C43800D56402 /* SoundPlayer.swift */,
 				7F317B6627E1C84300E1C2E1 /* Color.swift */,
+				7F5A4583282E1DC9002AFD2B /* Info.plist */,
 				7F55D64327F6CAD5004169C4 /* Api.plist */,
 				7F70E1D127D1E55A00C483B9 /* Assets.xcassets */,
 				7F70E1D327D1E55A00C483B9 /* Preview Content */,
@@ -194,6 +196,7 @@
 				7F70E1C627D1E55900C483B9 /* Sources */,
 				7F70E1C727D1E55900C483B9 /* Frameworks */,
 				7F70E1C827D1E55900C483B9 /* Resources */,
+				7F5A4584282E24C6002AFD2B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -249,6 +252,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7F5A4584282E24C6002AFD2B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftlint; then\n    swiftlint\nelse\n  echo \"warning: Swiftlint not installed, download from https://github.com/reaIm/Swiftlint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7F70E1C627D1E55900C483B9 /* Sources */ = {
@@ -413,6 +436,7 @@
 				DEVELOPMENT_TEAM = PW2MXY74G2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "InventoryApp-okubo/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "カメラを使用します";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -445,6 +469,7 @@
 				DEVELOPMENT_TEAM = PW2MXY74G2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "InventoryApp-okubo/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "カメラを使用します";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

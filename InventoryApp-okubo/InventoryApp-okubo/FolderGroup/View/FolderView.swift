@@ -6,20 +6,19 @@
 //
 
 import SwiftUI
-//フォルダデータを扱う画面　TabViewで扱うView
+// フォルダデータを扱う画面　TabViewで扱うView
 struct FolderView: View {
     // MARK: - プロパティ
-    //仮のデータ
+    // 仮のデータ
     @EnvironmentObject var testData: TestData
-    
     // MARK: - View
     var body: some View {
         NavigationView {
             Form {
-                //在庫リストのフォルダのみ取得
+                // 在庫リストのフォルダのみ取得
                 let stock = testData.folders.filter({$0.isStock})
                 let buy = testData.folders.filter({$0.isStock == false})
-                //在庫リストのフォルダ
+                // 在庫リストのフォルダ
                 Section {
                     ForEach(stock) { folder in
                         NavigationLink(destination: ItemListView(folder: folder)) {
@@ -33,7 +32,7 @@ struct FolderView: View {
                 } header: {
                     Text("在庫リスト")
                 }
-                //買い物リストのフォルダ
+                // 買い物リストのフォルダ
                 Section {
                     ForEach(buy) { folder in
                         NavigationLink(destination: ItemListView(folder: folder)) {
