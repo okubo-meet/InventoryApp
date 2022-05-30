@@ -7,116 +7,107 @@
 
 import SwiftUI
 
-// MARK: - プロトコル
-protocol SearchItemDelegate {
-    /// 商品検索が終わったときの処理
-    /// - Parameter isSuccess: 商品の有無
-    func searchItemDidfinish(isSuccess: Bool)
-    ///商品検索でエラーが起きたときの処理
-    func searchItemError()
-}
-
-// MARK: -　クラス
-class RakutenAPI: ObservableObject {
-    
+// MARK: - クラス
+class RakutenAPI {
     // MARK: - 構造体
-    ///JSONのデータ構造 （楽天市場API）
+    /// JSONのデータ構造 （楽天市場API）
     private struct IchibaJson: Codable {
-        ///JSONのitems内のデータ構造
-        struct Items: Codable {
-            ///商品名
-            let itemName: String
-            ///画像URL
-            //            let smallImageUrls: [String]
-            let mediumImageUrls: [String]
-        }
-        //データを受け取る変数
+        // データを受け取る変数
         let Items: [Items]
     }
-    
+    /// JSONのitems内のデータ構造
+    struct Items: Codable {
+        /// 商品名
+        let itemName: String
+        /// 画像URL
+        let mediumImageUrls: [String]
+    }
     // MARK: - プロパティ
-    ///APIで取得した商品名
+    /// APIで取得した商品名
     var resultItemName = ""
-    ///APIで取得した画像データ
-    var resultImageData: Data? = nil
-    ///APIで取得したデータの配列
+    /// APIで取得した画像データ
+    var resultImageData: Data?
+    /// APIで取得したデータの配列　登録画面で複数のデータが扱えるようにする予定
     var resultItem: [(name: String, image: Data?)] = []
-    ///商品検索終了時のデリゲート
-    var delegate: SearchItemDelegate?
-    //plistの値を受け取る変数
-    private var property: Dictionary<String, Any> = [:]
-    
+    /// 商品検索の結果を表す変数
+    var searchResult: SearchResult = .success
+    // plistの値を受け取る変数
+    private var property: [String: Any] = [:]
     // MARK: - イニシャライザ
-    //初期化　変数'property'に'Api.plist'の値を入れる
+    // 初期化　変数'property'に'Api.plist'の値を入れる
     init() {
-        //Api.plistのパス取得
+        // Api.plistのパス取得
         let path = Bundle.main.path(forResource: "Api", ofType: "plist")
-        //plistをDictionary形式で読み込み
+        // plistをDictionary形式で読み込み
         let configurations = NSDictionary(contentsOfFile: path!)
-        if let datasourceDictionary: [String : Any] = configurations as? [String: Any] {
+        if let datasourceDictionary: [String: Any] = configurations as? [String: Any] {
             property = datasourceDictionary
             print("plist:\(property)")
         }
     }
-    
     // MARK: - メソッド
-    ///楽天市場APIを使用する関数
-    func searchItem(itemCode: String) {
-        //ベースURL
+    /// 楽天市場APIを使用する関数
+    func searchItem(itemCode: String, completion: @escaping(_ : SearchResult) -> Void ) {
+        // ベースURL
         let baseURL = getProperty(key: "baseURL")
-        //アプリケーションID
+        // アプリケーションID
         let applicationId = getProperty(key: "applicationId")
-        //入力パラメータ（読み取った値）
+        // 入力パラメータ（読み取った値）
         var requestParams = "&keyword=" + itemCode
-        //入力パラメータ（固定の値）
-        let params: KeyValuePairs = ["format" : "json",
-                                     "formatVersion" : "2",
-                                     "hits" : "1",
-                                     "imageFlag" : "1",
-                                     "sort" : "-updateTimestamp",
-                                     "elements" : "itemName,mediumImageUrls"]
-        //パラメータをURLの形につなげる
+        // 入力パラメータ（固定の値）
+        let params: KeyValuePairs = ["format": "json",
+                                     "formatVersion": "2",
+                                     "hits": "1",
+                                     "imageFlag": "1",
+                                     "sort": "-updateTimestamp",
+                                     "elements": "itemName,mediumImageUrls"]
+        // パラメータをURLの形につなげる
         for (key, value) in params {
             requestParams += "&" + key + "=" + value
         }
-        //URL作成
+        // URL作成
         let requestURL = baseURL + applicationId + requestParams
         print("リクエストURL: \(requestURL)")
         guard let url = URL(string: requestURL) else { return }
-        //URLリクエストの生成
+        // URLリクエストの生成
         let request = URLRequest(url: url, timeoutInterval: 8.0)
-        let session = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let itemData = data {
-                let decoder = JSONDecoder()
-                do {
-                    let jsonData = try decoder.decode(IchibaJson.self, from: itemData)
-                    //商品名を取得
+        // 非同期処理
+        Task {
+            do {
+                print("データ取得開始")
+                // リクエストのデータ取得
+                let (data, _) = try await URLSession.shared.data(for: request)
+                // デコード
+                if let jsonData = try? JSONDecoder().decode(IchibaJson.self, from: data) {
+                    // 商品名を取得
                     self.resultItemName = jsonData.Items[0].itemName
                     print("商品名" + self.resultItemName)
-                    //画像を取得
-                    let imageURL = jsonData.Items[0].mediumImageUrls[0]
-                    print("画像URL:" + imageURL)
-                    self.downLoadImage(url: imageURL)
-                } catch {
+                    // 画像URLを取得
+                    let urlString = jsonData.Items[0].mediumImageUrls[0]
+                    print("画像URL:" + urlString)
+                    guard let imageURL = URL(string: urlString) else { return }
+                    // URLから画像データを取得
+                    let data = try? Data(contentsOf: imageURL)
+                    self.resultImageData = data
+                    self.resultItem.append((name: self.resultItemName, image: self.resultImageData))
+                    // 取得成功
+                    self.searchResult = .success
+                } else {
                     print("データがありません")
-                    DispatchQueue.main.async {
-                        //データがなかった場合のアラート
-                        self.delegate?.searchItemDidfinish(isSuccess: false)
-                    }
+                    // 該当商品なし
+                    self.searchResult = .failure
                 }
-            } else {
-                //接続エラー（タイムアウト含む）
-                print("接続エラー：\(String(describing: error?.localizedDescription))")
-                DispatchQueue.main.async {
-                    //接続に失敗した場合のアラート
-                    self.delegate?.searchItemError()
-                }
+            } catch {
+                print("通信エラー")
+                // エラー発生
+                self.searchResult = .error
             }
+            // クロージャ起動
+            completion(self.searchResult)
+            print("処理終了")
         }
-        //セッション開始
-        session.resume()
     }
-    ///plistから文字列を取得する関数
+    /// plistから文字列を取得する関数
     private func getProperty(key: String) -> String {
         guard let value = property[key] as? String else {
             print("plist: エラー")
@@ -125,18 +116,4 @@ class RakutenAPI: ObservableObject {
         print("plist: \(value)")
         return value
     }
-    ///取得したURLから画像を読み込む関数
-    private func downLoadImage(url: String) {
-        guard let imageURL = URL(string: url) else { return }
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: imageURL)
-            DispatchQueue.main.async {
-                self.resultImageData = data
-                self.resultItem.append((name: self.resultItemName, image: self.resultImageData))
-                //BarcodeReaderViewでアラート起動
-                self.delegate?.searchItemDidfinish(isSuccess: true)
-            }
-        }
-    }
-    
 }
