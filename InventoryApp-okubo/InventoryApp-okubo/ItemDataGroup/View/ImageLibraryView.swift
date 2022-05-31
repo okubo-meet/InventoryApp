@@ -53,7 +53,7 @@ struct ImageLibraryView: View {
                                         .frame(width: gridSize, height: gridSize, alignment: .center)
                                         .frame(minWidth: 0, maxWidth: .infinity,
                                                minHeight: 0, maxHeight: .infinity, alignment: .center)
-                                        .background(Color.imageBackground)
+                                        .background(Color.white)
                                         .border(Color.gray, width: 1)
                                 })
                             }

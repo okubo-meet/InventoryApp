@@ -24,7 +24,8 @@ struct ItemDataView: View {
                         ItemImageView(imageData: itemData.image)
                             .scaledToFit()
                             .frame(width: imageSize, height: imageSize, alignment: .center)
-                            .background(Color.imageBackground)
+                            .background(itemData.image == nil ?
+                                        Color.noImage : Color.white) // 画像データの有無で背景色を変える
                             .border(Color.orange, width: 1)
                         // 画像追加ボタン
                         AddImageButton(item: $itemData)

@@ -12,6 +12,6 @@ extension Color {
     static let tabBar: Color = Color("tabBar")
     // リストの背景色
     static let backgroundGray: Color = Color("backgroundGray")
-    // リストの背景色
-    static let imageBackground: Color = Color("imageBackground")
+    // 画像アイコンの背景色
+    static let noImage: Color = Color("noImage")
 }
