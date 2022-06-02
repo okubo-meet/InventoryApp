@@ -40,7 +40,7 @@ struct HomeView: View {
                     }// HStack
                 }// ScrollView
                 .frame(width: screenWidth, height: screenHeight / 4, alignment: .center)
-                .background(Color.background)
+                .background(Color.backgroundGray)
                 Spacer()
                 // 画面遷移ボタン
                 NavigationLink(destination: RegisterView()) {
