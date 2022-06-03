@@ -24,6 +24,8 @@ struct ListRowView: View {
             ItemImageView(imageData: item.image)
                 .scaledToFit()
                 .frame(width: imageSize, height: imageSize, alignment: .center)
+                .background(Color.white)
+                .border(Color.gray, width: 1)
             VStack {
                 // 商品名
                 Text(item.name)

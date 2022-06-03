@@ -82,7 +82,7 @@ struct Folder: Identifiable {
 }
 // テストデータ
 class TestData: ObservableObject {
-    @Published var newItem = ItemData(folder: "食品")
+    @Published var newItem: [ItemData] = []
     @Published var folders: [Folder] = [Folder(name: "食品", isStock: true, icon: "fork.knife"),
                                         Folder(name: "買い物リスト", isStock: false, icon: nil),
                                         Folder(name: "日用品", isStock: true, icon: "house.fill")]
