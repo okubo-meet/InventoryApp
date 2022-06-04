@@ -13,6 +13,10 @@ struct RegisterView: View {
     @EnvironmentObject var testData: TestData
     // 在庫リストか買い物リストどちらに登録するかの判定
     @State private var isStock = true
+    // 遷移先で表示するデータのインデックス番号
+    @State private var indexNum = 0
+    // リストから遷移するフラグ
+    @State private var isActive = false
     // MARK: - View
     var body: some View {
         VStack {
@@ -28,16 +32,22 @@ struct RegisterView: View {
                     .font(.title)
                 Spacer()
             } else {
+                // TODO: - データをに変更が加わると勝手に画面が閉じてしまう問題を修正する
                 List {
                     ForEach(testData.newItem) { item in
-                        // TODO: - リストのアイテム表示は新たに作る
-                        ListRowView(item: item, isStock: isStock)
+                        RegisterRowView(itemData: item)
+                            .onTapGesture {
+                                showItemView(item: item)
+                            }
                     }
                     .onDelete(perform: rowRemove)
                 }
+                // 商品データ画面のリンク
+                NavigationLink(destination: ItemDataView(isStock: $isStock,
+                                                         itemData: $testData.newItem[indexNum]), isActive: $isActive) {
+                    EmptyView()
+                }
             }
-            // 商品データ
-//            ItemDataView(isStock: $isStock, itemData: $testData.newItem)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("商品登録")
@@ -70,6 +80,14 @@ struct RegisterView: View {
     // リストの行を削除する関数
     private func rowRemove(offsets: IndexSet) {
         testData.newItem.remove(atOffsets: offsets)
+    }
+    // データから配列のインデックス番号を検索し、NavigationLinkを起動する関数
+    private func showItemView(item: ItemData) {
+        if let index = testData.newItem.firstIndex(where: { $0.id == item.id }) {
+            indexNum = index
+            print("インデックス番号: \(indexNum)")
+            isActive = true
+        }
     }
 }
 

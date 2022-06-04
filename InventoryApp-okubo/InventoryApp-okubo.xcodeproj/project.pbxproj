@@ -13,6 +13,7 @@
 		7F07990027D9C291006BF1CF /* RecentItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0798FF27D9C291006BF1CF /* RecentItemsView.swift */; };
 		7F1DC17F28328D1300992908 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DC17E28328D1300992908 /* SearchResult.swift */; };
 		7F317B6727E1C84300E1C2E1 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F317B6627E1C84300E1C2E1 /* Color.swift */; };
+		7F46DCF12849D44800AB2715 /* RegisterRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F46DCF02849D44800AB2715 /* RegisterRowView.swift */; };
 		7F47C30127D742D9006343B4 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F47C30027D742D9006343B4 /* RegisterView.swift */; };
 		7F4EFA5727EA187C0005461E /* ItemDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4EFA5627EA187C0005461E /* ItemDataView.swift */; };
 		7F55D64227F6C6A9004169C4 /* RakutenAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F55D64127F6C6A9004169C4 /* RakutenAPI.swift */; };
@@ -43,6 +44,7 @@
 		7F0798FF27D9C291006BF1CF /* RecentItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemsView.swift; sourceTree = "<group>"; };
 		7F1DC17E28328D1300992908 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		7F317B6627E1C84300E1C2E1 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		7F46DCF02849D44800AB2715 /* RegisterRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterRowView.swift; sourceTree = "<group>"; };
 		7F47C30027D742D9006343B4 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		7F4EFA5627EA187C0005461E /* ItemDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDataView.swift; sourceTree = "<group>"; };
 		7F55D64127F6C6A9004169C4 /* RakutenAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RakutenAPI.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				7F0798FF27D9C291006BF1CF /* RecentItemsView.swift */,
 				7F57129F27F57E91005DE0BC /* RecentRowView.swift */,
 				7F47C30027D742D9006343B4 /* RegisterView.swift */,
+				7F46DCF02849D44800AB2715 /* RegisterRowView.swift */,
 			);
 			path = HomeGroup;
 			sourceTree = "<group>";
@@ -284,6 +287,7 @@
 				7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */,
 				7F7660F6283A2D9E009D6291 /* CameraManager.swift in Sources */,
 				7F5A6B9327E2EC6900DCCE81 /* Icon.swift in Sources */,
+				7F46DCF12849D44800AB2715 /* RegisterRowView.swift in Sources */,
 				7F5BA4D327D64CE800338C12 /* SettingView.swift in Sources */,
 				7F4EFA5727EA187C0005461E /* ItemDataView.swift in Sources */,
 				7F70E1D027D1E55900C483B9 /* ContentView.swift in Sources */,
