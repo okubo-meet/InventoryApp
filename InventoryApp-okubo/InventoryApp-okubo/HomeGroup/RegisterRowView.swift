@@ -14,6 +14,7 @@ struct RegisterRowView: View {
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 4
     // MARK: - View
     var body: some View {
+        // TODO: - 余白などを設定する
         HStack {
             // 画像
             ItemImageView(imageData: itemData.image)

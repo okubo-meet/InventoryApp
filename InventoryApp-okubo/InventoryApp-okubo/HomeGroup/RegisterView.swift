@@ -32,7 +32,7 @@ struct RegisterView: View {
                     .font(.title)
                 Spacer()
             } else {
-                // TODO: - データをに変更が加わると勝手に画面が閉じてしまう問題を修正する
+                // TODO: - データをに変更が加わると勝手に画面が閉じてしまう問題を修正する, 遷移先でリストが更新されないようにする
                 List {
                     ForEach(testData.newItem) { item in
                         RegisterRowView(itemData: item)
@@ -41,7 +41,7 @@ struct RegisterView: View {
                             }
                     }
                     .onDelete(perform: rowRemove)
-                }
+                }// List
                 // 商品データ画面のリンク
                 NavigationLink(destination: ItemDataView(isStock: $isStock,
                                                          itemData: $testData.newItem[indexNum]), isActive: $isActive) {
