@@ -14,7 +14,6 @@ struct RegisterRowView: View {
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 4
     // MARK: - View
     var body: some View {
-        // TODO: - 余白などを設定する
         HStack {
             // 画像
             ItemImageView(imageData: itemData.image)
@@ -35,6 +34,7 @@ struct RegisterRowView: View {
                 Text("タップして詳細設定")
                     .font(.caption)
             }
+            Spacer()
             // 個数
             Text("×\(itemData.numberOfItems)")
         }

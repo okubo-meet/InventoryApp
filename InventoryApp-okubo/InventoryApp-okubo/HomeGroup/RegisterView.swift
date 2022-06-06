@@ -17,6 +17,8 @@ struct RegisterView: View {
     @State private var indexNum = 0
     // リストから遷移するフラグ
     @State private var isActive = false
+    // 登録データ
+    @State private var listItems: [ItemData] = []
     // MARK: - View
     var body: some View {
         VStack {
@@ -25,7 +27,7 @@ struct RegisterView: View {
                 Text("買い物リスト").tag(false)
             }
             .pickerStyle(.segmented)
-            if testData.newItem.isEmpty {
+            if listItems.isEmpty {
                 Spacer()
                 Text("追加するデータがありません")
                     .foregroundColor(.gray)
@@ -34,11 +36,19 @@ struct RegisterView: View {
             } else {
                 // TODO: - データをに変更が加わると勝手に画面が閉じてしまう問題を修正する, 遷移先でリストが更新されないようにする
                 List {
-                    ForEach(testData.newItem) { item in
-                        RegisterRowView(itemData: item)
-                            .onTapGesture {
-                                showItemView(item: item)
-                            }
+//                    ForEach(testData.newItem) { item in
+//                        RegisterRowView(itemData: item)
+//                            .onTapGesture {
+//                                showItemView(item: item)
+//                            }
+//                    }
+//                    .onDelete(perform: rowRemove)
+                    // TODO: - リストに追加されるとき Index out of range で落ちる
+                    ForEach(0..<listItems.count, id: \.self) { index in
+                        NavigationLink(destination: ItemDataView(isStock: $isStock,
+                                                                 itemData: $listItems[index])) {
+                            RegisterRowView(itemData: listItems[index])
+                        }
                     }
                     .onDelete(perform: rowRemove)
                 }// List
@@ -48,7 +58,7 @@ struct RegisterView: View {
                     EmptyView()
                 }
             }
-        }
+        }// VStack
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("商品登録")
         .toolbar {
@@ -70,7 +80,8 @@ struct RegisterView: View {
                     Spacer()
                     Button("商品追加") {
                         // 空のデータ追加
-                        testData.newItem.append(ItemData(folder: "食品"))
+                        listItems.append(ItemData(folder: "食品"))
+//                        testData.newItem.append(ItemData(folder: "食品"))
                     }
                 }// HStack
             })
