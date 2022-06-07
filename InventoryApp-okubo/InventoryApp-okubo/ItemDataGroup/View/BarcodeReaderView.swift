@@ -8,6 +8,7 @@
 import SwiftUI
 import AVFoundation
 import Vision
+// TODO: - 新規登録データか既存データの編集かを判別する
 // バーコードを読み取る画面　楽天APIを使用する予定
 struct BarcodeReaderView: UIViewControllerRepresentable {
     // MARK: - プロパティ

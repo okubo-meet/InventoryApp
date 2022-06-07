@@ -17,8 +17,8 @@ struct RegisterView: View {
     @State private var indexNum = 0
     // リストから遷移するフラグ
     @State private var isActive = false
-    // 登録データ
-    @State private var listItems: [ItemData] = []
+    // 新規登録するデータの配列(リスト表示する)
+    @State private var newItems: [ItemData] = []
     // MARK: - View
     var body: some View {
         VStack {
@@ -27,36 +27,24 @@ struct RegisterView: View {
                 Text("買い物リスト").tag(false)
             }
             .pickerStyle(.segmented)
-            if listItems.isEmpty {
+            if newItems.isEmpty {
                 Spacer()
                 Text("追加するデータがありません")
                     .foregroundColor(.gray)
                     .font(.title)
                 Spacer()
             } else {
-                // TODO: - データをに変更が加わると勝手に画面が閉じてしまう問題を修正する, 遷移先でリストが更新されないようにする
+                // リストで扱う配列をEnvironmentObjectの変数ではなく、＠Stateにしたら画面が勝手に戻る不具合は解消した
                 List {
-//                    ForEach(testData.newItem) { item in
-//                        RegisterRowView(itemData: item)
-//                            .onTapGesture {
-//                                showItemView(item: item)
-//                            }
-//                    }
-//                    .onDelete(perform: rowRemove)
-                    // TODO: - リストに追加されるとき Index out of range で落ちる
-                    ForEach(0..<listItems.count, id: \.self) { index in
+                    ForEach(0..<newItems.count, id: \.self) { index in
+                        // TODO: - バーコードを複数読み取った場合のデータを受け取る。
                         NavigationLink(destination: ItemDataView(isStock: $isStock,
-                                                                 itemData: $listItems[index])) {
-                            RegisterRowView(itemData: listItems[index])
+                                                                 itemData: $newItems[index])) {
+                            RegisterRowView(itemData: newItems[index])
                         }
                     }
                     .onDelete(perform: rowRemove)
                 }// List
-                // 商品データ画面のリンク
-                NavigationLink(destination: ItemDataView(isStock: $isStock,
-                                                         itemData: $testData.newItem[indexNum]), isActive: $isActive) {
-                    EmptyView()
-                }
             }
         }// VStack
         .navigationBarTitleDisplayMode(.inline)
@@ -65,8 +53,8 @@ struct RegisterView: View {
             // 画面右上
             ToolbarItem(placement: .navigationBarTrailing, content: {
                 Button("登録") {
-                    // 商品登録の処理
-                    for newData in testData.newItem {
+                    // 商品登録の処理(テスト)
+                    for newData in newItems {
                         print("追加するデータ: \(newData)")
                         testData.items.append(newData)
                     }
@@ -79,9 +67,9 @@ struct RegisterView: View {
                     EditButton()
                     Spacer()
                     Button("商品追加") {
+                        // TODO: - 一度に追加できるデータに上限を設ける
                         // 空のデータ追加
-                        listItems.append(ItemData(folder: "食品"))
-//                        testData.newItem.append(ItemData(folder: "食品"))
+                        newItems.append(ItemData(folder: "食品"))
                     }
                 }// HStack
             })
@@ -90,15 +78,7 @@ struct RegisterView: View {
     // MARK: - メソッド
     // リストの行を削除する関数
     private func rowRemove(offsets: IndexSet) {
-        testData.newItem.remove(atOffsets: offsets)
-    }
-    // データから配列のインデックス番号を検索し、NavigationLinkを起動する関数
-    private func showItemView(item: ItemData) {
-        if let index = testData.newItem.firstIndex(where: { $0.id == item.id }) {
-            indexNum = index
-            print("インデックス番号: \(indexNum)")
-            isActive = true
-        }
+        newItems.remove(atOffsets: offsets)
     }
 }
 
