@@ -15,8 +15,8 @@ struct RegisterView: View {
     @State private var isStock = true
     // 遷移先で表示するデータのインデックス番号
     @State private var indexNum = 0
-    // リストから遷移するフラグ
-    @State private var isActive = false
+    // バーコード読み取り画面を呼び出すフラグ
+    @State private var showSheet = false
     // 新規登録するデータの配列(リスト表示する)
     @State private var newItems: [ItemData] = []
     // MARK: - View
@@ -32,9 +32,10 @@ struct RegisterView: View {
                 Text("追加するデータがありません")
                     .foregroundColor(.gray)
                     .font(.title)
+                Text("「追加」を押すことでデータを作成できます")
+                    .foregroundColor(.gray)
                 Spacer()
             } else {
-                // リストで扱う配列をEnvironmentObjectの変数ではなく、＠Stateにしたら画面が勝手に戻る不具合は解消した
                 List {
                     ForEach(0..<newItems.count, id: \.self) { index in
                         // TODO: - バーコードを複数読み取った場合のデータを受け取る。
@@ -47,6 +48,9 @@ struct RegisterView: View {
                 }// List
             }
         }// VStack
+        .sheet(isPresented: $showSheet) {
+            BarcodeReaderView(item: $newItems.last!)
+        }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("商品登録")
         .toolbar {
@@ -66,7 +70,19 @@ struct RegisterView: View {
                     // 編集モード起動ボタン
                     EditButton()
                     Spacer()
-                    Button("商品追加") {
+                    Button(action: {
+                        // 配列の最後尾が空のデータでないときは新規データを作成してシートを起動
+                        if newItems.isEmpty {
+                            newItems.append(ItemData(folder: "食品"))
+                        } else if newItems.last?.name != "" || newItems.last?.image != nil {
+                            newItems.append(ItemData(folder: "食品"))
+                        }
+                        showSheet = true
+                    }, label: {
+                        Image(systemName: "barcode.viewfinder")
+                    })
+                    Spacer()
+                    Button("追加") {
                         // TODO: - 一度に追加できるデータに上限を設ける
                         // 空のデータ追加
                         newItems.append(ItemData(folder: "食品"))
