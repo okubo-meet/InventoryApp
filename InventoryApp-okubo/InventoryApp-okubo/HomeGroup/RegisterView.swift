@@ -38,7 +38,6 @@ struct RegisterView: View {
             } else {
                 List {
                     ForEach(0..<newItems.count, id: \.self) { index in
-                        // TODO: - バーコードを複数読み取った場合のデータを受け取る。
                         NavigationLink(destination: ItemDataView(isStock: $isStock,
                                                                  itemData: $newItems[index])) {
                             RegisterRowView(itemData: newItems[index])
@@ -48,9 +47,19 @@ struct RegisterView: View {
                 }// List
             }
         }// VStack
-        .sheet(isPresented: $showSheet) {
-            BarcodeReaderView(item: $newItems.last!)
-        }
+        .sheet(isPresented: $showSheet, onDismiss: {
+            if RakutenAPI.resultItems.count >= 2 {
+                // この配列の先頭はバーコードリーダーでリストに反映してるので必要ない
+                RakutenAPI.resultItems.removeFirst()
+                // 複数のバーコードを読み取っている場合リストに加える
+                for item in RakutenAPI.resultItems {
+                    newItems.append(item)
+                }
+            }
+            RakutenAPI.resultItems.removeAll()
+        }, content: {
+            BarcodeReaderView(item: $newItems.last!, isItemEdit: false)
+        })
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("商品登録")
         .toolbar {
@@ -70,6 +79,7 @@ struct RegisterView: View {
                     // 編集モード起動ボタン
                     EditButton()
                     Spacer()
+                    // バーコードリーダー呼び出しボタン
                     Button(action: {
                         // 配列の最後尾が空のデータでないときは新規データを作成してシートを起動
                         if newItems.isEmpty {
@@ -77,6 +87,7 @@ struct RegisterView: View {
                         } else if newItems.last?.name != "" || newItems.last?.image != nil {
                             newItems.append(ItemData(folder: "食品"))
                         }
+                        RakutenAPI.resultItems.removeAll()
                         showSheet = true
                     }, label: {
                         Image(systemName: "barcode.viewfinder")

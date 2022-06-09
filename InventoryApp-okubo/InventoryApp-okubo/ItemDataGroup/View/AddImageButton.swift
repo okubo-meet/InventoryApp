@@ -41,7 +41,7 @@ struct AddImageButton: View {
             Text("画像を追加する方法を選択してください")
         }
         .sheet(isPresented: $showBarcodeReader) {
-            BarcodeReaderView(item: $item)
+            BarcodeReaderView(item: $item, isItemEdit: true)
         }
         .sheet(isPresented: $showImagePicker) {
             ImagePickerView(item: $item)

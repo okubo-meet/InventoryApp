@@ -8,7 +8,6 @@
 import SwiftUI
 import AVFoundation
 import Vision
-// TODO: - 新規登録データか既存データの編集かを判別する
 // バーコードを読み取る画面　楽天APIを使用する予定
 struct BarcodeReaderView: UIViewControllerRepresentable {
     // MARK: - プロパティ
@@ -20,6 +19,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     @Binding var item: ItemData
     // インジケーター切り替えフラグ
     @State private var isLoading = false
+    // データの編集か登録データの追加を判別するフラグ true = データの編集, false = 登録データの追加
+    var isItemEdit: Bool
     // バーコードの位置に表示する線
     var barcodeBorder = CAShapeLayer()
     // バーコード検索の状態を表示するラベル
@@ -201,8 +202,20 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
             switch result {
             case .success:
                 print("成功")
-                item.name = rakutenAPI.resultItemName
-                item.image = rakutenAPI.resultImageData
+                if isItemEdit {
+                    item.name = rakutenAPI.resultItemName
+                    item.image = rakutenAPI.resultImageData
+                } else {
+                    // 初回はBindingしているデータに代入する
+                    if RakutenAPI.resultItems.isEmpty {
+                        item.name = rakutenAPI.resultItemName
+                        item.image = rakutenAPI.resultImageData
+                    }
+                    let resultItem = ItemData(name: rakutenAPI.resultItemName,
+                                              image: rakutenAPI.resultImageData,
+                                              folder: "食品")
+                    RakutenAPI.resultItems.append(resultItem)
+                }
                 successAlert()
             case .failure:
                 print("商品無し")
@@ -217,7 +230,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     private func successAlert() {
         // ラベルのテキスト変更
         guideLabel.text = rakutenAPI.resultItemName
-        searchLabel.text = "読み取った商品：\(rakutenAPI.resultItem.count)"
+        searchLabel.text = "読み取った商品：\(RakutenAPI.resultItems.count)"
         let alert = UIAlertController(title: "商品を検索しました", message: "前の画面に戻りますか？", preferredStyle: .alert)
         let ok = UIAlertAction(title: "戻る", style: .default, handler: { _ in
             dismiss()
