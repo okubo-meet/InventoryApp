@@ -23,16 +23,21 @@ struct RegisterRowView: View {
                             Color.noImage : Color.white)
                 .border(Color.gray, width: 1)
             VStack {
+                Spacer()
                 if itemData.name == "" {
                     // 商品名に入力がないとき
                     Text("商品名がありません")
+                        .font(.body)
+                        .fontWeight(.semibold)
                 } else {
                     // 商品名
                     Text(itemData.name)
-                        .fontWeight(.bold)
+                        .font(.body)
+                        .fontWeight(.semibold)
                 }
-                Text("タップして詳細設定")
-                    .font(.caption)
+                Spacer()
+                Text("登録先：\(itemData.folder)")
+                    .font(.callout)
             }
             Spacer()
             // 個数

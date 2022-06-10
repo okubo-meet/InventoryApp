@@ -14,7 +14,9 @@ struct RegisterView: View {
     // 在庫リストか買い物リストどちらに登録するかの判定
     @State private var isStock = true
     // 登録完了アラートのフラグ
-    @State private var showAlert = false
+    @State private var saveAlert = false
+    // 名前のないデータに対するアラートのフラグ
+    @State private var noNameAlert = false
     // バーコード読み取り画面を呼び出すフラグ
     @State private var showSheet = false
     // 新規登録するデータの配列(リスト表示する)
@@ -54,12 +56,17 @@ struct RegisterView: View {
                     .font(.callout)
             }
         }// VStack
-        .alert("登録完了", isPresented: $showAlert, actions: {
+        .alert("登録完了", isPresented: $saveAlert, actions: {
             Button("OK") {
                 withAnimation {
                     newItems.removeAll()
                 }
             }
+        })
+        .alert("商品名のないデータがあります", isPresented: $noNameAlert, actions: {
+            // 処理無し
+        }, message: {
+            Text("商品名を設定するか、データを削除してください")
         })
         .sheet(isPresented: $showSheet, onDismiss: {
             if RakutenAPI.resultItems.count >= 2 {
@@ -80,13 +87,18 @@ struct RegisterView: View {
             // 画面右上
             ToolbarItem(placement: .navigationBarTrailing, content: {
                 Button("登録") {
-                    // 商品登録の処理(テスト)
-                    for newData in newItems {
-                        print("追加するデータ: \(newData)")
-                        testData.items.append(newData)
+                    // 名前が入力されていないデータがあるときはアラート表示
+                    if newItems.allSatisfy({$0.name != ""}) {
+                        // 商品登録の処理(テスト)
+                        for newData in newItems {
+                            print("追加するデータ: \(newData)")
+                            testData.items.append(newData)
+                        }
+                        saveAlert = true
+                        soundPlayer.saveSound_play()
+                    } else {
+                        noNameAlert = true
                     }
-                    showAlert = true
-                    soundPlayer.saveSound_play()
                 }
                 .disabled(newItems.isEmpty)
             })
