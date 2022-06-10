@@ -13,12 +13,14 @@ struct RegisterView: View {
     @EnvironmentObject var testData: TestData
     // 在庫リストか買い物リストどちらに登録するかの判定
     @State private var isStock = true
-    // 遷移先で表示するデータのインデックス番号
-    @State private var indexNum = 0
+    // 登録完了アラートのフラグ
+    @State private var showAlert = false
     // バーコード読み取り画面を呼び出すフラグ
     @State private var showSheet = false
     // 新規登録するデータの配列(リスト表示する)
     @State private var newItems: [ItemData] = []
+    //　効果音を扱うクラスのインスタンス
+    private let soundPlayer = SoundPlayer()
     // MARK: - View
     var body: some View {
         VStack {
@@ -29,11 +31,14 @@ struct RegisterView: View {
             .pickerStyle(.segmented)
             if newItems.isEmpty {
                 Spacer()
-                Text("追加するデータがありません")
-                    .foregroundColor(.gray)
-                    .font(.title)
-                Text("「追加」を押すことでデータを作成できます")
-                    .foregroundColor(.gray)
+                VStack {
+                    Text("追加するデータがありません")
+                        .font(.title)
+                        .padding(.bottom)
+                    Text("「追加」を押してデータを作成する。")
+                    Text(Image(systemName: "barcode.viewfinder")) + Text("バーコードを読み取って作成する。")
+                }
+                .foregroundColor(.gray)
                 Spacer()
             } else {
                 List {
@@ -45,8 +50,17 @@ struct RegisterView: View {
                     }
                     .onDelete(perform: rowRemove)
                 }// List
+                Text("\(newItems.count)/10")
+                    .font(.callout)
             }
         }// VStack
+        .alert("登録完了", isPresented: $showAlert, actions: {
+            Button("OK") {
+                withAnimation {
+                    newItems.removeAll()
+                }
+            }
+        })
         .sheet(isPresented: $showSheet, onDismiss: {
             if RakutenAPI.resultItems.count >= 2 {
                 // この配列の先頭はバーコードリーダーでリストに反映してるので必要ない
@@ -71,13 +85,17 @@ struct RegisterView: View {
                         print("追加するデータ: \(newData)")
                         testData.items.append(newData)
                     }
+                    showAlert = true
+                    soundPlayer.saveSound_play()
                 }
+                .disabled(newItems.isEmpty)
             })
             // 画面下部
             ToolbarItem(placement: .bottomBar, content: {
                 HStack {
                     // 編集モード起動ボタン
                     EditButton()
+                        .disabled(newItems.isEmpty)
                     Spacer()
                     // バーコードリーダー呼び出しボタン
                     Button(action: {
@@ -92,12 +110,15 @@ struct RegisterView: View {
                     }, label: {
                         Image(systemName: "barcode.viewfinder")
                     })
+                    .disabled(newItems.count == 10)
                     Spacer()
                     Button("追加") {
-                        // TODO: - 一度に追加できるデータに上限を設ける
                         // 空のデータ追加
-                        newItems.append(ItemData(folder: "食品"))
+                        withAnimation {
+                            newItems.append(ItemData(folder: "食品"))
+                        }
                     }
+                    .disabled(newItems.count == 10)
                 }// HStack
             })
         }// toolbar

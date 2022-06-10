@@ -28,7 +28,9 @@ struct ContentView: View {
         }
     }// body
     init() {
-        // TabViewの背景色の設定
+        // 背景色の設定
+        UINavigationBar.appearance().backgroundColor = UIColor(Color.tabBar)
+        UIToolbar.appearance().backgroundColor = UIColor(Color.tabBar)
         UITabBar.appearance().backgroundColor = UIColor(Color.tabBar)
         // SegmentedPickerStyleの設定
         let segmentedAppearance = UISegmentedControl.appearance()
