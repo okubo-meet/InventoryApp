@@ -69,10 +69,11 @@ struct RegisterView: View {
             Text("商品名を設定するか、データを削除してください")
         })
         .sheet(isPresented: $showSheet, onDismiss: {
+            // この配列の先頭はバーコードリーダーでリストに反映してるので２つ以上読み取っている場合の処理
             if RakutenAPI.resultItems.count >= 2 {
-                // この配列の先頭はバーコードリーダーでリストに反映してるので必要ない
+                // 先頭は必要ない
                 RakutenAPI.resultItems.removeFirst()
-                // 複数のバーコードを読み取っている場合リストに加える
+                // リストに加える
                 for item in RakutenAPI.resultItems {
                     newItems.append(item)
                 }
@@ -117,6 +118,9 @@ struct RegisterView: View {
                         } else if newItems.last?.name != "" || newItems.last?.image != nil {
                             newItems.append(ItemData(folder: "食品"))
                         }
+                        // 読み取り上限を設定 リストの最後尾はBindingで渡すのでカウントしない
+                        let number = newItems.count - 1
+                        RakutenAPI.limitNumber = 10 - number
                         RakutenAPI.resultItems.removeAll()
                         showSheet = true
                     }, label: {

@@ -25,6 +25,8 @@ class RakutenAPI {
     // MARK: - プロパティ
     /// APIで取得したデータの配列　登録画面で複数のデータが扱えるようにする
     static var resultItems: [ItemData] = []
+    /// API検索で一度に取得できる上限
+    static var limitNumber = 10
     /// APIで取得した商品名
     var resultItemName = ""
     /// APIで取得した画像データ
@@ -89,7 +91,6 @@ class RakutenAPI {
                     // URLから画像データを取得
                     let data = try? Data(contentsOf: imageURL)
                     self.resultImageData = data
-//                    RakutenAPI.resultItem.append((name: self.resultItemName, image: self.resultImageData))
                     // 取得成功
                     self.searchResult = .success
                 } else {
