@@ -145,7 +145,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         // 検索した商品の数を表示するラベル
         searchLabel.frame = CGRect(x: windowWidth * 0.5, y: windowWidth * 0.05,
                                    width: windowWidth * 0.45, height: windowHeight * 0.06)
-        searchLabel.text = "読み取った商品：0"
+        searchLabel.text = searchlabelText()
         searchLabel.textAlignment = .center
         searchLabel.textColor = .orange
         searchLabel.backgroundColor = .white
@@ -228,10 +228,20 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     }
     /// 商品検索に成功した場合のアラートを出す関数
     private func successAlert() {
+        var title = ""
+        var message = ""
+        // アラートの内容を切り替える
+        if RakutenAPI.resultItems.count == RakutenAPI.limitNumber {
+            title = "読み取り上限に達しました"
+            message = "前の画面に戻ります"
+        } else {
+            title = "商品を検索しました"
+            message = "前の画面に戻りますか？"
+        }
         // ラベルのテキスト変更
         guideLabel.text = rakutenAPI.resultItemName
-        searchLabel.text = "読み取った商品：\(RakutenAPI.resultItems.count)"
-        let alert = UIAlertController(title: "商品を検索しました", message: "前の画面に戻りますか？", preferredStyle: .alert)
+        searchLabel.text = searchlabelText()
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "戻る", style: .default, handler: { _ in
             dismiss()
         })
@@ -240,7 +250,9 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
             self.guideLabel.text = "バーコードを写してください"
         })
         alert.addAction(ok)
-        alert.addAction(continuation)
+        if RakutenAPI.resultItems.count != RakutenAPI.limitNumber {
+            alert.addAction(continuation)
+        }
         // バイブレーション起動
         finishImpact.notificationOccurred(.success)
         // アラート表示
@@ -271,5 +283,19 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         finishImpact.notificationOccurred(.error)
         // アラート表示
         viewController.present(alert, animated: true, completion: nil)
+    }
+    /// 商品検索する際に表示するテキストを返す関数
+    private func searchlabelText() -> String {
+        var text = ""
+        if isItemEdit {
+            if rakutenAPI.resultItemName == "" {
+                text = "読み取り中..."
+            } else {
+                text = "読み取り完了"
+            }
+        } else {
+            text = "読み取った商品：\(RakutenAPI.resultItems.count)/\(RakutenAPI.limitNumber)"
+        }
+        return text
     }
 }
