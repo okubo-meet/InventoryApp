@@ -289,12 +289,12 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         var text = ""
         if isItemEdit {
             if rakutenAPI.resultItemName == "" {
-                text = "読み取り中..."
+                text = "取得データ：無し"
             } else {
-                text = "読み取り完了"
+                text = "取得データ：有り"
             }
         } else {
-            text = "読み取った商品：\(RakutenAPI.resultItems.count)/\(RakutenAPI.limitNumber)"
+            text = "取得データ：\(RakutenAPI.resultItems.count)/\(RakutenAPI.limitNumber)"
         }
         return text
     }

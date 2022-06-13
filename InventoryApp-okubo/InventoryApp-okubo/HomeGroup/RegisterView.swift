@@ -140,7 +140,7 @@ struct RegisterView: View {
         }// toolbar
     }
     // MARK: - メソッド
-    // リストの行を削除する関数
+    // ForEachの.onDeleteに渡す関数
     private func rowRemove(offsets: IndexSet) {
         newItems.remove(atOffsets: offsets)
     }
