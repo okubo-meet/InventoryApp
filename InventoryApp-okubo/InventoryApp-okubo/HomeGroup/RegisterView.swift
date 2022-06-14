@@ -31,30 +31,35 @@ struct RegisterView: View {
                 Text("買い物リスト").tag(false)
             }
             .pickerStyle(.segmented)
-            if newItems.isEmpty {
-                Spacer()
+            ZStack {
                 VStack {
-                    Text("登録するデータがありません")
-                        .font(.title)
-                        .padding(.bottom)
-                    Text("「追加」を押してデータを作成する。")
-                    Text(Image(systemName: "barcode.viewfinder")) + Text("バーコードを読み取って作成する。")
-                }
-                .foregroundColor(.gray)
-                Spacer()
-            } else {
-                List {
-                    ForEach(0..<newItems.count, id: \.self) { index in
-                        NavigationLink(destination: ItemDataView(isStock: $isStock,
-                                                                 itemData: $newItems[index])) {
-                            RegisterRowView(itemData: newItems[index])
+                    List {
+                        ForEach(0..<newItems.count, id: \.self) { index in
+                            NavigationLink(destination: ItemDataView(isStock: $isStock,
+                                                                     itemData: $newItems[index])) {
+                                RegisterRowView(itemData: newItems[index])
+                            }
                         }
+                        .onDelete(perform: rowRemove)
+                    }// List
+                    Text("\(newItems.count)/10")
+                        .font(.callout)
+                }
+                if newItems.isEmpty {
+                    VStack {
+                        Spacer()
+                        Text("登録するデータがありません")
+                            .font(.title)
+                            .padding(.bottom)
+                        Text("「追加」を押してデータを作成する。")
+                        Text(Image(systemName: "barcode.viewfinder")) + Text("バーコードを読み取って作成する。")
+                        Spacer()
                     }
-                    .onDelete(perform: rowRemove)
-                }// List
-                Text("\(newItems.count)/10")
-                    .font(.callout)
-            }
+                    .foregroundColor(.gray)
+                    .frame(minWidth: 0, maxWidth: .infinity,
+                           minHeight: 0, maxHeight: .infinity, alignment: .center)
+                }
+            }// ZStack
         }// VStack
         .alert("登録完了", isPresented: $saveAlert, actions: {
             Button("OK") {
