@@ -34,7 +34,7 @@ struct RegisterView: View {
             if newItems.isEmpty {
                 Spacer()
                 VStack {
-                    Text("追加するデータがありません")
+                    Text("登録するデータがありません")
                         .font(.title)
                         .padding(.bottom)
                     Text("「追加」を押してデータを作成する。")
@@ -128,7 +128,7 @@ struct RegisterView: View {
                     })
                     .disabled(newItems.count == 10)
                     Spacer()
-                    Button("追加") {
+                    Button("作成") {
                         // 空のデータ追加
                         withAnimation {
                             newItems.append(ItemData(folder: "食品"))
