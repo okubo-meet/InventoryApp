@@ -11,6 +11,9 @@ struct FolderView: View {
     // MARK: - プロパティ
     // 仮のデータ
     @EnvironmentObject var testData: TestData
+    // 環境プロパティ
+    //    @Environment(\.editMode) private var editMode
+    @State var isEditing = false
     // MARK: - View
     var body: some View {
         NavigationView {
@@ -46,6 +49,34 @@ struct FolderView: View {
                 }
             }// Form
             .navigationTitle("フォルダ")
+            .toolbar {
+                // 編集ボタン
+                ToolbarItem(placement: .navigationBarTrailing, content: {
+                    Button(action: {
+                        withAnimation {
+                            isEditing.toggle()
+                        }
+                    }, label: {
+                        if isEditing {
+                            Text("完了")
+                        } else {
+                            Text("編集")
+                        }
+                    })
+                })
+                // 新規作成ボタン
+                ToolbarItem(placement: .bottomBar, content: {
+                    if isEditing {
+                        HStack {
+                            Spacer()
+                            Button("新規フォルダ作成") {
+                                // TODO: - フォルダ設定画面を作る
+                                // フォルダ設定画面を呼び出す
+                            }
+                        }
+                    }
+                })
+            }// toolbar
         }// NavigationView
     }
 }
