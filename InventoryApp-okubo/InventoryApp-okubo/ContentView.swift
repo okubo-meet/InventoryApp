@@ -76,18 +76,18 @@ struct Folder: Identifiable {
     /// 識別ID
     let id = UUID()
     /// フォルダ名
-    let name: String
+    var name: String
     /// 在庫リストか買い物リストかの判定
-    let isStock: Bool
+    var isStock: Bool
     /// アイコン名
-    let icon: String?
+    var icon: String
 }
 // テストデータ
 class TestData: ObservableObject {
 //    @Published var newItem: [ItemData] = []
-    @Published var folders: [Folder] = [Folder(name: "食品", isStock: true, icon: "fork.knife"),
-                                        Folder(name: "買い物リスト", isStock: false, icon: nil),
-                                        Folder(name: "日用品", isStock: true, icon: "house.fill")]
+    @Published var folders: [Folder] = [Folder(name: "食品", isStock: true, icon: Icon.food.rawValue),
+                                        Folder(name: "買い物リスト", isStock: false, icon: Icon.cart.rawValue),
+                                        Folder(name: "日用品", isStock: true, icon: Icon.house.rawValue)]
     @Published var items: [ItemData] = [ItemData(name: "テスト",
                                                  image: UIImage(imageLiteralResourceName: "pork-loin").pngData(),
                                                  deadLine: Date(), registrationDate: Date(),

@@ -11,9 +11,12 @@ struct FolderView: View {
     // MARK: - プロパティ
     // 仮のデータ
     @EnvironmentObject var testData: TestData
-    // 環境プロパティ
-    //    @Environment(\.editMode) private var editMode
+    // 編集モードのフラグ
     @State var isEditing = false
+    // フォルダ設定画面の呼び出しフラグ
+    @State var showSheet = false
+    // フォルダ設定画面に渡すインデックス番号
+    private var folderIndex: Int?
     // MARK: - View
     var body: some View {
         NavigationView {
@@ -26,7 +29,7 @@ struct FolderView: View {
                     ForEach(stock) { folder in
                         NavigationLink(destination: ItemListView(folder: folder)) {
                             HStack {
-                                Image(systemName: folder.icon!)
+                                Image(systemName: folder.icon)
                                     .foregroundColor(.orange)
                                 Text(folder.name)
                             }
@@ -40,6 +43,8 @@ struct FolderView: View {
                     ForEach(buy) { folder in
                         NavigationLink(destination: ItemListView(folder: folder)) {
                             HStack {
+                                Image(systemName: folder.icon)
+                                    .foregroundColor(.orange)
                                 Text(folder.name)
                             }
                         }// NavigationLink
@@ -48,6 +53,10 @@ struct FolderView: View {
                     Text("買い物リスト")
                 }
             }// Form
+            .sheet(isPresented: $showSheet, content: {
+                // 設定画面
+                FolderEditView(folder: editFolder())
+            })
             .navigationTitle("フォルダ")
             .toolbar {
                 // 編集ボタン
@@ -70,14 +79,23 @@ struct FolderView: View {
                         HStack {
                             Spacer()
                             Button("新規フォルダ作成") {
-                                // TODO: - フォルダ設定画面を作る
                                 // フォルダ設定画面を呼び出す
+                                showSheet = true
                             }
                         }
                     }
                 })
             }// toolbar
         }// NavigationView
+    }// View
+    // MARK: - メソッド
+    // 設定画面に編集するフォルダを渡す関数
+    func editFolder() -> Folder {
+        if let folderIndex = folderIndex {
+            return testData.folders[folderIndex]
+        } else {
+            return Folder(name: "", isStock: true, icon: Icon.house.rawValue)
+        }
     }
 }
 
