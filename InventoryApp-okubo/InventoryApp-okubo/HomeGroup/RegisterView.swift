@@ -100,10 +100,10 @@ struct RegisterView: View {
                             print("追加するデータ: \(newData)")
                             testData.items.append(newData)
                         }
-                        saveAlert = true
+                        saveAlert.toggle()
                         soundPlayer.saveSound_play()
                     } else {
-                        noNameAlert = true
+                        noNameAlert.toggle()
                     }
                 }
                 .disabled(newItems.isEmpty)
@@ -127,7 +127,7 @@ struct RegisterView: View {
                         let number = newItems.count - 1
                         RakutenAPI.limitNumber = 10 - number
                         RakutenAPI.resultItems.removeAll()
-                        showSheet = true
+                        showSheet.toggle()
                     }, label: {
                         Image(systemName: "barcode.viewfinder")
                     })
