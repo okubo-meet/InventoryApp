@@ -231,7 +231,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         var title = ""
         var message = ""
         // アラートの内容を切り替える
-        if RakutenAPI.resultItems.count == RakutenAPI.limitNumber {
+        if RakutenAPI.resultItems.count == RakutenAPI.readLimit {
             title = "読み取り上限に達しました"
             message = "前の画面に戻ります"
         } else {
@@ -250,7 +250,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
             self.guideLabel.text = "バーコードを写してください"
         })
         alert.addAction(ok)
-        if RakutenAPI.resultItems.count != RakutenAPI.limitNumber {
+        if RakutenAPI.resultItems.count != RakutenAPI.readLimit {
             alert.addAction(continuation)
         }
         // バイブレーション起動
@@ -294,7 +294,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
                 text = "取得データ：有り"
             }
         } else {
-            text = "取得データ：\(RakutenAPI.resultItems.count)/\(RakutenAPI.limitNumber)"
+            text = "取得データ：\(RakutenAPI.resultItems.count)/\(RakutenAPI.readLimit)"
         }
         return text
     }

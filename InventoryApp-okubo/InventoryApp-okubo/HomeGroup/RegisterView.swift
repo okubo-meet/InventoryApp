@@ -23,6 +23,8 @@ struct RegisterView: View {
     @State private var newItems: [ItemData] = []
     //　効果音を扱うクラスのインスタンス
     private let soundPlayer = SoundPlayer()
+    // 新規登録データの上限値
+    private let maxItems = 10
     // MARK: - View
     var body: some View {
         VStack {
@@ -42,7 +44,7 @@ struct RegisterView: View {
                         }
                         .onDelete(perform: rowRemove)
                     }// List
-                    Text("\(newItems.count)/10")
+                    Text("\(newItems.count)/\(maxItems)")
                         .font(.callout)
                 }
                 if newItems.isEmpty {
@@ -125,13 +127,13 @@ struct RegisterView: View {
                         }
                         // 読み取り上限を設定 リストの最後尾はBindingで渡すのでカウントしない
                         let number = newItems.count - 1
-                        RakutenAPI.limitNumber = 10 - number
+                        RakutenAPI.readLimit = maxItems - number
                         RakutenAPI.resultItems.removeAll()
                         showSheet.toggle()
                     }, label: {
                         Image(systemName: "barcode.viewfinder")
                     })
-                    .disabled(newItems.count == 10)
+                    .disabled(newItems.count == maxItems)
                     Spacer()
                     Button("作成") {
                         // 空のデータ追加
@@ -139,7 +141,7 @@ struct RegisterView: View {
                             newItems.append(ItemData(folder: "食品"))
                         }
                     }
-                    .disabled(newItems.count == 10)
+                    .disabled(newItems.count == maxItems)
                 }// HStack
             })
         }// toolbar
