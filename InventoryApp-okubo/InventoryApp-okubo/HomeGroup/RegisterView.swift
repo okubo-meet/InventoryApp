@@ -98,9 +98,9 @@ struct RegisterView: View {
                     // 名前が入力されていないデータがあるときはアラート表示
                     if newItems.allSatisfy({$0.name != ""}) {
                         // 商品登録の処理(テスト)
-                        for newData in newItems {
-                            print("追加するデータ: \(newData)")
-                            testData.items.append(newData)
+                        for newItem in newItems {
+                            print("追加するデータ: \(newItem)")
+                            testData.items.append(newItem)
                         }
                         saveAlert.toggle()
                         soundPlayer.saveSoundPlay()
