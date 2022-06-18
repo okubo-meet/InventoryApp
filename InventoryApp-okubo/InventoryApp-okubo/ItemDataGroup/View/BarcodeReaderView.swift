@@ -70,7 +70,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
                         print("読み取り：\(value)")
                         print("タイプ：\(barcode.symbology)")
                         // 効果音再生
-                        self.parent.soundPlayer.detectSound_play()
+                        self.parent.soundPlayer.detectSoundPlay()
                         // キャプチャ停止
                         self.parent.captureSession.stopRunning()
                         // インジケーター起動

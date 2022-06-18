@@ -101,7 +101,7 @@ struct RegisterView: View {
                             testData.items.append(newData)
                         }
                         saveAlert.toggle()
-                        soundPlayer.saveSound_play()
+                        soundPlayer.saveSoundPlay()
                     } else {
                         noNameAlert.toggle()
                     }
