@@ -23,12 +23,14 @@ class RakutenAPI {
         let mediumImageUrls: [String]
     }
     // MARK: - プロパティ
+    /// APIで取得したデータの配列　登録画面で複数のデータが扱えるようにする
+    static var resultItems: [ItemData] = []
+    /// API検索で一度に取得できる上限
+    static var readLimit = 10
     /// APIで取得した商品名
     var resultItemName = ""
     /// APIで取得した画像データ
     var resultImageData: Data?
-    /// APIで取得したデータの配列　登録画面で複数のデータが扱えるようにする予定
-    var resultItem: [(name: String, image: Data?)] = []
     /// 商品検索の結果を表す変数
     var searchResult: SearchResult = .success
     // plistの値を受け取る変数
@@ -89,7 +91,6 @@ class RakutenAPI {
                     // URLから画像データを取得
                     let data = try? Data(contentsOf: imageURL)
                     self.resultImageData = data
-                    self.resultItem.append((name: self.resultItemName, image: self.resultImageData))
                     // 取得成功
                     self.searchResult = .success
                 } else {

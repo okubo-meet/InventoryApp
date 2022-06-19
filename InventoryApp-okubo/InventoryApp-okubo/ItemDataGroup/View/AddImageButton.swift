@@ -22,26 +22,26 @@ struct AddImageButton: View {
     // MARK: - View
     var body: some View {
         Button("画像を設定する") {
-            showingDialog = true
+            showingDialog.toggle()
         }
         .foregroundColor(.orange)
         // ダイアログ
         .confirmationDialog("画像を追加", isPresented: $showingDialog, titleVisibility: .visible) {
             // アクションボタンリスト
             Button("バーコード検索") {
-                showBarcodeReader = true
+                showBarcodeReader.toggle()
             }
             Button("自分で撮影") {
-                showImagePicker = true
+                showImagePicker.toggle()
             }
             Button("サンプル画像を選択") {
-                showLibrary = true
+                showLibrary.toggle()
             }
         } message: {
             Text("画像を追加する方法を選択してください")
         }
         .sheet(isPresented: $showBarcodeReader) {
-            BarcodeReaderView(item: $item)
+            BarcodeReaderView(item: $item, isItemEdit: true)
         }
         .sheet(isPresented: $showImagePicker) {
             ImagePickerView(item: $item)
