@@ -26,7 +26,7 @@ class RakutenAPI {
     /// APIで取得したデータの配列　登録画面で複数のデータが扱えるようにする
     static var resultItems: [ItemData] = []
     /// API検索で一度に取得できる上限
-    static var limitNumber = 10
+    static var readLimit = 10
     /// APIで取得した商品名
     var resultItemName = ""
     /// APIで取得した画像データ
