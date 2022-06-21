@@ -17,8 +17,12 @@ struct FolderEditView: View {
     @Binding var folderIndex: Int?
     // 編集するフォルダ
     @State var folder = Folder(name: "", isStock: true, icon: Icon.house.rawValue)
-    // フォルダ削除時に表示するアラートのフラグ
-    @State private var showAlert = false
+    // フォルダ保存アラートのフラグ
+    @State private var saveAlert = false
+    // フォルダ削除アラートのフラグ
+    @State private var deleteAlert = false
+    // 効果音を扱うクラスのインスタンス
+    private let soundPlayer = SoundPlayer()
     // MARK: - View
     var body: some View {
         NavigationView {
@@ -41,9 +45,12 @@ struct FolderEditView: View {
                     })
                 }
                 Section {
+                    // 既存フォルダの削除ボタン
                     if folderIndex != nil {
                         Button(action: {
-                            showAlert = true
+                            // 削除アラート起動
+                            deleteAlert.toggle()
+                            soundPlayer.deleteVibrationPlay()
                         }, label: {
                             HStack {
                                 Image(systemName: "trash.fill")
@@ -54,8 +61,16 @@ struct FolderEditView: View {
                     }
                 }
             }// Form
+            // 保存アラート
+            .alert("フォルダを保存しました", isPresented: $saveAlert, actions: {
+                Button("OK") {
+                    dismiss()
+                }
+            }, message: {
+                Text("前の画面に戻ります")
+            })
             // 削除アラート
-            .alert("フォルダを削除します", isPresented: $showAlert, actions: {
+            .alert("フォルダを削除します", isPresented: $deleteAlert, actions: {
                 Button("削除", role: .destructive) {
                     if let index = folderIndex {
                         testData.items.removeAll(where: {$0.folder == folder.name})
@@ -86,8 +101,9 @@ struct FolderEditView: View {
                             // 追加
                             testData.folders.append(folder)
                         }
-                        // TODO: - 保存完了アラートを作成する
-                        dismiss()
+                        // 保存完了アラート起動
+                        saveAlert.toggle()
+                        soundPlayer.saveSoundPlay()
                     }
                 })
             })// toolbar

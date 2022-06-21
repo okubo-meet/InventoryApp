@@ -12,9 +12,9 @@ struct FolderView: View {
     // 仮のデータ
     @EnvironmentObject var testData: TestData
     // 編集モードのフラグ
-    @State var isEditing = false
+    @State private var isEditing = false
     // フォルダ設定画面の呼び出しフラグ
-    @State var showSheet = false
+    @State private var showSheet = false
     // フォルダ設定画面に渡すインデックス番号
     @State private var folderIndex: Int?
     // MARK: - View
@@ -29,7 +29,7 @@ struct FolderView: View {
                         if isEditing {
                             Button(action: {
                                 folderIndex = testData.folders.firstIndex(where: {$0.id == folder.id})
-                                showSheet = true
+                                showSheet.toggle()
                             }, label: {
                                 HStack {
                                     Image(systemName: folder.icon)
@@ -61,7 +61,7 @@ struct FolderView: View {
                         if isEditing {
                             Button(action: {
                                 folderIndex = testData.folders.firstIndex(where: {$0.id == folder.id})
-                                showSheet = true
+                                showSheet.toggle()
                             }, label: {
                                 HStack {
                                     Image(systemName: folder.icon)
@@ -115,7 +115,7 @@ struct FolderView: View {
                             Button("新規フォルダ作成") {
                                 // フォルダ設定画面を呼び出す
                                 folderIndex = nil
-                                showSheet = true
+                                showSheet.toggle()
                             }
                         }
                     }
