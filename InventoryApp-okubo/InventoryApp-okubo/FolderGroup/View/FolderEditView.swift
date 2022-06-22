@@ -95,6 +95,7 @@ struct FolderEditView: View {
                     Button("保存") {
                         // フォルダ設定保存の処理
                         if let index = folderIndex {
+                            // TODO: - フォルダ名を更新するときに商品データのフォルダ名も変更する
                             // 更新
                             testData.folders[index] = folder
                         } else {
@@ -105,6 +106,7 @@ struct FolderEditView: View {
                         saveAlert.toggle()
                         soundPlayer.saveSoundPlay()
                     }
+                    .disabled(folder.name == "")
                 })
             })// toolbar
         }// NavigationView
