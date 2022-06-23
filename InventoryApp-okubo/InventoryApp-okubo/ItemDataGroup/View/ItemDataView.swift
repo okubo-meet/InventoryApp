@@ -9,6 +9,8 @@ import SwiftUI
 // データの詳細を表示するView
 struct ItemDataView: View {
     // MARK: - プロパティ
+    // 仮のデータ
+    @EnvironmentObject var testData: TestData
     /// 在庫か買い物かの判定
     @Binding var isStock: Bool
     /// 表示するデータ
@@ -98,7 +100,13 @@ struct ItemDataView: View {
                 // 保存先はCoreDataに登録されているフォルダから選択できるようにする
                 HStack {
                     Text("保存先:")
-                    Text(itemData.folder)
+                    Picker("", selection: $itemData.folder) {
+                        let folders = testData.folders.filter({$0.isStock == isStock})
+                        ForEach(folders) { folder in
+                            Text(folder.name).tag(folder.name)
+                        }
+                    }
+                    .pickerStyle(.menu)
                 }
                 // 登録日は編集できない
                 HStack {
