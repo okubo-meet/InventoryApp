@@ -16,7 +16,7 @@ struct FolderEditView: View {
     // 保存済みのフォルダを判別するインデックス番号
     @Binding var folderIndex: Int?
     // 編集するフォルダ
-    @State var folder = Folder(name: "", isStock: true, icon: Icon.house.rawValue)
+    @State var editFolder = Folder(name: "", isStock: true, icon: Icon.house.rawValue)
     // フォルダ保存アラートのフラグ
     @State private var saveAlert = false
     // フォルダ削除アラートのフラグ
@@ -30,14 +30,14 @@ struct FolderEditView: View {
                 Section {
                     HStack {
                         Text("フォルダ名")
-                        TextField("入力してください", text: $folder.name)
+                        TextField("入力してください", text: $editFolder.name)
                             .textFieldStyle(.roundedBorder)
                     }
-                    Picker("種類", selection: $folder.isStock, content: {
+                    Picker("種類", selection: $editFolder.isStock, content: {
                         Text("在庫リスト").tag(true)
                         Text("買い物リスト").tag(false)
                     })
-                    Picker("アイコン", selection: $folder.icon, content: {
+                    Picker("アイコン", selection: $editFolder.icon, content: {
                         ForEach(Icon.allCases, id: \.self) { icon in
                             Image(systemName: icon.rawValue).tag(icon.rawValue)
                                 .foregroundColor(.orange)
@@ -73,7 +73,7 @@ struct FolderEditView: View {
             .alert("フォルダを削除します", isPresented: $deleteAlert, actions: {
                 Button("削除", role: .destructive) {
                     if let index = folderIndex {
-                        testData.items.removeAll(where: {$0.folder == folder.name})
+                        testData.items.removeAll(where: {$0.folder == editFolder.name})
                         testData.folders.remove(at: index)
                     }
                     dismiss()
@@ -95,26 +95,35 @@ struct FolderEditView: View {
                     Button("保存") {
                         // フォルダ設定保存の処理
                         if let index = folderIndex {
-                            // TODO: - フォルダ名を更新するときに商品データのフォルダ名も変更する
+                            // フォルダの商品データ
+                            let items = testData.items.filter({$0.folder == testData.folders[index].name})
+                            for item in items {
+                                // 商品データのインデックス番号を取得して保存先を更新
+                                if let index = testData.items.firstIndex(where: {$0.id == item.id}) {
+                                    testData.items[index].folder = editFolder.name
+                                    print("\(testData.items[index])")
+                                }
+                            }
                             // 更新
-                            testData.folders[index] = folder
+                            testData.folders[index] = editFolder
                         } else {
                             // 追加
-                            testData.folders.append(folder)
+                            testData.folders.append(editFolder)
                         }
                         // 保存完了アラート起動
                         saveAlert.toggle()
                         soundPlayer.saveSoundPlay()
                     }
-                    .disabled(folder.name == "")
+                    .disabled(editFolder.name == "")
                 })
             })// toolbar
         }// NavigationView
         .onAppear {
+            // フォルダのインデックス番号がnilの時は新規作成
             if let index = folderIndex {
                 print("既存のフォルダ： \(testData.folders[index])")
-                folder = testData.folders[index]
-                print("代入:\(folder)")
+                editFolder = testData.folders[index]
+                print("代入:\(editFolder)")
             } else {
                 print("新規作成")
             }
@@ -124,6 +133,6 @@ struct FolderEditView: View {
 
 struct FolderEditView_Previews: PreviewProvider {
     static var previews: some View {
-        FolderEditView(folderIndex: .constant(nil), folder: .init(name: "", isStock: true, icon: "無し"))
+        FolderEditView(folderIndex: .constant(nil))
     }
 }
