@@ -32,12 +32,23 @@ struct ItemListView: View {
                 }// List
                 .listStyle(.plain)
             }// VStack
+            // 商品データが無い場合の表示
+            if folderItems(folderName: folder.name).isEmpty {
+                VStack {
+                    Spacer()
+                    Text("データがありません")
+                        .font(.title)
+                        .foregroundColor(.gray)
+                    Spacer()
+                }
+            }
             NavigationLink(destination: ItemDataView(isStock: $isStock, itemData: $testData.items[indexNum]),
                            isActive: $isActive) {
                 EmptyView()
             }
-            .navigationTitle(folder.name)
         }// ZStack
+        .navigationTitle(folder.name)
+        // TODO: - toolbar作成
     }
     // MARK: - メソッド
     // フォルダ名から商品リストを検索して返す関数
@@ -50,7 +61,7 @@ struct ItemListView: View {
         if let index = testData.items.firstIndex(where: { $0.id == item.id }) {
             indexNum = index
             print("インデックス番号: \(indexNum)")
-            isActive = true
+            isActive.toggle()
         }
     }
 }
