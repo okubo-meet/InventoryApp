@@ -67,6 +67,7 @@ struct ListRowView: View {
             .padding(.trailing)
         }// HStack
         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: rowHeight, alignment: .leading)
+        .contentShape(Rectangle())
     }
     // MARK: - メソッド
     // 日付フォーマットの関数

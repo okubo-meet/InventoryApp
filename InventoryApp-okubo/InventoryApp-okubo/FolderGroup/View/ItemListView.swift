@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-// 商品データをリスト表示する画面　「最近の項目」にも対応できるようにする予定
+// 商品データをリスト表示する画面
 struct ItemListView: View {
     // MARK: - プロパティ
     // 仮のデータ
@@ -17,6 +17,10 @@ struct ItemListView: View {
     @State private var isStock = true
     // リストから遷移するフラグ
     @State private var isActive = false
+    // 編集モードの切り替えフラグ
+    @State private var isEditing = false
+    // 選択されたデータを保持する配列
+    @State private var selectedItemID: [UUID] = []
     // どのカテゴリのリストかを受け取る変数
     var folder: Folder
     // MARK: - View
@@ -24,11 +28,35 @@ struct ItemListView: View {
         ZStack {
             VStack {
                 List(folderItems(folderName: folder.name)) { item in
-                    ListRowView(item: item, isStock: folder.isStock)
-                        .onTapGesture {
-                            isStock = folder.isStock
-                            showItemView(item: item)
+                    HStack {
+                        // 編集モードのときのみ表示するアイコン
+                        if isEditing {
+                            Image(systemName: iconString(id: item.id))
+                                .foregroundColor(isSelected(id: item.id) ? .orange : .gray)
                         }
+                        // 同じフォルダに登録されたデータリスト
+                        ListRowView(item: item, isStock: folder.isStock)
+                            .onTapGesture {
+                                // 編集モードのとき
+                                if isEditing {
+                                    // 既に選択されたデータなら選択解除
+                                    if isSelected(id: item.id) {
+                                        if let index = selectedItemID.firstIndex(of: item.id) {
+                                            print("選択解除")
+                                            selectedItemID.remove(at: index)
+                                        }
+                                    } else {
+                                        print("選択")
+                                        // 選択状態にする
+                                        selectedItemID.append(item.id)
+                                    }
+                                } else {
+                                    // 編集モードでない時は画面遷移
+                                    isStock = folder.isStock
+                                    showItemView(item: item)
+                                }
+                            }
+                    }// HStack
                 }// List
                 .listStyle(.plain)
             }// VStack
@@ -48,7 +76,22 @@ struct ItemListView: View {
             }
         }// ZStack
         .navigationTitle(folder.name)
-        // TODO: - toolbar作成
+        .toolbar(content: {
+            ToolbarItem(placement: .navigationBarTrailing, content: {
+                Button(action: {
+                    // 編集モード起動
+                    withAnimation {
+                        isEditing.toggle()
+                    }
+                }, label: {
+                    if isEditing {
+                        Text("キャンセル")
+                    } else {
+                        Text("編集")
+                    }
+                })
+            })
+        })// toolbar
     }
     // MARK: - メソッド
     // フォルダ名から商品リストを検索して返す関数
@@ -62,6 +105,19 @@ struct ItemListView: View {
             indexNum = index
             print("インデックス番号: \(indexNum)")
             isActive.toggle()
+        }
+    }
+    // 編集モードで選択されたデータかの判定を返す関数
+    private func isSelected(id: UUID) -> Bool {
+        let isSelected = selectedItemID.contains(where: {$0 == id})
+        return isSelected
+    }
+    // 編集モードで選択されたデータのアイコンを切り替える関数
+    private func iconString(id: UUID) -> String {
+        if isSelected(id: id) {
+            return "checkmark.circle.fill"
+        } else {
+            return "circle"
         }
     }
 }
