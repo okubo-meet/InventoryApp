@@ -19,6 +19,8 @@ struct ItemListView: View {
     @State private var isActive = false
     // 編集モードの切り替えフラグ
     @State private var isEditing = false
+    // ダイアログ表示トリガー
+    @State private var showDialog = false
     // 選択されたデータを保持する配列
     @State private var selectedItemID: [UUID] = []
     // どのカテゴリのリストかを受け取る変数
@@ -31,7 +33,7 @@ struct ItemListView: View {
                     HStack {
                         // 編集モードのときのみ表示するアイコン
                         if isEditing {
-                            Image(systemName: iconString(id: item.id))
+                            Image(systemName: selectIconString(id: item.id))
                                 .foregroundColor(isSelected(id: item.id) ? .orange : .gray)
                         }
                         // 同じフォルダに登録されたデータリスト
@@ -75,12 +77,27 @@ struct ItemListView: View {
                 EmptyView()
             }
         }// ZStack
+        // データ削除ダイアログ
+        .confirmationDialog("選択したデータを削除します", isPresented: $showDialog, titleVisibility: .visible) {
+            Button("削除", role: .destructive) {
+                withAnimation {
+                    // 選択されたidで検索してデータを削除する
+                    for uuid in selectedItemID {
+                        if let index = testData.items.firstIndex(where: {$0.id == uuid}) {
+                            testData.items.remove(at: index)
+                        }
+                    }
+                }
+            }
+        }
         .navigationTitle(folder.name)
         .toolbar(content: {
+            // 編集モード切り替えボタン
             ToolbarItem(placement: .navigationBarTrailing, content: {
                 Button(action: {
                     // 編集モード起動
                     withAnimation {
+                        selectedItemID.removeAll()
                         isEditing.toggle()
                     }
                 }, label: {
@@ -90,6 +107,24 @@ struct ItemListView: View {
                         Text("編集")
                     }
                 })
+            })
+            // ボトムバー
+            ToolbarItem(placement: .bottomBar, content: {
+                // 編集モードのときのみ表示
+                if isEditing {
+                    HStack {
+                        // TODO: - フォルダを移動させる機能を追加する
+                        Spacer()
+                        Text(selectCountString())
+                        Spacer()
+                        // 削除ボタン
+                        Button("削除") {
+                            // 削除ダイアログ表示
+                            showDialog.toggle()
+                        }
+                        .disabled(selectedItemID.isEmpty)
+                    }// HStack
+                }
             })
         })// toolbar
     }
@@ -113,11 +148,19 @@ struct ItemListView: View {
         return isSelected
     }
     // 編集モードで選択されたデータのアイコンを切り替える関数
-    private func iconString(id: UUID) -> String {
+    private func selectIconString(id: UUID) -> String {
         if isSelected(id: id) {
             return "checkmark.circle.fill"
         } else {
             return "circle"
+        }
+    }
+    // 選択されたデータの数を表示するテキストの関数
+    private func selectCountString() -> String {
+        if selectedItemID.isEmpty {
+            return "選択中…"
+        } else {
+            return "\(selectedItemID.count)個選択"
         }
     }
 }

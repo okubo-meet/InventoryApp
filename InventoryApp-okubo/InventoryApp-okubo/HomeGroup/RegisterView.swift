@@ -110,7 +110,7 @@ struct RegisterView: View {
                 }
                 .disabled(newItems.isEmpty)
             })
-            // 画面下部
+            // ボトムバー
             ToolbarItem(placement: .bottomBar, content: {
                 HStack {
                     // 編集モード起動ボタン
