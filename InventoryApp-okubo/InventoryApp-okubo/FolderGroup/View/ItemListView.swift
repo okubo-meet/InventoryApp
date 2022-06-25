@@ -34,7 +34,7 @@ struct ItemListView: View {
                         // 編集モードのときのみ表示するアイコン
                         if isEditing {
                             Image(systemName: selectIconString(id: item.id))
-                                .foregroundColor(isSelected(id: item.id) ? .orange : .gray)
+                                .foregroundColor(isSelected(id: item.id) ? .red : .gray)
                         }
                         // 同じフォルダに登録されたデータリスト
                         ListRowView(item: item, isStock: folder.isStock)
@@ -90,7 +90,7 @@ struct ItemListView: View {
                 }
             }
         }
-        .navigationTitle(folder.name)
+        .navigationTitle(navigationTitleString())
         .toolbar(content: {
             // 編集モード切り替えボタン
             ToolbarItem(placement: .navigationBarTrailing, content: {
@@ -113,9 +113,6 @@ struct ItemListView: View {
                 // 編集モードのときのみ表示
                 if isEditing {
                     HStack {
-                        // TODO: - フォルダを移動させる機能を追加する
-                        Spacer()
-                        Text(selectCountString())
                         Spacer()
                         // 削除ボタン
                         Button("削除") {
@@ -155,10 +152,10 @@ struct ItemListView: View {
             return "circle"
         }
     }
-    // 選択されたデータの数を表示するテキストの関数
-    private func selectCountString() -> String {
+    // navigationTitleに表示する文字列を返す関数
+    private func navigationTitleString() -> String {
         if selectedItemID.isEmpty {
-            return "選択中…"
+            return folder.name
         } else {
             return "\(selectedItemID.count)個選択"
         }
