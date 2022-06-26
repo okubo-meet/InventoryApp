@@ -15,10 +15,13 @@ struct ItemDataView: View {
     @Binding var isStock: Bool
     /// 表示するデータ
     @Binding var itemData: ItemData
+    // 編集可能状態の切り替えフラグ
+    @State private var isEditing = true
     // 画像のサイズ
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 3
     // MARK: - View
     var body: some View {
+        // TODO: - 各項目は編集可能状態でないときに無効化する
             List {
                 HStack {
                     Spacer()
@@ -117,7 +120,9 @@ struct ItemDataView: View {
             .listStyle(.plain)
             .onAppear {
                 print("データ：　\(itemData)")
+                // TODO: - 新規登録データか登録済みのデータか判定する
             }
+        // TODO: - 登録済みのデータの場合はtoolBarに編集切り替えボタンなどを表示する
     }
     // MARK: - メソッド
     // 日付フォーマットの関数
