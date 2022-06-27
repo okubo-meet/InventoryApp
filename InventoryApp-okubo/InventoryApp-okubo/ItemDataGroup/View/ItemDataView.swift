@@ -17,11 +17,12 @@ struct ItemDataView: View {
     @Binding var itemData: ItemData
     // 編集可能状態の切り替えフラグ
     @State private var isEditing = true
+    // 新規登録データか登録済みデータかの判定
+    @State private var isFolderItem = true
     // 画像のサイズ
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 3
     // MARK: - View
     var body: some View {
-        // TODO: - 各項目は編集可能状態でないときに無効化する
             List {
                 HStack {
                     Spacer()
@@ -30,16 +31,20 @@ struct ItemDataView: View {
                             .scaledToFit()
                             .frame(width: imageSize, height: imageSize, alignment: .center)
                             .background(itemData.image == nil ?
-                                        Color.noImage : Color.white) // 画像データの有無で背景色を変える
+                                        Color.noImage : Color.white)
                             .border(Color.orange, width: 1)
-                        // 画像追加ボタン
-                        AddImageButton(item: $itemData)
+                        // 編集可能な場合のみ表示
+                        if isEditing {
+                            // 画像追加ボタン
+                            AddImageButton(item: $itemData)
+                        }
                     }// VStack
                     Spacer()
                 }
                 HStack {
                     Text("商品名:")
                     TextField("入力してください（必須）", text: $itemData.name)
+                        .disabled(isEditing == false)
                 }
                 // 期限と通知は在庫リストのみ表示
                 if isStock {
@@ -53,19 +58,23 @@ struct ItemDataView: View {
                                                                     set: {itemData.deadLine = $0}),
                                        displayedComponents: .date)
                                 .labelsHidden()
+                                .disabled(isEditing == false)
                         }
                         Spacer()
-                        // 期限の有り無しを選択するボタン
-                        Image(systemName: deadLineIcon())
-                            .foregroundColor(itemData.deadLine == nil ? .orange : .gray)
-                            .onTapGesture {
-                                // 期限がnilなら現在の日付を代入し、すでに日付があればnilを代入する
-                                if itemData.deadLine == nil {
-                                    itemData.deadLine = Date()
-                                } else {
-                                    itemData.deadLine = nil
+                        // 編集可能な場合のみ表示
+                        if isEditing {
+                            // 期限の有り無しを選択するボタン
+                            Image(systemName: deadLineIcon())
+                                .foregroundColor(itemData.deadLine == nil ? .orange : .gray)
+                                .onTapGesture {
+                                    // 期限がnilなら現在の日付を代入し、すでに日付があればnilを代入する
+                                    if itemData.deadLine == nil {
+                                        itemData.deadLine = Date()
+                                    } else {
+                                        itemData.deadLine = nil
+                                    }
                                 }
-                            }
+                        }
                     }
                     // 期限の何日前か計算して表示する
                     HStack {
@@ -78,38 +87,57 @@ struct ItemDataView: View {
                     Stepper(value: $itemData.numberOfItems, in: 0...99) {
                         Text("\(itemData.numberOfItems)個")
                     }
+                    .disabled(isEditing == false)
                 }
-                // Pickerのデザインを検討
                 HStack {
                     if isStock {
                         // 在庫リスト
                         Text("状態: ")
-                        Picker("", selection: $itemData.status) {
-                            ForEach(ItemStatus.allCases, id: \.self) { status in
-                                Text(status.rawValue).tag(status.rawValue)
+                        // 編集可能状態に応じて変化
+                        if isEditing {
+                            Picker("", selection: $itemData.status) {
+                                ForEach(ItemStatus.allCases, id: \.self) { status in
+                                    Text(status.rawValue).tag(status.rawValue)
+                                }
                             }
+                            .pickerStyle(.menu)
+                        } else {
+                            Text(itemData.status)
                         }
-                        .pickerStyle(.menu)
                     } else {
                         // 買い物リスト
                         Text("緊急性:")
-                        Picker("", selection: $itemData.isHurry) {
-                            Text("通常").tag(false)
-                            Text("緊急").tag(true)
+                        // 編集可能状態に応じて変化
+                        if isEditing {
+                            Picker("", selection: $itemData.isHurry) {
+                                Text("通常").tag(false)
+                                Text("緊急").tag(true)
+                            }
+                            .pickerStyle(.menu)
+                        } else {
+                            if itemData.isHurry {
+                                Text("緊急")
+                            } else {
+                                Text("通常")
+                            }
                         }
-                        .pickerStyle(.menu)
                     }
                 }
                 // 保存先はCoreDataに登録されているフォルダから選択できるようにする
                 HStack {
                     Text("保存先:")
-                    Picker("", selection: $itemData.folder) {
-                        let folders = testData.folders.filter({$0.isStock == isStock})
-                        ForEach(folders) { folder in
-                            Text(folder.name).tag(folder.name)
+                    // 編集可能状態に応じて変化
+                    if isEditing {
+                        Picker("", selection: $itemData.folder) {
+                            let folders = testData.folders.filter({$0.isStock == isStock})
+                            ForEach(folders) { folder in
+                                Text(folder.name).tag(folder.name)
+                            }
                         }
+                        .pickerStyle(.menu)
+                    } else {
+                        Text(itemData.folder)
                     }
-                    .pickerStyle(.menu)
                 }
                 // 登録日は編集できない
                 HStack {
@@ -119,10 +147,26 @@ struct ItemDataView: View {
             }
             .listStyle(.plain)
             .onAppear {
-                print("データ：　\(itemData)")
-                // TODO: - 新規登録データか登録済みのデータか判定する
+                // 登録済みのデータか判定する
+                isFolderItem = testData.items.contains(where: { $0.id == itemData.id })
+                print("登録済みデータ: \(isFolderItem)")
+                if isFolderItem {
+                    // 登録済みのデータなら編集不可状態にする
+                    isEditing = false
+                }
             }
-        // TODO: - 登録済みのデータの場合はtoolBarに編集切り替えボタンなどを表示する
+            .toolbar(content: {
+                ToolbarItem(placement: .navigationBarTrailing, content: {
+                    // 登録済みのデータの場合は編集切り替えボタンを表示する
+                    if isFolderItem {
+                        Button(editButtonText()) {
+                            withAnimation {
+                                isEditing.toggle()
+                            }
+                        }
+                    }
+                })
+            })// toolbar
     }
     // MARK: - メソッド
     // 日付フォーマットの関数
@@ -142,6 +186,14 @@ struct ItemDataView: View {
             return "calendar.badge.plus"
         } else {
             return "xmark.circle.fill"
+        }
+    }
+    // 編集モード切り替えボタンのテキストを返す関数
+    private func editButtonText() -> String {
+        if isEditing {
+            return "完了"
+        } else {
+            return "編集"
         }
     }
 }
