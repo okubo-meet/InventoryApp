@@ -11,10 +11,10 @@ struct ItemDataView: View {
     // MARK: - プロパティ
     // 仮のデータ
     @EnvironmentObject var testData: TestData
-    /// 在庫か買い物かの判定
-    @Binding var isStock: Bool
     /// 表示するデータ
     @Binding var itemData: ItemData
+    // 在庫か買い物かの判定
+    @State private var isStock = true
     // 編集可能状態の切り替えフラグ
     @State private var isEditing = true
     // 新規登録データか登録済みデータかの判定
@@ -23,6 +23,20 @@ struct ItemDataView: View {
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 3
     // MARK: - View
     var body: some View {
+        VStack {
+            Picker("", selection: $isStock) {
+                Text("在庫リスト").tag(true)
+                Text("買い物リスト").tag(false)
+            }
+            .pickerStyle(.segmented)
+            .disabled(isEditing == false)
+            .onChange(of: isStock, perform: { changed in
+                // 在庫リストから買い物リストに変更したとき通知を無効にする
+                if changed == false {
+                    print("買い物リスト")
+                    itemData.notificationDate = nil
+                }
+            })
             List {
                 HStack {
                     Spacer()
@@ -57,8 +71,8 @@ struct ItemDataView: View {
                             DatePicker("", selection: Binding<Date>(get: {itemData.deadLine ?? Date()},
                                                                     set: {itemData.deadLine = $0}),
                                        displayedComponents: .date)
-                                .labelsHidden()
-                                .disabled(isEditing == false)
+                            .labelsHidden()
+                            .disabled(isEditing == false)
                         }
                         Spacer()
                         // 編集可能な場合のみ表示
@@ -78,6 +92,7 @@ struct ItemDataView: View {
                     }
                     // 期限の何日前か計算して表示する
                     HStack {
+                        // TODO: - 通知の日程を選べるようにする
                         Text("通知:")
                         Text(dateText(date: itemData.notificationDate))
                     }
@@ -144,29 +159,35 @@ struct ItemDataView: View {
                     Text("登録日:")
                     Text(dateText(date: itemData.registrationDate))
                 }
-            }
+            }// List
             .listStyle(.plain)
-            .onAppear {
-                // 登録済みのデータか判定する
-                isFolderItem = testData.items.contains(where: { $0.id == itemData.id })
-                print("登録済みデータ: \(isFolderItem)")
-                if isFolderItem {
-                    // 登録済みのデータなら編集不可状態にする
-                    isEditing = false
-                }
+        }
+        // 画面起動時
+        .onAppear {
+            // 在庫リストかどうかの判定
+            if let itemFolder = testData.folders.first(where: {$0.name == itemData.folder}) {
+                isStock = itemFolder.isStock
             }
-            .toolbar(content: {
-                ToolbarItem(placement: .navigationBarTrailing, content: {
-                    // 登録済みのデータの場合は編集切り替えボタンを表示する
-                    if isFolderItem {
-                        Button(editButtonText()) {
-                            withAnimation {
-                                isEditing.toggle()
-                            }
+            // 登録済みのデータか判定する
+            isFolderItem = testData.items.contains(where: { $0.id == itemData.id })
+            print("登録済みデータ: \(isFolderItem)")
+            if isFolderItem {
+                // 登録済みのデータなら編集不可状態にする
+                isEditing = false
+            }
+        }
+        .toolbar(content: {
+            ToolbarItem(placement: .navigationBarTrailing, content: {
+                // 登録済みのデータの場合は編集切り替えボタンを表示する
+                if isFolderItem {
+                    Button(editButtonText()) {
+                        withAnimation {
+                            isEditing.toggle()
                         }
                     }
-                })
-            })// toolbar
+                }
+            })
+        })// toolbar
     }
     // MARK: - メソッド
     // 日付フォーマットの関数
@@ -200,6 +221,6 @@ struct ItemDataView: View {
 
 struct ItemDataView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemDataView(isStock: .constant(true), itemData: .constant(TestData().items[0]))
+        ItemDataView(itemData: .constant(TestData().items[0]))
     }
 }

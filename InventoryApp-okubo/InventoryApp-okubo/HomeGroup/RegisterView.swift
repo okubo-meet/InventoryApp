@@ -11,8 +11,6 @@ struct RegisterView: View {
     // MARK: - プロパティ
     // 仮のデータ
     @EnvironmentObject var testData: TestData
-    // 在庫リストか買い物リストどちらに登録するかの判定
-    @State private var isStock = true
     // 登録完了アラートのフラグ
     @State private var saveAlert = false
     // 名前のないデータに対するアラートのフラグ
@@ -28,17 +26,11 @@ struct RegisterView: View {
     // MARK: - View
     var body: some View {
         VStack {
-            Picker("", selection: $isStock) {
-                Text("在庫リスト").tag(true)
-                Text("買い物リスト").tag(false)
-            }
-            .pickerStyle(.segmented)
             ZStack {
                 VStack {
                     List {
                         ForEach(0..<newItems.count, id: \.self) { index in
-                            NavigationLink(destination: ItemDataView(isStock: $isStock,
-                                                                     itemData: $newItems[index])) {
+                            NavigationLink(destination: ItemDataView(itemData: $newItems[index])) {
                                 RegisterRowView(itemData: newItems[index])
                             }
                         }

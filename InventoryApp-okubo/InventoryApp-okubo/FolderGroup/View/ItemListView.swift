@@ -13,8 +13,6 @@ struct ItemListView: View {
     @EnvironmentObject var testData: TestData
     // 遷移先で表示するデータのインデックス番号
     @State private var indexNum = 0
-    // タップした商品が在庫か買い物リストなのかを遷移先に渡す変数
-    @State private var isStock = true
     // リストから遷移するフラグ
     @State private var isActive = false
     // 編集モードの切り替えフラグ
@@ -54,7 +52,6 @@ struct ItemListView: View {
                                     }
                                 } else {
                                     // 編集モードでない時は画面遷移
-                                    isStock = folder.isStock
                                     showItemView(item: item)
                                 }
                             }
@@ -72,7 +69,7 @@ struct ItemListView: View {
                     Spacer()
                 }
             }
-            NavigationLink(destination: ItemDataView(isStock: $isStock, itemData: $testData.items[indexNum]),
+            NavigationLink(destination: ItemDataView(itemData: $testData.items[indexNum]),
                            isActive: $isActive) {
                 EmptyView()
             }
