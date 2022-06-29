@@ -89,6 +89,9 @@ struct ItemListView: View {
                             testData.items.remove(at: index)
                         }
                     }
+                    // 編集モード終了
+                    isEditing.toggle()
+                    selectedItemID.removeAll()
                 }
             }
         }
@@ -110,6 +113,7 @@ struct ItemListView: View {
                         Text("編集")
                     }
                 })
+                .disabled(folderItems(folderName: folder.name).isEmpty)// フォルダ内のデータが無い時は無効
             })
             // ボトムバー
             ToolbarItem(placement: .bottomBar, content: {
