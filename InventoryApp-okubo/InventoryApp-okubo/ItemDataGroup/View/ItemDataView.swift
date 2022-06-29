@@ -38,6 +38,7 @@ struct ItemDataView: View {
                 }
             })
             List {
+                // 画像
                 HStack {
                     Spacer()
                     VStack {
@@ -55,6 +56,7 @@ struct ItemDataView: View {
                     }// VStack
                     Spacer()
                 }
+                // 商品名
                 HStack {
                     Text("商品名:")
                     TextField("入力してください（必須）", text: $itemData.name)
@@ -62,6 +64,7 @@ struct ItemDataView: View {
                 }
                 // 期限と通知は在庫リストのみ表示
                 if isStock {
+                    // 期限
                     HStack {
                         Text("期限:")
                         if itemData.deadLine == nil {
@@ -86,17 +89,30 @@ struct ItemDataView: View {
                                         itemData.deadLine = Date()
                                     } else {
                                         itemData.deadLine = nil
+                                        // 通知の日程もnilにする
+                                        itemData.notificationDate = nil
                                     }
                                 }
                         }
                     }
-                    // 期限の何日前か計算して表示する
+                    // 通知の日程
                     HStack {
-                        // TODO: - 通知の日程を選べるようにする
                         Text("通知:")
                         Text(dateText(date: itemData.notificationDate))
+                        // 期限が設定されているときのみ表示
+                        if let deadLine = itemData.deadLine {
+                            Spacer()
+                            Picker("", selection: $itemData.notificationDate) {
+                                ForEach(NotificationDate.allCases, id: \.self) { day in
+                                    Text(day.rawValue).tag(day.toDate(deadLine: deadLine))
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .disabled(isEditing == false)
+                        }
                     }
                 }
+                // 個数
                 HStack {
                     Text("個数:")
                     Stepper(value: $itemData.numberOfItems, in: 0...99) {
@@ -104,6 +120,7 @@ struct ItemDataView: View {
                     }
                     .disabled(isEditing == false)
                 }
+                // 状態
                 HStack {
                     if isStock {
                         // 在庫リスト
@@ -154,7 +171,7 @@ struct ItemDataView: View {
                         Text(itemData.folder)
                     }
                 }
-                // 登録日は編集できない
+                // 登録日
                 HStack {
                     Text("登録日:")
                     Text(dateText(date: itemData.registrationDate))
