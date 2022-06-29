@@ -55,6 +55,11 @@ struct ItemListView: View {
                                     showItemView(item: item)
                                 }
                             }
+                        // 画面遷移を表すアイコン
+                        if isEditing == false {
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.gray)
+                        }
                     }// HStack
                 }// List
                 .listStyle(.plain)
@@ -88,6 +93,7 @@ struct ItemListView: View {
             }
         }
         .navigationTitle(navigationTitleString())
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar(content: {
             // 編集モード切り替えボタン
             ToolbarItem(placement: .navigationBarTrailing, content: {

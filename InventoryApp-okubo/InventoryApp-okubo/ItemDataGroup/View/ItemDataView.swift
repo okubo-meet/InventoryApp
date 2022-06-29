@@ -179,6 +179,7 @@ struct ItemDataView: View {
             }// List
             .listStyle(.plain)
         }
+        .navigationBarTitleDisplayMode(.inline)
         // 画面起動時
         .onAppear {
             // 在庫リストかどうかの判定

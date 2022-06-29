@@ -47,22 +47,22 @@ struct ListRowView: View {
                 if isStock {
                     // 在庫リストの表示
                     Text(item.status)
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke())
                         .foregroundColor(ItemStatus(rawValue: item.status)?.toStatusColor())
                 } else {
                     // 買い物リストの表示
                     if item.isHurry {
                         Text("緊急")
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke())
                             .foregroundColor(.red)
                     } else {
                         Text("通常")
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke())
                             .foregroundColor(.blue)
                     }
                 }
+                Spacer()
                 // 個数
                 Text("×\(item.numberOfItems)")
+                Spacer()
+                Spacer()
             }// VStack
             .padding(.trailing)
         }// HStack
