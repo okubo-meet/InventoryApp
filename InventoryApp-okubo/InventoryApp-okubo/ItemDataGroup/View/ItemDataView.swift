@@ -33,8 +33,11 @@ struct ItemDataView: View {
             .onChange(of: isStock, perform: { changed in
                 // 在庫リストから買い物リストに変更したとき通知を無効にする
                 if changed == false {
-                    print("買い物リスト")
                     itemData.notificationDate = nil
+                }
+                // 保存先をPickerの値に合わせて変更する
+                if let folder = testData.folders.first(where: {$0.isStock == changed}) {
+                    itemData.folder = folder.name
                 }
             })
             List {
