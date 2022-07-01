@@ -17,6 +17,8 @@ struct ListRowView: View {
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 4
     // 行の高さ
     private let rowHeight = CGFloat(UIScreen.main.bounds.height) / 8
+    // 緊急性の表示に関するクラスのインスタンス
+    private let urgency = Urgency()
     // MARK: - View
     var body: some View {
         HStack {
@@ -50,8 +52,8 @@ struct ListRowView: View {
                         .foregroundColor(ItemStatus(rawValue: item.status)?.toStatusColor())
                 } else {
                     // 買い物リストの表示
-                    Text(Urgency.toTextString(isHurry: item.isHurry))
-                        .foregroundColor(Urgency.toColor(isHurry: item.isHurry))
+                    Text(urgency.toTextString(isHurry: item.isHurry))
+                        .foregroundColor(urgency.toColor(isHurry: item.isHurry))
                 }
                 Spacer()
                 // 個数
