@@ -50,13 +50,8 @@ struct ListRowView: View {
                         .foregroundColor(ItemStatus(rawValue: item.status)?.toStatusColor())
                 } else {
                     // 買い物リストの表示
-                    if item.isHurry {
-                        Text("緊急")
-                            .foregroundColor(.red)
-                    } else {
-                        Text("通常")
-                            .foregroundColor(.blue)
-                    }
+                    Text(Urgency.toTextString(isHurry: item.isHurry))
+                        .foregroundColor(Urgency.toColor(isHurry: item.isHurry))
                 }
                 Spacer()
                 // 個数

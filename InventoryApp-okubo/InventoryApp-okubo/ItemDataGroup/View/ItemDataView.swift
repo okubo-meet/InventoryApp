@@ -145,16 +145,12 @@ struct ItemDataView: View {
                         // 編集可能状態に応じて変化
                         if isEditing {
                             Picker("", selection: $itemData.isHurry) {
-                                Text("通常").tag(false)
-                                Text("緊急").tag(true)
+                                Text(Urgency.hurryString).tag(true)
+                                Text(Urgency.notHurryString).tag(false)
                             }
                             .pickerStyle(.menu)
                         } else {
-                            if itemData.isHurry {
-                                Text("緊急")
-                            } else {
-                                Text("通常")
-                            }
+                            Text(Urgency.toTextString(isHurry: itemData.isHurry))
                         }
                     }
                 }
