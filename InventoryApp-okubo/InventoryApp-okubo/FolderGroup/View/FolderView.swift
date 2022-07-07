@@ -12,11 +12,11 @@ struct FolderView: View {
     // 仮のデータ
     @EnvironmentObject var testData: TestData
     // 編集モードのフラグ
-    @State var isEditing = false
+    @State private var isEditing = false
     // フォルダ設定画面の呼び出しフラグ
     @State var showSheet = false
     // フォルダ設定画面に渡すインデックス番号
-    @State private var folderIndex: Int?
+    @State var folderIndex: Int?
     // MARK: - View
     var body: some View {
         NavigationView {
@@ -26,62 +26,19 @@ struct FolderView: View {
                 // 在庫リストのフォルダ
                 Section {
                     ForEach(stock) { folder in
-                        if isEditing {
-                            Button(action: {
-                                folderIndex = testData.folders.firstIndex(where: {$0.id == folder.id})
-                                showSheet = true
-                            }, label: {
-                                HStack {
-                                    Image(systemName: folder.icon)
-                                        .foregroundColor(.orange)
-                                    Text(folder.name)
-                                        .foregroundColor(.primary)
-                                    Spacer()
-                                    Image(systemName: "folder.badge.gearshape")
-                                        .foregroundColor(.gray)
-                                }
-                            })
-                        } else {
-                            NavigationLink(destination: ItemListView(folder: folder)) {
-                                HStack {
-                                    Image(systemName: folder.icon)
-                                        .foregroundColor(.orange)
-                                    Text(folder.name)
-                                }
-                            }// NavigationLink
-                        }
+                        FolderRowView(isEditing: $isEditing, showSheet: $showSheet,
+                                      folderIndex: $folderIndex, folder: folder)
                     }// ForEach
                 } header: {
                     Text("在庫リスト")
                 }
-                // 買い物リストのフォルダ
+                // 買い物リストのフォルダのみ取得
                 let buy = testData.folders.filter({$0.isStock == false})
+                // 買い物リストのフォルダ
                 Section {
                     ForEach(buy) { folder in
-                        if isEditing {
-                            Button(action: {
-                                folderIndex = testData.folders.firstIndex(where: {$0.id == folder.id})
-                                showSheet = true
-                            }, label: {
-                                HStack {
-                                    Image(systemName: folder.icon)
-                                        .foregroundColor(.orange)
-                                    Text(folder.name)
-                                        .foregroundColor(.primary)
-                                    Spacer()
-                                    Image(systemName: "folder.badge.gearshape")
-                                        .foregroundColor(.gray)
-                                }
-                            })
-                        } else {
-                            NavigationLink(destination: ItemListView(folder: folder)) {
-                                HStack {
-                                    Image(systemName: folder.icon)
-                                        .foregroundColor(.orange)
-                                    Text(folder.name)
-                                }
-                            }// NavigationLink
-                        }
+                        FolderRowView(isEditing: $isEditing, showSheet: $showSheet,
+                                      folderIndex: $folderIndex, folder: folder)
                     }// ForEach
                 } header: {
                     Text("買い物リスト")
@@ -115,14 +72,14 @@ struct FolderView: View {
                             Button("新規フォルダ作成") {
                                 // フォルダ設定画面を呼び出す
                                 folderIndex = nil
-                                showSheet = true
+                                showSheet.toggle()
                             }
                         }
                     }
                 })
             }// toolbar
         }// NavigationView
-    }// View
+    }
 }
 
 struct FolderView_Previews: PreviewProvider {

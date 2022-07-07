@@ -13,25 +13,25 @@ class SoundPlayer {
     // データ保存時の効果音ID
     private var saveSound: SystemSoundID = 1300
     // データ削除時の効果音ID
-    private var deleteSound: SystemSoundID = 1050
+    private var deleteVibration: SystemSoundID = 1351
     // バーコード検知時の効果音ID
     private var detectSound: SystemSoundID = 1057
     /// データ保存の効果音を再生する関数
-    func saveSound_play() {
+    func saveSoundPlay() {
         if let soundURL = CFBundleCopyResourceURL(CFBundleGetMainBundle(), nil, nil, nil) {
             AudioServicesCreateSystemSoundID(soundURL, &saveSound)
             AudioServicesPlaySystemSound(saveSound)
         }
     }
     /// データ削除の効果音を再生する関数
-    func deleteSound_play() {
+    func deleteVibrationPlay() {
         if let soundURL = CFBundleCopyResourceURL(CFBundleGetMainBundle(), nil, nil, nil) {
-            AudioServicesCreateSystemSoundID(soundURL, &deleteSound)
-            AudioServicesPlaySystemSound(deleteSound)
+            AudioServicesCreateSystemSoundID(soundURL, &deleteVibration)
+            AudioServicesPlaySystemSound(deleteVibration)
         }
     }
     /// バーコード検知の効果音を再生する関数
-    func detectSound_play() {
+    func detectSoundPlay() {
         if let soundURL = CFBundleCopyResourceURL(CFBundleGetMainBundle(), nil, nil, nil) {
             AudioServicesCreateSystemSoundID(soundURL, &detectSound)
             AudioServicesPlaySystemSound(detectSound)
