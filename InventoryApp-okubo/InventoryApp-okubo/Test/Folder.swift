@@ -9,7 +9,7 @@ import Foundation
 // フォルダのデータ（テスト）
 struct Folder: Identifiable {
     /// 識別ID
-    var id = UUID()
+    let id = UUID()
     /// フォルダ名
     var name: String
     /// 在庫リストか買い物リストかの判定

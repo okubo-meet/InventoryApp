@@ -119,6 +119,7 @@ struct FolderEditView: View {
             })// toolbar
         }// NavigationView
         .onAppear {
+            // フォルダのインデックス番号がnilの時は新規作成
             if let index = folderIndex {
                 print("既存のフォルダ： \(testData.folders[index])")
                 editFolder = testData.folders[index]
