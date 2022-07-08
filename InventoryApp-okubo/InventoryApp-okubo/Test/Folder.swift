@@ -11,9 +11,9 @@ struct Folder: Identifiable {
     /// 識別ID
     let id = UUID()
     /// フォルダ名
-    let name: String
+    var name: String
     /// 在庫リストか買い物リストかの判定
-    let isStock: Bool
+    var isStock: Bool
     /// アイコン名
-    let icon: String?
+    var icon: String
 }

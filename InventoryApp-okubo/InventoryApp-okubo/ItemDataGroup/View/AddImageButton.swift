@@ -12,7 +12,7 @@ struct AddImageButton: View {
     // 編集する商品データ
     @Binding var item: ItemData
     // ダイアログ表示トリガー
-    @State private var showingDialog = false
+    @State private var showDialog = false
     // バーコードリーダー表示トリガー
     @State private var showBarcodeReader = false
     // 撮影カメラ表示トリガー
@@ -22,11 +22,11 @@ struct AddImageButton: View {
     // MARK: - View
     var body: some View {
         Button("画像を設定する") {
-            showingDialog.toggle()
+            showDialog.toggle()
         }
         .foregroundColor(.orange)
         // ダイアログ
-        .confirmationDialog("画像を追加", isPresented: $showingDialog, titleVisibility: .visible) {
+        .confirmationDialog("画像を追加", isPresented: $showDialog, titleVisibility: .visible) {
             // アクションボタンリスト
             Button("バーコード検索") {
                 showBarcodeReader.toggle()

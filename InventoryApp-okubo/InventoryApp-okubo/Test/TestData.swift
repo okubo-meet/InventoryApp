@@ -9,9 +9,9 @@ import Foundation
 import SwiftUI
 // テストデータ
 class TestData: ObservableObject {
-    @Published var folders: [Folder] = [Folder(name: "食品", isStock: true, icon: "fork.knife"),
-                                        Folder(name: "買い物リスト", isStock: false, icon: nil),
-                                        Folder(name: "日用品", isStock: true, icon: "house.fill")]
+    @Published var folders: [Folder] = [Folder(name: "食品", isStock: true, icon: Icon.food.rawValue),
+                                        Folder(name: "買い物リスト", isStock: false, icon: Icon.cart.rawValue),
+                                        Folder(name: "日用品", isStock: true, icon: Icon.house.rawValue)]
     @Published var items: [ItemData] = [ItemData(name: "テスト",
                                                  image: UIImage(imageLiteralResourceName: "pork-loin").pngData(),
                                                  deadLine: Date(), registrationDate: Date(),
