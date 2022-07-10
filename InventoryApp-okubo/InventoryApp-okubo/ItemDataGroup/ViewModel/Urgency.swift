@@ -7,24 +7,24 @@
 
 import Foundation
 import SwiftUI
-// 買い物の緊急性のクラス
-class Urgency {
-    // Pickerに表示する文字列
-    let hurryString = "緊急"
-    let notHurryString = "通常"
-    // Listに表示する文字列を返す関数
-    func toTextString(isHurry: Bool) -> String {
+// 買い物の緊急性の列挙型
+enum Urgency: String {
+    case hurry = "緊急"
+    case normal = "通常"
+    // 買い物データの緊急性の値で初期化する
+    init(isHurry: Bool) {
         if isHurry {
-            return hurryString
+            self = .hurry
         } else {
-            return notHurryString
+            self = .normal
         }
     }
     // Listに表示するテキストの色を返す関数
-    func toColor(isHurry: Bool) -> Color {
-        if isHurry {
+    func color() -> Color {
+        switch self {
+        case .hurry:
             return .red
-        } else {
+        case .normal:
             return .blue
         }
     }

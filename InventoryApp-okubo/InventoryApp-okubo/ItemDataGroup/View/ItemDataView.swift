@@ -21,8 +21,6 @@ struct ItemDataView: View {
     @State private var isFolderItem = true
     // 画像のサイズ
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 3
-    // 緊急性の表示に関するクラスのインスタンス
-    private let urgency = Urgency()
     // MARK: - View
     var body: some View {
         VStack {
@@ -147,12 +145,12 @@ struct ItemDataView: View {
                         // 編集可能状態に応じて変化
                         if isEditing {
                             Picker("", selection: $itemData.isHurry) {
-                                Text(urgency.hurryString).tag(true)
-                                Text(urgency.notHurryString).tag(false)
+                                Text(Urgency.hurry.rawValue).tag(true)
+                                Text(Urgency.normal.rawValue).tag(false)
                             }
                             .pickerStyle(.menu)
                         } else {
-                            Text(urgency.toTextString(isHurry: itemData.isHurry))
+                            Text(Urgency(isHurry: itemData.isHurry).rawValue)
                         }
                     }
                 }
