@@ -47,26 +47,22 @@ struct ListRowView: View {
                 if isStock {
                     // 在庫リストの表示
                     Text(item.status)
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke())
                         .foregroundColor(ItemStatus(rawValue: item.status)?.toStatusColor())
                 } else {
                     // 買い物リストの表示
-                    if item.isHurry {
-                        Text("緊急")
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke())
-                            .foregroundColor(.red)
-                    } else {
-                        Text("通常")
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke())
-                            .foregroundColor(.blue)
-                    }
+                    Text(Urgency(isHurry: item.isHurry).rawValue)
+                        .foregroundColor(Urgency(isHurry: item.isHurry).color())
                 }
+                Spacer()
                 // 個数
                 Text("×\(item.numberOfItems)")
+                Spacer()
+                Spacer()
             }// VStack
             .padding(.trailing)
         }// HStack
         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: rowHeight, alignment: .leading)
+        .contentShape(Rectangle())
     }
     // MARK: - メソッド
     // 日付フォーマットの関数

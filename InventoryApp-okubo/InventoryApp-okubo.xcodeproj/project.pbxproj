@@ -34,6 +34,10 @@
 		7F730DD528092600002EBD76 /* ItemImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F730DD428092600002EBD76 /* ItemImageView.swift */; };
 		7F7660F6283A2D9E009D6291 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7660F5283A2D9E009D6291 /* CameraManager.swift */; };
 		7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7CD3E627D8EA8A005A953B /* ItemListView.swift */; };
+		7F944CA72877ED72008894AE /* FolderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F944CA62877ED72008894AE /* FolderEditView.swift */; };
+		7F944CA92877EE44008894AE /* FolderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F944CA82877EE44008894AE /* FolderRowView.swift */; };
+		7F944CAB2877EEF9008894AE /* Urgency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F944CAA2877EEF9008894AE /* Urgency.swift */; };
+		7F944CAE2877F501008894AE /* NotificationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F944CAD2877F501008894AE /* NotificationDate.swift */; };
 		7FA5698627DB194900AB0EEF /* SampleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5698527DB194900AB0EEF /* SampleImage.swift */; };
 		7FDFDB112823C43800D56402 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FDFDB102823C43800D56402 /* SoundPlayer.swift */; };
 		7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE8968227E4463B002E80B1 /* ListRowView.swift */; };
@@ -70,6 +74,10 @@
 		7F730DD428092600002EBD76 /* ItemImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemImageView.swift; sourceTree = "<group>"; };
 		7F7660F5283A2D9E009D6291 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		7F7CD3E627D8EA8A005A953B /* ItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListView.swift; sourceTree = "<group>"; };
+		7F944CA62877ED72008894AE /* FolderEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderEditView.swift; sourceTree = "<group>"; };
+		7F944CA82877EE44008894AE /* FolderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderRowView.swift; sourceTree = "<group>"; };
+		7F944CAA2877EEF9008894AE /* Urgency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Urgency.swift; sourceTree = "<group>"; };
+		7F944CAD2877F501008894AE /* NotificationDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDate.swift; sourceTree = "<group>"; };
 		7FA5698527DB194900AB0EEF /* SampleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleImage.swift; sourceTree = "<group>"; };
 		7FDFDB102823C43800D56402 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		7FE8968227E4463B002E80B1 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
@@ -136,6 +144,8 @@
 				7F55D64127F6C6A9004169C4 /* RakutenAPI.swift */,
 				7F1DC17E28328D1300992908 /* SearchResult.swift */,
 				7FE8968427E44A57002E80B1 /* ItemStatus.swift */,
+				7F944CAA2877EEF9008894AE /* Urgency.swift */,
+				7F944CAD2877F501008894AE /* NotificationDate.swift */,
 				7FA5698527DB194900AB0EEF /* SampleImage.swift */,
 				7F7660F5283A2D9E009D6291 /* CameraManager.swift */,
 			);
@@ -146,6 +156,8 @@
 			isa = PBXGroup;
 			children = (
 				7F5BA4D027D64C8800338C12 /* FolderView.swift */,
+				7F944CA82877EE44008894AE /* FolderRowView.swift */,
+				7F944CA62877ED72008894AE /* FolderEditView.swift */,
 				7F7CD3E627D8EA8A005A953B /* ItemListView.swift */,
 				7FE8968227E4463B002E80B1 /* ListRowView.swift */,
 			);
@@ -298,8 +310,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F944CA72877ED72008894AE /* FolderEditView.swift in Sources */,
 				7F1DC17F28328D1300992908 /* SearchResult.swift in Sources */,
 				7F0798FA27D9B268006BF1CF /* BarcodeReaderView.swift in Sources */,
+				7F944CA92877EE44008894AE /* FolderRowView.swift in Sources */,
 				7F5BA4CF27D64C0A00338C12 /* HomeView.swift in Sources */,
 				7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */,
 				7F7660F6283A2D9E009D6291 /* CameraManager.swift in Sources */,
@@ -318,12 +332,14 @@
 				7F6227C1285C4E9100E90137 /* TestData.swift in Sources */,
 				7F6227C3285C4EF300E90137 /* ItemData.swift in Sources */,
 				7F730DD528092600002EBD76 /* ItemImageView.swift in Sources */,
+				7F944CAE2877F501008894AE /* NotificationDate.swift in Sources */,
 				7F5BA4D127D64C8800338C12 /* FolderView.swift in Sources */,
 				7F70E1CE27D1E55900C483B9 /* InventoryApp_okuboApp.swift in Sources */,
 				7FA5698627DB194900AB0EEF /* SampleImage.swift in Sources */,
 				7F0798FE27D9BF21006BF1CF /* ImageLibraryView.swift in Sources */,
 				7FE8968527E44A57002E80B1 /* ItemStatus.swift in Sources */,
 				7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */,
+				7F944CAB2877EEF9008894AE /* Urgency.swift in Sources */,
 				7F5C967427F4976D0079CD69 /* AddImageButton.swift in Sources */,
 				7F6227C5285C4F2B00E90137 /* Folder.swift in Sources */,
 			);

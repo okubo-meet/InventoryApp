@@ -7,9 +7,13 @@
 
 import Foundation
 // フォルダに使うアイコンの列挙型
-enum Icon: String {
+enum Icon: String, CaseIterable {
     // 家
     case house = "house.fill"
+    // 人
+    case person = "person.fill"
+    // 買い物カゴ
+    case cart = "cart.fill"
     // フォークとナイフ
     case food = "fork.knife"
     // 鞄
