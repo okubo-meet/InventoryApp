@@ -22,7 +22,7 @@ struct ItemListView: View {
     // 選択されたデータを保持する配列
     @State private var selectedItemID: [UUID] = []
     // どのカテゴリのリストかを受け取る変数
-    var folder: Folder
+    var folder: FolderData
     // MARK: - View
     var body: some View {
         ZStack {

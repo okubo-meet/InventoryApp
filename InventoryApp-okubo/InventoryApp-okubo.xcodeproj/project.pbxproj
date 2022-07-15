@@ -26,7 +26,7 @@
 		7F5C967427F4976D0079CD69 /* AddImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5C967327F4976D0079CD69 /* AddImageButton.swift */; };
 		7F6227C1285C4E9100E90137 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6227C0285C4E9100E90137 /* TestData.swift */; };
 		7F6227C3285C4EF300E90137 /* ItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6227C2285C4EF300E90137 /* ItemData.swift */; };
-		7F6227C5285C4F2B00E90137 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6227C4285C4F2B00E90137 /* Folder.swift */; };
+		7F6227C5285C4F2B00E90137 /* FolderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6227C4285C4F2B00E90137 /* FolderData.swift */; };
 		7F70E1CE27D1E55900C483B9 /* InventoryApp_okuboApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F70E1CD27D1E55900C483B9 /* InventoryApp_okuboApp.swift */; };
 		7F70E1D027D1E55900C483B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F70E1CF27D1E55900C483B9 /* ContentView.swift */; };
 		7F70E1D227D1E55A00C483B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F70E1D127D1E55A00C483B9 /* Assets.xcassets */; };
@@ -42,6 +42,12 @@
 		7FDFDB112823C43800D56402 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FDFDB102823C43800D56402 /* SoundPlayer.swift */; };
 		7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE8968227E4463B002E80B1 /* ListRowView.swift */; };
 		7FE8968527E44A57002E80B1 /* ItemStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE8968427E44A57002E80B1 /* ItemStatus.swift */; };
+		7FF951A028814CB600F7F7C1 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7FF9519E28814CB600F7F7C1 /* Model.xcdatamodeld */; };
+		7FF951A5288150F700F7F7C1 /* Folder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FF951A1288150F700F7F7C1 /* Folder+CoreDataClass.swift */; };
+		7FF951A6288150F700F7F7C1 /* Folder+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FF951A2288150F700F7F7C1 /* Folder+CoreDataProperties.swift */; };
+		7FF951A7288150F700F7F7C1 /* Item+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FF951A3288150F700F7F7C1 /* Item+CoreDataClass.swift */; };
+		7FF951A8288150F700F7F7C1 /* Item+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FF951A4288150F700F7F7C1 /* Item+CoreDataProperties.swift */; };
+		7FF951AA288151B800F7F7C1 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FF951A9288151B800F7F7C1 /* Persistence.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,7 +71,7 @@
 		7F5C967327F4976D0079CD69 /* AddImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddImageButton.swift; sourceTree = "<group>"; };
 		7F6227C0285C4E9100E90137 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		7F6227C2285C4EF300E90137 /* ItemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemData.swift; sourceTree = "<group>"; };
-		7F6227C4285C4F2B00E90137 /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
+		7F6227C4285C4F2B00E90137 /* FolderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderData.swift; sourceTree = "<group>"; };
 		7F70E1CA27D1E55900C483B9 /* InventoryApp-okubo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "InventoryApp-okubo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F70E1CD27D1E55900C483B9 /* InventoryApp_okuboApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryApp_okuboApp.swift; sourceTree = "<group>"; };
 		7F70E1CF27D1E55900C483B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -82,6 +88,12 @@
 		7FDFDB102823C43800D56402 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		7FE8968227E4463B002E80B1 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
 		7FE8968427E44A57002E80B1 /* ItemStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemStatus.swift; sourceTree = "<group>"; };
+		7FF9519F28814CB600F7F7C1 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		7FF951A1288150F700F7F7C1 /* Folder+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7FF951A2288150F700F7F7C1 /* Folder+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7FF951A3288150F700F7F7C1 /* Item+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7FF951A4288150F700F7F7C1 /* Item+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7FF951A9288151B800F7F7C1 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,7 +181,7 @@
 			children = (
 				7F6227C0285C4E9100E90137 /* TestData.swift */,
 				7F6227C2285C4EF300E90137 /* ItemData.swift */,
-				7F6227C4285C4F2B00E90137 /* Folder.swift */,
+				7F6227C4285C4F2B00E90137 /* FolderData.swift */,
 			);
 			path = Test;
 			sourceTree = "<group>";
@@ -201,6 +213,7 @@
 				7F5BA4D227D64CE800338C12 /* SettingView.swift */,
 				7FDFDB102823C43800D56402 /* SoundPlayer.swift */,
 				7F317B6627E1C84300E1C2E1 /* Color.swift */,
+				7FF9519D28814C9600F7F7C1 /* CoreData */,
 				7F6227BF285C4E5300E90137 /* Test */,
 				7F5A4583282E1DC9002AFD2B /* Info.plist */,
 				7F55D64327F6CAD5004169C4 /* Api.plist */,
@@ -216,6 +229,19 @@
 				7F70E1D427D1E55A00C483B9 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		7FF9519D28814C9600F7F7C1 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				7FF9519E28814CB600F7F7C1 /* Model.xcdatamodeld */,
+				7FF951A1288150F700F7F7C1 /* Folder+CoreDataClass.swift */,
+				7FF951A2288150F700F7F7C1 /* Folder+CoreDataProperties.swift */,
+				7FF951A3288150F700F7F7C1 /* Item+CoreDataClass.swift */,
+				7FF951A4288150F700F7F7C1 /* Item+CoreDataProperties.swift */,
+				7FF951A9288151B800F7F7C1 /* Persistence.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -314,10 +340,12 @@
 				7F1DC17F28328D1300992908 /* SearchResult.swift in Sources */,
 				7F0798FA27D9B268006BF1CF /* BarcodeReaderView.swift in Sources */,
 				7F944CA92877EE44008894AE /* FolderRowView.swift in Sources */,
+				7FF951A8288150F700F7F7C1 /* Item+CoreDataProperties.swift in Sources */,
 				7F5BA4CF27D64C0A00338C12 /* HomeView.swift in Sources */,
 				7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */,
 				7F7660F6283A2D9E009D6291 /* CameraManager.swift in Sources */,
 				7F5A6B9327E2EC6900DCCE81 /* Icon.swift in Sources */,
+				7FF951A6288150F700F7F7C1 /* Folder+CoreDataProperties.swift in Sources */,
 				7F46DCF12849D44800AB2715 /* RegisterRowView.swift in Sources */,
 				7F5BA4D327D64CE800338C12 /* SettingView.swift in Sources */,
 				7F4EFA5727EA187C0005461E /* ItemDataView.swift in Sources */,
@@ -327,21 +355,25 @@
 				7F0798FC27D9B630006BF1CF /* ImagePickerView.swift in Sources */,
 				7F47C30127D742D9006343B4 /* RegisterView.swift in Sources */,
 				7FDFDB112823C43800D56402 /* SoundPlayer.swift in Sources */,
+				7FF951A5288150F700F7F7C1 /* Folder+CoreDataClass.swift in Sources */,
 				7F55D64227F6C6A9004169C4 /* RakutenAPI.swift in Sources */,
 				7F07990027D9C291006BF1CF /* RecentItemsView.swift in Sources */,
 				7F6227C1285C4E9100E90137 /* TestData.swift in Sources */,
+				7FF951A028814CB600F7F7C1 /* Model.xcdatamodeld in Sources */,
 				7F6227C3285C4EF300E90137 /* ItemData.swift in Sources */,
 				7F730DD528092600002EBD76 /* ItemImageView.swift in Sources */,
 				7F944CAE2877F501008894AE /* NotificationDate.swift in Sources */,
+				7FF951AA288151B800F7F7C1 /* Persistence.swift in Sources */,
 				7F5BA4D127D64C8800338C12 /* FolderView.swift in Sources */,
 				7F70E1CE27D1E55900C483B9 /* InventoryApp_okuboApp.swift in Sources */,
 				7FA5698627DB194900AB0EEF /* SampleImage.swift in Sources */,
 				7F0798FE27D9BF21006BF1CF /* ImageLibraryView.swift in Sources */,
+				7FF951A7288150F700F7F7C1 /* Item+CoreDataClass.swift in Sources */,
 				7FE8968527E44A57002E80B1 /* ItemStatus.swift in Sources */,
 				7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */,
 				7F944CAB2877EEF9008894AE /* Urgency.swift in Sources */,
 				7F5C967427F4976D0079CD69 /* AddImageButton.swift in Sources */,
-				7F6227C5285C4F2B00E90137 /* Folder.swift in Sources */,
+				7F6227C5285C4F2B00E90137 /* FolderData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,6 +584,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7FF9519E28814CB600F7F7C1 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7FF9519F28814CB600F7F7C1 /* Model.xcdatamodel */,
+			);
+			currentVersion = 7FF9519F28814CB600F7F7C1 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 7F70E1C227D1E55900C483B9 /* Project object */;
 }

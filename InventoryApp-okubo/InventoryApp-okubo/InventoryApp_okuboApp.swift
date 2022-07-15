@@ -9,10 +9,13 @@ import SwiftUI
 
 @main
 struct InventoryApp_okuboApp: App {
+    // NSPersistentContainerの初期化
+    let persistenceController = PersistenceController.shared
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(TestData())
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }

@@ -16,7 +16,7 @@ struct FolderEditView: View {
     // 保存済みのフォルダを判別するインデックス番号
     @Binding var folderIndex: Int?
     // 編集するフォルダ
-    @State var editFolder = Folder(name: "", isStock: true, icon: Icon.house.rawValue)
+    @State var editFolder = FolderData(name: "", isStock: true, icon: Icon.house.rawValue)
     // フォルダ保存アラートのフラグ
     @State private var saveAlert = false
     // フォルダ削除アラートのフラグ

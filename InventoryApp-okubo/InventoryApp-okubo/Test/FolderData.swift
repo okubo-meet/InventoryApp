@@ -6,8 +6,8 @@
 //
 
 import Foundation
-// フォルダのデータ（テスト）
-struct Folder: Identifiable {
+// フォルダのデータ（テスト） CoreDataのエンティティと名前が被るので変更
+struct FolderData: Identifiable {
     /// 識別ID
     let id = UUID()
     /// フォルダ名
