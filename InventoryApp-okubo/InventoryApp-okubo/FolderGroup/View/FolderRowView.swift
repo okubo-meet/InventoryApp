@@ -18,7 +18,7 @@ struct FolderRowView: View {
     // フォルダ設定画面に渡すインデックス番号
     @Binding var folderIndex: Int?
     // 表示するフォルダ
-    var folder: Folder
+    var folder: FolderData
     // MARK: - View
     var body: some View {
         if isEditing {
