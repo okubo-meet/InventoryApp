@@ -12,7 +12,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
     // 環境変数で取得したdismissハンドラー
     @Environment(\.dismiss) var dismiss
     // 編集中の商品データ
-    @Binding var item: ItemData
+    @Binding var itemData: ItemData
     // UIImagePickerControllerのインスタンス
     private let imagePickerController = UIImagePickerController()
     // MARK: - Coordinator
@@ -28,7 +28,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
             if let pickedImage = info[.editedImage] as? UIImage {
                 // 画像データをpngからjpegに変えたら画像の向きの不具合は解決した
                 let imageData = pickedImage.jpegData(compressionQuality: 1.0)
-                parent.item.image = imageData
+                parent.itemData.image = imageData
             }
             // 画面を閉じる
             parent.dismiss()

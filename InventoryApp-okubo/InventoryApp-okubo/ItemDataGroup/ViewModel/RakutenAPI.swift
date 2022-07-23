@@ -24,7 +24,7 @@ class RakutenAPI {
     }
     // MARK: - プロパティ
     /// APIで取得したデータの配列　登録画面で複数のデータが扱えるようにする
-    static var resultItems: [ItemData] = []
+    static var resultItems: [(name: String, image: Data?)] = []
     /// API検索で一度に取得できる上限
     static var readLimit = 10
     /// APIで取得した商品名

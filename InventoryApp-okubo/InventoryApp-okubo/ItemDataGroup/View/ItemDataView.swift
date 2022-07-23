@@ -9,16 +9,28 @@ import SwiftUI
 // データの詳細を表示するView
 struct ItemDataView: View {
     // MARK: - プロパティ
-    // 仮のデータ
-    @EnvironmentObject var testData: TestData
+    // 被管理オブジェクトコンテキスト（ManagedObjectContext）の取得
+    @Environment(\.managedObjectContext) private var context
+    // 在庫リストのフォルダのみ取得
+    @FetchRequest(entity: Folder.entity(),
+                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.id, ascending: false)],
+                  predicate: NSPredicate(format: "isStock == %@", NSNumber(value: true)),
+                  animation: .default)
+    private var stockFolders: FetchedResults<Folder>
+    // 買い物リストのフォルダのみ取得
+    @FetchRequest(entity: Folder.entity(),
+                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.id, ascending: false)],
+                  predicate: NSPredicate(format: "isStock == %@", NSNumber(value: false)),
+                  animation: .default)
+    private var buyFolders: FetchedResults<Folder>
     /// 表示するデータ
     @Binding var itemData: ItemData
     // 在庫か買い物かの判定
-    @State var isStock = true
+    @State private var isStock = true
     // 編集可能状態の切り替えフラグ
     @State private var isEditing = true
     // 新規登録データか登録済みデータかの判定
-    @State private var isFolderItem = true
+    var isFolderItem: Bool
     // 画像のサイズ
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 3
     // MARK: - View
@@ -31,13 +43,16 @@ struct ItemDataView: View {
             .pickerStyle(.segmented)
             .disabled(isEditing == false)
             .onChange(of: isStock, perform: { changed in
-                // 在庫リストから買い物リストに変更したとき通知を無効にする
-                if changed == false {
-                    itemData.notificationDate = nil
-                }
-                // 保存先をPickerの値に合わせて変更する
-                if let folder = testData.folders.first(where: {$0.isStock == changed}) {
-                    itemData.folder = folder.name
+                // 変更されたとき保存先フォルダも変更する
+                if changed {
+                    itemData.folder = stockFolders[0]
+                } else {
+                    // 画面起動時の変更ではフォルダを切り替えない
+                    if changed != itemData.folder?.isStock {
+                        itemData.folder = buyFolders[0]
+                        // 在庫リストから買い物リストに変更したとき通知を無効にする
+                        itemData.notificationDate = nil
+                    }
                 }
             })
             List {
@@ -54,7 +69,7 @@ struct ItemDataView: View {
                         // 編集可能な場合のみ表示
                         if isEditing {
                             // 画像追加ボタン
-                            AddImageButton(item: $itemData)
+                            AddImageButton(itemData: $itemData)
                         }
                     }// VStack
                     Spacer()
@@ -156,18 +171,26 @@ struct ItemDataView: View {
                 }
                 // 保存先はCoreDataに登録されているフォルダから選択できるようにする
                 HStack {
-                    Text("保存先:")
+                    Text("フォルダ選択:")
                     // 編集可能状態に応じて変化
                     if isEditing {
-                        Picker("", selection: $itemData.folder) {
-                            let folders = testData.folders.filter({$0.isStock == isStock})
-                            ForEach(folders) { folder in
-                                Text(folder.name).tag(folder.name)
+                        Picker("", selection: Binding<Folder>(get: {itemData.folder ?? stockFolders[0]},
+                                                              set: {itemData.folder = $0})) {
+                            if isStock {
+                                // 在庫リスト
+                                ForEach(stockFolders) { folder in
+                                    Label(folder.name!, systemImage: folder.icon!).tag(folder)
+                                }
+                            } else {
+                                // 買い物リスト
+                                ForEach(buyFolders) { folder in
+                                    Label(folder.name!, systemImage: folder.icon!).tag(folder)
+                                }
                             }
                         }
                         .pickerStyle(.menu)
                     } else {
-                        Text(itemData.folder)
+                        Text((itemData.folder?.name!)!)
                     }
                 }
                 // 登録日
@@ -195,11 +218,9 @@ struct ItemDataView: View {
         // 画面起動時
         .onAppear {
             // 在庫リストかどうかの判定
-            if let itemFolder = testData.folders.first(where: {$0.name == itemData.folder}) {
-                isStock = itemFolder.isStock
+            if let itemFolder = itemData.folder?.isStock {
+                isStock = itemFolder
             }
-            // 登録済みのデータか判定する
-            isFolderItem = testData.items.contains(where: { $0.id == itemData.id })
             print("登録済みデータ: \(isFolderItem)")
             if isFolderItem {
                 // 登録済みのデータなら編集不可状態にする
@@ -239,6 +260,6 @@ struct ItemDataView: View {
 
 struct ItemDataView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemDataView(itemData: .constant(TestData().items[0]))
+        ItemDataView(itemData: .constant(ItemData()), isFolderItem: false)
     }
 }

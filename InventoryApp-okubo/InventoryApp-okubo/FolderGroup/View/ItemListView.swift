@@ -9,8 +9,8 @@ import SwiftUI
 // 商品データをリスト表示する画面
 struct ItemListView: View {
     // MARK: - プロパティ
-    // 仮のデータ
-    @EnvironmentObject var testData: TestData
+    // どのカテゴリのリストかを受け取る変数
+    @ObservedObject var folder: Folder
     // 遷移先で表示するデータのインデックス番号
     @State private var indexNum = 0
     // リストから遷移するフラグ
@@ -21,18 +21,18 @@ struct ItemListView: View {
     @State private var showDialog = false
     // 選択されたデータを保持する配列
     @State private var selectedItemID: [UUID] = []
-    // どのカテゴリのリストかを受け取る変数
-    var folder: Folder
+    // 遷移先に渡す商品データ
+    @State private var selectItem = ItemData()
     // MARK: - View
     var body: some View {
         ZStack {
             VStack {
-                List(folderItems(folderName: folder.name!)) { item in
+                List(folderItems(items: folder.items)) { item in
                     HStack {
                         // 編集モードのときのみ表示するアイコン
                         if isEditing {
-                            Image(systemName: selectIconString(id: item.id))
-                                .foregroundColor(isSelected(id: item.id) ? .red : .gray)
+                            Image(systemName: selectIconString(id: item.id!))
+                                .foregroundColor(isSelected(id: item.id!) ? .red : .gray)
                         }
                         // 同じフォルダに登録されたデータリスト
                         ListRowView(item: item, isStock: folder.isStock)
@@ -40,15 +40,15 @@ struct ItemListView: View {
                                 // 編集モードのとき
                                 if isEditing {
                                     // 既に選択されたデータなら選択解除
-                                    if isSelected(id: item.id) {
-                                        if let index = selectedItemID.firstIndex(of: item.id) {
+                                    if isSelected(id: item.id!) {
+                                        if let index = selectedItemID.firstIndex(of: item.id!) {
                                             print("選択解除")
                                             selectedItemID.remove(at: index)
                                         }
                                     } else {
                                         print("選択")
                                         // 選択状態にする
-                                        selectedItemID.append(item.id)
+                                        selectedItemID.append(item.id!)
                                     }
                                 } else {
                                     // 編集モードでない時は画面遷移
@@ -65,7 +65,7 @@ struct ItemListView: View {
                 .listStyle(.plain)
             }// VStack
             // 商品データが無い場合の表示
-            if folderItems(folderName: folder.name!).isEmpty {
+            if folderItems(items: folder.items).isEmpty {
                 VStack {
                     Spacer()
                     Text("データがありません")
@@ -73,12 +73,13 @@ struct ItemListView: View {
                         .foregroundColor(.gray)
                     Spacer()
                 }
+            } else {
+                // 商品データがある場合のみリンクを生成
+                NavigationLink(destination: ItemDataView(itemData: $selectItem,
+                                                         isFolderItem: true), isActive: $isActive) {
+                    EmptyView()
+                }
             }
-            NavigationLink(destination: ItemDataView(itemData: $testData.items[indexNum]),
-                           isActive: $isActive) {
-                EmptyView()
-            }
-            .navigationTitle(folder.name!)
         }// ZStack
         // データ削除ダイアログ
         .confirmationDialog("選択したデータを削除します", isPresented: $showDialog, titleVisibility: .visible) {
@@ -86,9 +87,10 @@ struct ItemListView: View {
                 withAnimation {
                     // 選択されたidで検索してデータを削除する
                     for uuid in selectedItemID {
-                        if let index = testData.items.firstIndex(where: {$0.id == uuid}) {
-                            testData.items.remove(at: index)
-                        }
+                        // TODO: - CoreDataの削除機能を作る（別のブランチで行う）
+//                        if let index = testData.items.firstIndex(where: {$0.id == uuid}) {
+//                            testData.items.remove(at: index)
+//                        }
                     }
                     // 編集モード終了
                     isEditing.toggle()
@@ -114,7 +116,7 @@ struct ItemListView: View {
                         Text("編集")
                     }
                 })
-                .disabled(folderItems(folderName: folder.name!).isEmpty)// フォルダ内のデータが無い時は無効
+                .disabled(folderItems(items: folder.items).isEmpty)// フォルダ内のデータが無い時は無効
             })
             // ボトムバー
             ToolbarItem(placement: .bottomBar, content: {
@@ -135,17 +137,28 @@ struct ItemListView: View {
     }
     // MARK: - メソッド
     // フォルダ名から商品リストを検索して返す関数
-    private func folderItems(folderName: String) -> [ItemData] {
-        let items = testData.items.filter({$0.folder == folderName})
-        return items
-    }
-    // データから配列のインデックス番号を検索し、NavigationLinkを起動する関数
-    private func showItemView(item: ItemData) {
-        if let index = testData.items.firstIndex(where: { $0.id == item.id }) {
-            indexNum = index
-            print("インデックス番号: \(indexNum)")
-            isActive = true
+    private func folderItems(items: NSSet?) -> [Item] {
+        // NSSet? を [Item]に変換
+        if let setItems = items as? Set<Item> {
+            // 日付でソートした配列を返す
+            return setItems.sorted(by: {$0.registrationDate! < $1.registrationDate!})
+        } else {
+            return []
         }
+    }
+    // Itemの値をItemDataに代入して、NavigationLinkを起動する関数
+    private func showItemView(item: Item) {
+        selectItem.id = item.id!
+        selectItem.name = item.name!
+        selectItem.image = item.image
+        selectItem.notificationDate = item.notificationDate
+        selectItem.deadLine = item.deadLine
+        selectItem.status = item.status!
+        selectItem.isHurry = item.isHurry
+        selectItem.numberOfItems = item.numberOfItems
+        selectItem.registrationDate = item.registrationDate!
+        selectItem.folder = item.folder
+        isActive = true
     }
     // 編集モードで選択されたデータかの判定を返す関数
     private func isSelected(id: UUID) -> Bool {

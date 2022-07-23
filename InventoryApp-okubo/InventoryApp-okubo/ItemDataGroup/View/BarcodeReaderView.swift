@@ -13,10 +13,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     // MARK: - プロパティ
     // 環境変数で取得したdismissハンドラー
     @Environment(\.dismiss) var dismiss
-    // 仮のデータ
-    @EnvironmentObject var testData: TestData
     // 編集中の商品データ
-    @Binding var item: ItemData
+    @Binding var itemData: ItemData
     // インジケーター切り替えフラグ
     @State private var isLoading = false
     // データの編集か登録データの追加を判別するフラグ true = データの編集, false = 登録データの追加
@@ -203,18 +201,22 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
             case .success:
                 print("成功")
                 if isItemEdit {
-                    item.name = rakutenAPI.resultItemName
-                    item.image = rakutenAPI.resultImageData
+                    itemData.name = rakutenAPI.resultItemName
+                    itemData.image = rakutenAPI.resultImageData
                 } else {
                     // 初回はBindingしているデータに代入する
                     if RakutenAPI.resultItems.isEmpty {
-                        item.name = rakutenAPI.resultItemName
-                        item.image = rakutenAPI.resultImageData
+                        itemData.name = rakutenAPI.resultItemName
+                        itemData.image = rakutenAPI.resultImageData
                     }
-                    let resultItem = ItemData(name: rakutenAPI.resultItemName,
-                                              image: rakutenAPI.resultImageData,
-                                              folder: "食品")
-                    RakutenAPI.resultItems.append(resultItem)
+//                    let resultItem = ItemData(name: rakutenAPI.resultItemName,
+//                                              image: rakutenAPI.resultImageData,
+//                                              folder: "食品")
+//                    let resultItem = Item()
+//                    resultItem.name = rakutenAPI.resultItemName
+//                    resultItem.image = rakutenAPI.resultImageData
+//                    RakutenAPI.resultItems.append()
+                    RakutenAPI.resultItems.append((name: rakutenAPI.resultItemName, image: rakutenAPI.resultImageData))
                 }
                 successAlert()
             case .failure:

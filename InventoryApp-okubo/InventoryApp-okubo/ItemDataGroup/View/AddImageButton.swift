@@ -10,7 +10,7 @@ import SwiftUI
 struct AddImageButton: View {
     // MARK: - プロパティ
     // 編集する商品データ
-    @Binding var item: ItemData
+    @Binding var itemData: ItemData
     // ダイアログ表示トリガー
     @State private var showDialog = false
     // バーコードリーダー表示トリガー
@@ -41,19 +41,19 @@ struct AddImageButton: View {
             Text("画像を追加する方法を選択してください")
         }
         .sheet(isPresented: $showBarcodeReader) {
-            BarcodeReaderView(item: $item, isItemEdit: true)
+            BarcodeReaderView(itemData: $itemData, isItemEdit: true)
         }
         .sheet(isPresented: $showImagePicker) {
-            ImagePickerView(item: $item)
+            ImagePickerView(itemData: $itemData)
         }
         .sheet(isPresented: $showLibrary) {
-            ImageLibraryView(item: $item)
+            ImageLibraryView(itemData: $itemData)
         }
     }
 }
 
 struct AddImageButton_Previews: PreviewProvider {
     static var previews: some View {
-        AddImageButton(item: .constant(TestData().items[0]))
+        AddImageButton(itemData: .constant(ItemData()))
     }
 }
