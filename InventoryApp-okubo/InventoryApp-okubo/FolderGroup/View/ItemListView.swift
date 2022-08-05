@@ -22,12 +22,12 @@ struct ItemListView: View {
     // 選択されたデータを保持する配列
     @State private var selectedItemID: [UUID] = []
     // どのカテゴリのリストかを受け取る変数
-    var folder: FolderData
+    var folder: Folder
     // MARK: - View
     var body: some View {
         ZStack {
             VStack {
-                List(folderItems(folderName: folder.name)) { item in
+                List(folderItems(folderName: folder.name!)) { item in
                     HStack {
                         // 編集モードのときのみ表示するアイコン
                         if isEditing {
@@ -65,7 +65,7 @@ struct ItemListView: View {
                 .listStyle(.plain)
             }// VStack
             // 商品データが無い場合の表示
-            if folderItems(folderName: folder.name).isEmpty {
+            if folderItems(folderName: folder.name!).isEmpty {
                 VStack {
                     Spacer()
                     Text("データがありません")
@@ -78,7 +78,7 @@ struct ItemListView: View {
                            isActive: $isActive) {
                 EmptyView()
             }
-                           .navigationTitle(folder.name)
+            .navigationTitle(folder.name!)
         }// ZStack
         // データ削除ダイアログ
         .confirmationDialog("選択したデータを削除します", isPresented: $showDialog, titleVisibility: .visible) {
@@ -114,7 +114,7 @@ struct ItemListView: View {
                         Text("編集")
                     }
                 })
-                .disabled(folderItems(folderName: folder.name).isEmpty)// フォルダ内のデータが無い時は無効
+                .disabled(folderItems(folderName: folder.name!).isEmpty)// フォルダ内のデータが無い時は無効
             })
             // ボトムバー
             ToolbarItem(placement: .bottomBar, content: {
@@ -163,7 +163,7 @@ struct ItemListView: View {
     // navigationTitleに表示する文字列を返す関数
     private func navigationTitleString() -> String {
         if selectedItemID.isEmpty {
-            return folder.name
+            return folder.name!
         } else {
             return "\(selectedItemID.count)個選択"
         }
@@ -172,6 +172,6 @@ struct ItemListView: View {
 
 struct ItemListView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemListView(folder: TestData().folders[0])
+        ItemListView(folder: Folder())
     }
 }

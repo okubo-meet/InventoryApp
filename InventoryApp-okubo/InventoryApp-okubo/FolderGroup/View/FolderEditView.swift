@@ -9,14 +9,22 @@ import SwiftUI
 // フォルダを編集する画面
 struct FolderEditView: View {
     // MARK: - プロパティ
-    // 仮のデータ
-    @EnvironmentObject var testData: TestData
     // 環境変数で取得したdismissハンドラー
     @Environment(\.dismiss) var dismiss
-    // 保存済みのフォルダを判別するインデックス番号
-    @Binding var folderIndex: Int?
-    // 編集するフォルダ
-    @State var editFolder = FolderData(name: "", isStock: true, icon: Icon.house.rawValue)
+    // 被管理オブジェクトコンテキスト（ManagedObjectContext）の取得
+    @Environment(\.managedObjectContext) private var context
+    // フォルダデータの取得
+    @FetchRequest(entity: Folder.entity(),
+                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.id, ascending: false)])
+    private var folders: FetchedResults<Folder>
+    // 編集するフォルダのID
+    @Binding var folderID: UUID?
+    // 編集中のフォルダ名
+    @State private var editName = ""
+    //　編集中のフォルダの種類
+    @State private var editStock = true
+    // 編集中のフォルダのアイコン名
+    @State private var editIcon = Icon.house.rawValue
     // フォルダ保存アラートのフラグ
     @State private var saveAlert = false
     // フォルダ削除アラートのフラグ
@@ -30,14 +38,15 @@ struct FolderEditView: View {
                 Section {
                     HStack {
                         Text("フォルダ名")
-                        TextField("入力してください", text: $editFolder.name)
+                        TextField("入力してください", text: $editName)
                             .textFieldStyle(.roundedBorder)
                     }
-                    Picker("種類", selection: $editFolder.isStock, content: {
+                    Picker("タイプ", selection: $editStock, content: {
                         Text("在庫リスト").tag(true)
                         Text("買い物リスト").tag(false)
                     })
-                    Picker("アイコン", selection: $editFolder.icon, content: {
+                    .disabled(isLastFolder())
+                    Picker("アイコン", selection: $editIcon, content: {
                         ForEach(Icon.allCases, id: \.self) { icon in
                             Image(systemName: icon.rawValue).tag(icon.rawValue)
                                 .foregroundColor(.orange)
@@ -46,7 +55,7 @@ struct FolderEditView: View {
                 }
                 Section {
                     // 既存フォルダの削除ボタン
-                    if folderIndex != nil {
+                    if folderID != nil {
                         Button(action: {
                             // 削除アラート起動
                             deleteAlert.toggle()
@@ -56,8 +65,17 @@ struct FolderEditView: View {
                                 Image(systemName: "trash.fill")
                                 Text("フォルダを削除する")
                             }
+                            .foregroundColor(isLastFolder() ? .gray : .red)
                         })
-                        .foregroundColor(.red)
+                        .disabled(isLastFolder())
+                    }
+                } footer: {
+                    // 編集機能を制限する際に表示
+                    if isLastFolder() {
+                        VStack {
+                            Text("このフォルダは削除及び、タイプ変更できません。")
+                            Text("各タイプのフォルダが１つ以上存在している必要があります。")
+                        }
                     }
                 }
             }// Form
@@ -72,10 +90,8 @@ struct FolderEditView: View {
             // 削除アラート
             .alert("フォルダを削除します", isPresented: $deleteAlert, actions: {
                 Button("削除", role: .destructive) {
-                    if let index = folderIndex {
-                        testData.items.removeAll(where: {$0.folder == editFolder.name})
-                        testData.folders.remove(at: index)
-                    }
+                    // CoreDataから該当するIDのフォルダを削除
+                    deleteFolder()
                     dismiss()
                 }
             }, message: {
@@ -94,45 +110,121 @@ struct FolderEditView: View {
                 ToolbarItem(placement: .navigationBarTrailing, content: {
                     Button("保存") {
                         // フォルダ設定保存の処理
-                        if let index = folderIndex {
-                            // フォルダの商品データ
-                            let items = testData.items.filter({$0.folder == testData.folders[index].name})
-                            for item in items {
-                                // 商品データのインデックス番号を取得して保存先を更新
-                                if let index = testData.items.firstIndex(where: {$0.id == item.id}) {
-                                    testData.items[index].folder = editFolder.name
-                                    print("\(testData.items[index])")
-                                }
-                            }
+                        if let index = folderIndex() {
                             // 更新
-                            testData.folders[index] = editFolder
+                            updateFolder(index: index)
                         } else {
-                            // 追加
-                            testData.folders.append(editFolder)
+                            // 新規フォルダ追加
+                            addNewFolder()
                         }
                         // 保存完了アラート起動
                         saveAlert.toggle()
                         soundPlayer.saveSoundPlay()
                     }
-                    .disabled(editFolder.name == "")
+                    .disabled(editName == "" || isNoChange())// フォルダ名が無いか、どの項目にも変更がない場合無効化
                 })
             })// toolbar
         }// NavigationView
         .onAppear {
-            // フォルダのインデックス番号がnilの時は新規作成
-            if let index = folderIndex {
-                print("既存のフォルダ： \(testData.folders[index])")
-                editFolder = testData.folders[index]
-                print("代入:\(editFolder)")
+            // 入力欄にIDが一致したフォルダの値を代入する
+            if let index = folderIndex() {
+                print("既存のフォルダ：" + folders[index].name!)
+                editName = folders[index].name!
+                editIcon = folders[index].icon!
+                editStock = folders[index].isStock
             } else {
                 print("新規作成")
             }
         }
     }// View
+    // MARK: - メソッド
+    // IDが一致したフォルダのインデックス番号を返す関数
+    private func folderIndex() -> Int? {
+        if let index = folders.firstIndex(where: {$0.id == folderID}) {
+            return index
+        } else {
+            print("IDが一致するフォルダがありません")
+            return nil
+        }
+    }
+    //  入力情報で新規フォルダを保存する関数
+    private func addNewFolder() {
+        let newFolder = Folder(context: context)
+        newFolder.id = UUID()
+        newFolder.name = editName
+        newFolder.icon = editIcon
+        newFolder.isStock = editStock
+        do {
+            // 保存
+            try context.save()
+            print("フォルダ追加完了")
+        } catch {
+            print(error)
+        }
+    }
+    // 入力情報で既存フォルダを上書きする関数
+    private func updateFolder(index: Int) {
+        // 上書き
+        folders[index].name = editName
+        folders[index].icon = editIcon
+        folders[index].isStock = editStock
+        do {
+            // 保存
+            try context.save()
+            print("フォルダ上書き完了")
+        } catch {
+            print(error)
+        }
+    }
+    // idが一致するフォルダをCoreDataから削除する関数
+    private func deleteFolder() {
+        guard let index = folderIndex() else {
+            return
+        }
+        // 削除
+        context.delete(folders[index])
+        do {
+            // 保存
+            try context.save()
+            print("フォルダ削除完了")
+        } catch {
+            print(error)
+        }
+    }
+    // 編集しているフォルダと同じ種類のフォルダの存在をチェックする関数
+    private func isLastFolder() -> Bool {
+        // 編集か新規作成か判定
+        if let index = folderIndex() {
+            // 編集中のフォルダのタイプを取得
+            let isStock = folders[index].isStock
+            // 種類が一致しているものを抽出
+            let searchedFolders = folders.filter({$0.isStock == isStock})
+            // １つしかない場合は削除やタイプを変更をできないようにする
+            if searchedFolders.count == 1 {
+                return true
+            }
+        }
+        return false
+    }
+    // 編集フォルダに変更がない時は保存ボタンを無効化する関数
+    private func isNoChange() -> Bool {
+        // 既存フォルダの編集か判定
+        if let index = folderIndex() {
+            // 全ての項目に変更がない場合は保存ボタンを無効化
+            if folders[index].name == editName
+                && folders[index].isStock == editStock
+                && folders[index].icon == editIcon {
+                // 変更無し
+                return true
+            }
+        }
+        // 新規作成 or 変更点あり
+        return false
+    }
 }
 
 struct FolderEditView_Previews: PreviewProvider {
     static var previews: some View {
-        FolderEditView(folderIndex: .constant(nil))
+        FolderEditView(folderID: .constant(nil))
     }
 }

@@ -9,36 +9,42 @@ import SwiftUI
 // フォルダデータを扱う画面　TabViewで扱うView
 struct FolderView: View {
     // MARK: - プロパティ
-    // 仮のデータ
-    @EnvironmentObject var testData: TestData
+    // 被管理オブジェクトコンテキスト（ManagedObjectContext）の取得
+    @Environment(\.managedObjectContext) private var context
+    // 在庫リストのフォルダのみ取得
+    @FetchRequest(entity: Folder.entity(),
+                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.id, ascending: false)],
+                  predicate: NSPredicate(format: "isStock == %@", NSNumber(value: true)),
+                  animation: .default) private var stockFolders: FetchedResults<Folder>
+    // 買い物リストのフォルダのみ取得
+    @FetchRequest(entity: Folder.entity(),
+                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.id, ascending: false)],
+                  predicate: NSPredicate(format: "isStock == %@", NSNumber(value: false)),
+                  animation: .default) private var buyFolders: FetchedResults<Folder>
     // 編集モードのフラグ
     @State private var isEditing = false
     // フォルダ設定画面の呼び出しフラグ
     @State var showSheet = false
-    // フォルダ設定画面に渡すインデックス番号
-    @State var folderIndex: Int?
+    // 選択したフォルダのID
+    @State var folderID: UUID?
     // MARK: - View
     var body: some View {
         NavigationView {
             Form {
-                // 在庫リストのフォルダのみ取得
-                let stock = testData.folders.filter({$0.isStock})
                 // 在庫リストのフォルダ
                 Section {
-                    ForEach(stock) { folder in
+                    ForEach(stockFolders) { folder in
                         FolderRowView(isEditing: $isEditing, showSheet: $showSheet,
-                                      folderIndex: $folderIndex, folder: folder)
+                                      folderID: $folderID, folder: folder)
                     }// ForEach
                 } header: {
                     Text("在庫リスト")
                 }
-                // 買い物リストのフォルダのみ取得
-                let buy = testData.folders.filter({$0.isStock == false})
                 // 買い物リストのフォルダ
                 Section {
-                    ForEach(buy) { folder in
+                    ForEach(buyFolders) { folder in
                         FolderRowView(isEditing: $isEditing, showSheet: $showSheet,
-                                      folderIndex: $folderIndex, folder: folder)
+                                      folderID: $folderID, folder: folder)
                     }// ForEach
                 } header: {
                     Text("買い物リスト")
@@ -46,7 +52,7 @@ struct FolderView: View {
             }// Form
             .sheet(isPresented: $showSheet, content: {
                 // 設定画面
-                FolderEditView(folderIndex: $folderIndex)
+                FolderEditView(folderID: $folderID)
             })
             .navigationTitle("フォルダ")
             .toolbar {
@@ -71,7 +77,7 @@ struct FolderView: View {
                             Spacer()
                             Button("新規フォルダ作成") {
                                 // フォルダ設定画面を呼び出す
-                                folderIndex = nil
+                                folderID = nil
                                 showSheet.toggle()
                             }
                         }
@@ -85,5 +91,6 @@ struct FolderView: View {
 struct FolderView_Previews: PreviewProvider {
     static var previews: some View {
         FolderView()
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
