@@ -28,10 +28,12 @@ struct ListRowView: View {
                 .border(Color.gray, width: 1)
             VStack {
                 // 商品名
-                Text(item.name!)
-                    .fontWeight(.bold)
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity,
-                           alignment: .leading)
+                if let itemName = item.name {
+                    Text(itemName)
+                        .fontWeight(.bold)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity,
+                               alignment: .leading)
+                }
                 if isStock {
                     // 在庫リストの表示
                     Text("期限：" + dateText(date: item.deadLine))
@@ -45,9 +47,11 @@ struct ListRowView: View {
             Spacer()
             VStack {
                 if isStock {
-                    // 在庫リストの表示
-                    Text(item.status!)
-                        .foregroundColor(ItemStatus(rawValue: item.status!)?.toStatusColor())
+                    if let itemStatus = item.status {
+                        // 在庫リストの表示
+                        Text(itemStatus)
+                            .foregroundColor(ItemStatus(rawValue: itemStatus)?.toStatusColor())
+                    }
                 } else {
                     // 買い物リストの表示
                     Text(Urgency(isHurry: item.isHurry).rawValue)

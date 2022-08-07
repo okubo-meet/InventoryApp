@@ -9,6 +9,8 @@ import SwiftUI
 // 商品データをリスト表示する画面
 struct ItemListView: View {
     // MARK: - プロパティ
+    // 被管理オブジェクトコンテキスト（ManagedObjectContext）の取得
+    @Environment(\.managedObjectContext) private var context
     // どのカテゴリのリストかを受け取る変数
     @ObservedObject var folder: Folder
     // 遷移先で表示するデータのインデックス番号
@@ -85,12 +87,17 @@ struct ItemListView: View {
         .confirmationDialog("選択したデータを削除します", isPresented: $showDialog, titleVisibility: .visible) {
             Button("削除", role: .destructive) {
                 withAnimation {
-                    // 選択されたidで検索してデータを削除する
+                    // 選択されたidの数だけ
                     for uuid in selectedItemID {
-                        // TODO: - CoreDataの削除機能を作る（別のブランチで行う）
-//                        if let index = testData.items.firstIndex(where: {$0.id == uuid}) {
-//                            testData.items.remove(at: index)
-//                        }
+                        // 検索してデータを削除する
+                        if let removeItem = folderItems(items: folder.items).first(where: {$0.id == uuid}) {
+                            context.delete(removeItem)
+                        }
+                    }
+                    do {
+                        try context.save()
+                    } catch {
+                        print(error)
                     }
                     // 編集モード終了
                     isEditing.toggle()
