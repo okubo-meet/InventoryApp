@@ -10,7 +10,7 @@ import SwiftUI
 struct ImageLibraryView: View {
     // MARK: - プロパティ
     // 編集中の商品データ
-    @Binding var item: ItemData
+    @Binding var itemData: ItemData
     // 環境変数で取得したdismissハンドラー
     @Environment(\.dismiss) var dismiss
     // サンプル画像のカテゴリ
@@ -42,7 +42,7 @@ struct ImageLibraryView: View {
                                     // 画像をpngに変換
                                     if let imageData = uiImage.pngData() {
                                         // 編集中のデータに代入
-                                        item.image = imageData
+                                        itemData.image = imageData
                                         // 画面を閉じる
                                         dismiss()
                                     }
@@ -78,6 +78,6 @@ struct ImageLibraryView: View {
 
 struct ImageLibraryView_Previews: PreviewProvider {
     static var previews: some View {
-        ImageLibraryView(item: .constant(TestData().items[0]))
+        ImageLibraryView(itemData: .constant(ItemData()))
     }
 }

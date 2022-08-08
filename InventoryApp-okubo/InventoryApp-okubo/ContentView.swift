@@ -19,10 +19,16 @@ struct ContentView: View {
     // MARK: - View
     var body: some View {
         TabView {
-            HomeView()
+            // ホーム画面廃止
+//            HomeView()
+//                .tabItem {
+//                    Image(systemName: "house.fill")
+//                    Text("ホーム")
+//                }
+            RegisterView()
                 .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("ホーム")
+                    Image(systemName: "square.and.pencil")
+                    Text("登録")
                 }
             FolderView()
                 .tabItem {

@@ -6,10 +6,10 @@
 //
 
 import Foundation
-// 商品データ（テスト）
+// 商品データ（データ編集に使用）
 struct ItemData: Identifiable {
     /// 識別ID
-    let id = UUID()
+    var id = UUID()
     /// 商品名
     var name: String = ""
     /// 画像
@@ -19,13 +19,13 @@ struct ItemData: Identifiable {
     /// 登録日
     var registrationDate: Date = Date()
     /// 個数
-    var numberOfItems: Int = 1
+    var numberOfItems: Int16 = 1
     /// 状態
-    var status: String = "未開封"
+    var status: String = ItemStatus.unOpened.rawValue
     /// 緊急性
     var isHurry: Bool = false
     /// 通知する日付
     var notificationDate: Date?
     /// フォルダ
-    var folder: String
+    var folder: Folder?
 }

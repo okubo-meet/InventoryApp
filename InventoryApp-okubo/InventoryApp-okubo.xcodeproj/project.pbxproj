@@ -24,9 +24,7 @@
 		7F5BA4D127D64C8800338C12 /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5BA4D027D64C8800338C12 /* FolderView.swift */; };
 		7F5BA4D327D64CE800338C12 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5BA4D227D64CE800338C12 /* SettingView.swift */; };
 		7F5C967427F4976D0079CD69 /* AddImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5C967327F4976D0079CD69 /* AddImageButton.swift */; };
-		7F6227C1285C4E9100E90137 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6227C0285C4E9100E90137 /* TestData.swift */; };
 		7F6227C3285C4EF300E90137 /* ItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6227C2285C4EF300E90137 /* ItemData.swift */; };
-		7F6227C5285C4F2B00E90137 /* FolderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6227C4285C4F2B00E90137 /* FolderData.swift */; };
 		7F70E1CE27D1E55900C483B9 /* InventoryApp_okuboApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F70E1CD27D1E55900C483B9 /* InventoryApp_okuboApp.swift */; };
 		7F70E1D027D1E55900C483B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F70E1CF27D1E55900C483B9 /* ContentView.swift */; };
 		7F70E1D227D1E55A00C483B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F70E1D127D1E55A00C483B9 /* Assets.xcassets */; };
@@ -69,9 +67,7 @@
 		7F5BA4D027D64C8800338C12 /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
 		7F5BA4D227D64CE800338C12 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		7F5C967327F4976D0079CD69 /* AddImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddImageButton.swift; sourceTree = "<group>"; };
-		7F6227C0285C4E9100E90137 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		7F6227C2285C4EF300E90137 /* ItemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemData.swift; sourceTree = "<group>"; };
-		7F6227C4285C4F2B00E90137 /* FolderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderData.swift; sourceTree = "<group>"; };
 		7F70E1CA27D1E55900C483B9 /* InventoryApp-okubo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "InventoryApp-okubo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F70E1CD27D1E55900C483B9 /* InventoryApp_okuboApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryApp_okuboApp.swift; sourceTree = "<group>"; };
 		7F70E1CF27D1E55900C483B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -153,6 +149,7 @@
 		7F18DA8928111C5F005472AC /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				7F6227C2285C4EF300E90137 /* ItemData.swift */,
 				7F55D64127F6C6A9004169C4 /* RakutenAPI.swift */,
 				7F1DC17E28328D1300992908 /* SearchResult.swift */,
 				7FE8968427E44A57002E80B1 /* ItemStatus.swift */,
@@ -174,16 +171,6 @@
 				7FE8968227E4463B002E80B1 /* ListRowView.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		7F6227BF285C4E5300E90137 /* Test */ = {
-			isa = PBXGroup;
-			children = (
-				7F6227C0285C4E9100E90137 /* TestData.swift */,
-				7F6227C2285C4EF300E90137 /* ItemData.swift */,
-				7F6227C4285C4F2B00E90137 /* FolderData.swift */,
-			);
-			path = Test;
 			sourceTree = "<group>";
 		};
 		7F70E1C127D1E55900C483B9 = {
@@ -214,7 +201,6 @@
 				7FDFDB102823C43800D56402 /* SoundPlayer.swift */,
 				7F317B6627E1C84300E1C2E1 /* Color.swift */,
 				7FF9519D28814C9600F7F7C1 /* CoreData */,
-				7F6227BF285C4E5300E90137 /* Test */,
 				7F5A4583282E1DC9002AFD2B /* Info.plist */,
 				7F55D64327F6CAD5004169C4 /* Api.plist */,
 				7F70E1D127D1E55A00C483B9 /* Assets.xcassets */,
@@ -358,7 +344,6 @@
 				7FF951A5288150F700F7F7C1 /* Folder+CoreDataClass.swift in Sources */,
 				7F55D64227F6C6A9004169C4 /* RakutenAPI.swift in Sources */,
 				7F07990027D9C291006BF1CF /* RecentItemsView.swift in Sources */,
-				7F6227C1285C4E9100E90137 /* TestData.swift in Sources */,
 				7FF951A028814CB600F7F7C1 /* Model.xcdatamodeld in Sources */,
 				7F6227C3285C4EF300E90137 /* ItemData.swift in Sources */,
 				7F730DD528092600002EBD76 /* ItemImageView.swift in Sources */,
@@ -373,7 +358,6 @@
 				7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */,
 				7F944CAB2877EEF9008894AE /* Urgency.swift in Sources */,
 				7F5C967427F4976D0079CD69 /* AddImageButton.swift in Sources */,
-				7F6227C5285C4F2B00E90137 /* FolderData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

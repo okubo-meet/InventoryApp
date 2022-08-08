@@ -10,7 +10,7 @@ import SwiftUI
 struct ListRowView: View {
     // MARK: - プロパティ
     // 商品データ
-    var item: ItemData
+    @ObservedObject var item: Item
     // 在庫か買い物か
     var isStock: Bool
     // 画像サイズ
@@ -28,7 +28,7 @@ struct ListRowView: View {
                 .border(Color.gray, width: 1)
             VStack {
                 // 商品名
-                Text(item.name)
+                Text(item.name!)
                     .fontWeight(.bold)
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity,
                            alignment: .leading)
@@ -46,8 +46,8 @@ struct ListRowView: View {
             VStack {
                 if isStock {
                     // 在庫リストの表示
-                    Text(item.status)
-                        .foregroundColor(ItemStatus(rawValue: item.status)?.toStatusColor())
+                    Text(item.status!)
+                        .foregroundColor(ItemStatus(rawValue: item.status!)?.toStatusColor())
                 } else {
                     // 買い物リストの表示
                     Text(Urgency(isHurry: item.isHurry).rawValue)
@@ -80,6 +80,6 @@ struct ListRowView: View {
 
 struct ListRowView_Previews: PreviewProvider {
     static var previews: some View {
-        ListRowView(item: TestData().items[0], isStock: true)
+        ListRowView(item: Item(), isStock: true)
     }
 }

@@ -36,8 +36,13 @@ struct RegisterRowView: View {
                         .fontWeight(.semibold)
                 }
                 Spacer()
-                Text("登録先：\(itemData.folder)")
-                    .font(.callout)
+                if let folderName = itemData.folder?.name {
+                    Text("登録先：" + folderName)
+                        .font(.callout)
+                } else {
+                    Text("登録先: なし")
+                        .font(.callout)
+                }
             }
             Spacer()
             // 個数
@@ -49,6 +54,6 @@ struct RegisterRowView: View {
 
 struct RegisterRowView_Previews: PreviewProvider {
     static var previews: some View {
-        RegisterRowView(itemData: TestData().items[0])
+        RegisterRowView(itemData: ItemData())
     }
 }
