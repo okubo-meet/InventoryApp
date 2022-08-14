@@ -19,12 +19,6 @@ struct ContentView: View {
     // MARK: - View
     var body: some View {
         TabView {
-            // ホーム画面廃止
-//            HomeView()
-//                .tabItem {
-//                    Image(systemName: "house.fill")
-//                    Text("ホーム")
-//                }
             RegisterView()
                 .tabItem {
                     Image(systemName: "square.and.pencil")
@@ -41,7 +35,10 @@ struct ContentView: View {
                     Text("設定")
                 }
         }
-        .onAppear(perform: makeFirstFolder)
+        .onAppear {
+            makeFirstFolder()
+            NotificationManager().requestPermission()
+        }
     }// body
     // MARK: - メソッド
     init() {

@@ -43,6 +43,8 @@ struct ItemDataView: View {
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 3
     //　効果音を扱うクラスのインスタンス
     private let soundPlayer = SoundPlayer()
+    // 通知を扱うクラスのインスタンス
+    private let notificationManager = NotificationManager()
     // MARK: - View
     var body: some View {
         VStack {
@@ -79,58 +81,16 @@ struct ItemDataView: View {
                 HStack {
                     Text("商品名:")
                     TextField("入力してください（必須）", text: $itemData.name)
-                    .disabled(isEditing == false)
+                        .disabled(isEditing == false)
                 }
                 // 期限と通知は在庫リストのみ表示
                 if isStock {
                     // 期限
-                    HStack {
-                        Text("期限:")
-                        // 編集可能な場合のみ表示
-                        if isEditing {
-                            if itemData.deadLine == nil {
-                                // 期限無し
-                                Text("無し")
-                            } else {
-                                DatePicker("", selection: Binding<Date>(get: {itemData.deadLine ?? Date()},
-                                                                        set: {itemData.deadLine = $0}),
-                                           displayedComponents: .date)
-                                .labelsHidden()
-                                .disabled(isEditing == false)
-                            }
-                            Spacer()
-                            // 期限の有り無しを選択するボタン
-                            Image(systemName: deadLineIcon())
-                                .foregroundColor(itemData.deadLine == nil ? .orange : .gray)
-                                .onTapGesture {
-                                    // 期限がnilなら現在の日付を代入し、すでに日付があればnilを代入する
-                                    if itemData.deadLine == nil {
-                                        itemData.deadLine = Date()
-                                    } else {
-                                        itemData.deadLine = nil
-                                        // 通知の日程もnilにする
-                                        itemData.notificationDate = nil
-                                    }
-                                }
-                        } else {
-                            Text(dateText(date: itemData.deadLine))
-                        }
-                    }
-                    // 通知の日付
-                    HStack {
-                        Text("通知:")
-                        Text(dateText(date: itemData.notificationDate))
-                        // 期限が設定されているときのみ表示
-                        if let deadLine = itemData.deadLine {
-                            Spacer()
-                            Picker("", selection: $itemData.notificationDate) {
-                                ForEach(NotificationDate.allCases, id: \.self) { day in
-                                    Text(day.rawValue).tag(day.toDate(deadLine: deadLine))
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .disabled(isEditing == false)
-                        }
+                    DatePickerRow(itemData: $itemData, isEditing: $isEditing, isDeadLine: true)
+                    // 期限が設定されているときのみ表示
+                    if itemData.deadLine != nil {
+                        // 通知の日付
+                        DatePickerRow(itemData: $itemData, isEditing: $isEditing, isDeadLine: false)
                     }
                 }
                 // 個数
@@ -191,7 +151,7 @@ struct ItemDataView: View {
                                 }
                             }
                         }
-                        .pickerStyle(.menu)
+                                                              .pickerStyle(.menu)
                     } else {
                         Text((itemData.folder?.name!)!)
                     }
@@ -219,7 +179,7 @@ struct ItemDataView: View {
         })
         // 保存完了アラート
         .alert("変更を保存しました", isPresented: $savedAlert, actions: {
-            // 処理無し
+            // 処理なし
         }, message: {
             Text("登録日も更新されました。")
         })
@@ -300,14 +260,6 @@ struct ItemDataView: View {
             }
         }
     }
-    // 期限がある場合とない場合で違う画像を返す関数
-    private func deadLineIcon() -> String {
-        if itemData.deadLine == nil {
-            return "calendar.badge.plus"
-        } else {
-            return "xmark.circle.fill"
-        }
-    }
     // 編集モード切り替えボタンのテキストを返す関数
     private func editButtonText() -> String {
         if isEditing {
@@ -350,6 +302,14 @@ struct ItemDataView: View {
             items[index].folder = itemData.folder
             // 登録日も更新
             items[index].registrationDate = Date()
+            // 通知日に応じて通知を編集
+            if items[index].notificationDate == nil {
+                // 通知削除
+                notificationManager.removeNotification(item: items[index])
+            } else {
+                // 通知作成/上書き
+                notificationManager.makeNotification(item: items[index])
+            }
             // 保存
             do {
                 try context.save()

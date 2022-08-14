@@ -6,7 +6,7 @@
 //
 
 import Foundation
-// 期限の通知が期限の何日前かの列挙型
+// 期限の通知が期限の何日前かの列挙型（不要になったので削除）
 enum NotificationDate: String, CaseIterable {
     case onTheDay = "期限当日"
     case oneDay = "1日前"

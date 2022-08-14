@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F067E0928A93D03000FA713 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F067E0828A93D03000FA713 /* NotificationManager.swift */; };
 		7F0798FA27D9B268006BF1CF /* BarcodeReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0798F927D9B268006BF1CF /* BarcodeReaderView.swift */; };
 		7F0798FC27D9B630006BF1CF /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0798FB27D9B630006BF1CF /* ImagePickerView.swift */; };
 		7F0798FE27D9BF21006BF1CF /* ImageLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0798FD27D9BF21006BF1CF /* ImageLibraryView.swift */; };
@@ -36,6 +37,7 @@
 		7F944CA92877EE44008894AE /* FolderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F944CA82877EE44008894AE /* FolderRowView.swift */; };
 		7F944CAB2877EEF9008894AE /* Urgency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F944CAA2877EEF9008894AE /* Urgency.swift */; };
 		7F944CAE2877F501008894AE /* NotificationDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F944CAD2877F501008894AE /* NotificationDate.swift */; };
+		7F98A34928AE1D1B009220ED /* DatePickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F98A34828AE1D1B009220ED /* DatePickerRow.swift */; };
 		7FA5698627DB194900AB0EEF /* SampleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA5698527DB194900AB0EEF /* SampleImage.swift */; };
 		7FDFDB112823C43800D56402 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FDFDB102823C43800D56402 /* SoundPlayer.swift */; };
 		7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE8968227E4463B002E80B1 /* ListRowView.swift */; };
@@ -49,6 +51,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7F067E0828A93D03000FA713 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		7F0798F927D9B268006BF1CF /* BarcodeReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeReaderView.swift; sourceTree = "<group>"; };
 		7F0798FB27D9B630006BF1CF /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 		7F0798FD27D9BF21006BF1CF /* ImageLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLibraryView.swift; sourceTree = "<group>"; };
@@ -80,6 +83,7 @@
 		7F944CA82877EE44008894AE /* FolderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderRowView.swift; sourceTree = "<group>"; };
 		7F944CAA2877EEF9008894AE /* Urgency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Urgency.swift; sourceTree = "<group>"; };
 		7F944CAD2877F501008894AE /* NotificationDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDate.swift; sourceTree = "<group>"; };
+		7F98A34828AE1D1B009220ED /* DatePickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerRow.swift; sourceTree = "<group>"; };
 		7FA5698527DB194900AB0EEF /* SampleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleImage.swift; sourceTree = "<group>"; };
 		7FDFDB102823C43800D56402 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		7FE8968227E4463B002E80B1 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
@@ -139,6 +143,7 @@
 				7F4EFA5627EA187C0005461E /* ItemDataView.swift */,
 				7F730DD428092600002EBD76 /* ItemImageView.swift */,
 				7F5C967327F4976D0079CD69 /* AddImageButton.swift */,
+				7F98A34828AE1D1B009220ED /* DatePickerRow.swift */,
 				7F0798F927D9B268006BF1CF /* BarcodeReaderView.swift */,
 				7F0798FB27D9B630006BF1CF /* ImagePickerView.swift */,
 				7F0798FD27D9BF21006BF1CF /* ImageLibraryView.swift */,
@@ -198,6 +203,7 @@
 				7F18DA8628111B6A005472AC /* FolderGroup */,
 				7F18DA8728111BF6005472AC /* ItemDataGroup */,
 				7F5BA4D227D64CE800338C12 /* SettingView.swift */,
+				7F067E0828A93D03000FA713 /* NotificationManager.swift */,
 				7FDFDB102823C43800D56402 /* SoundPlayer.swift */,
 				7F317B6627E1C84300E1C2E1 /* Color.swift */,
 				7FF9519D28814C9600F7F7C1 /* CoreData */,
@@ -330,6 +336,7 @@
 				7F5BA4CF27D64C0A00338C12 /* HomeView.swift in Sources */,
 				7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */,
 				7F7660F6283A2D9E009D6291 /* CameraManager.swift in Sources */,
+				7F067E0928A93D03000FA713 /* NotificationManager.swift in Sources */,
 				7F5A6B9327E2EC6900DCCE81 /* Icon.swift in Sources */,
 				7FF951A6288150F700F7F7C1 /* Folder+CoreDataProperties.swift in Sources */,
 				7F46DCF12849D44800AB2715 /* RegisterRowView.swift in Sources */,
@@ -353,6 +360,7 @@
 				7F70E1CE27D1E55900C483B9 /* InventoryApp_okuboApp.swift in Sources */,
 				7FA5698627DB194900AB0EEF /* SampleImage.swift in Sources */,
 				7F0798FE27D9BF21006BF1CF /* ImageLibraryView.swift in Sources */,
+				7F98A34928AE1D1B009220ED /* DatePickerRow.swift in Sources */,
 				7FF951A7288150F700F7F7C1 /* Item+CoreDataClass.swift in Sources */,
 				7FE8968527E44A57002E80B1 /* ItemStatus.swift in Sources */,
 				7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */,

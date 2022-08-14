@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21G83" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Folder" representedClassName="Folder" syncable="YES">
         <attribute name="icon" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="isStock" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="folder" inverseEntity="Item"/>
+        <relationship name="items" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="folder" inverseEntity="Item"/>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES">
         <attribute name="deadLine" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -17,7 +17,7 @@
         <attribute name="numberOfItems" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="registrationDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="status" attributeType="String"/>
-        <relationship name="folder" maxCount="1" deletionRule="Nullify" destinationEntity="Folder" inverseName="items" inverseEntity="Folder"/>
+        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Folder" inverseName="items" inverseEntity="Folder"/>
     </entity>
     <elements>
         <element name="Folder" positionX="-63" positionY="-18" width="128" height="104"/>
