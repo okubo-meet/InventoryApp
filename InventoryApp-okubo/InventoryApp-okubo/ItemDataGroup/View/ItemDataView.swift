@@ -23,16 +23,26 @@ struct ItemDataView: View {
                   predicate: NSPredicate(format: "isStock == %@", NSNumber(value: false)),
                   animation: .default)
     private var buyFolders: FetchedResults<Folder>
-    /// 表示するデータ
+    // 登録された商品データを取得
+    @FetchRequest(entity: Item.entity(),
+                  sortDescriptors: [NSSortDescriptor(keyPath: \Item.registrationDate, ascending: true)])
+    private var items: FetchedResults<Item>
+    // 表示するデータ
     @Binding var itemData: ItemData
     // 在庫か買い物かの判定
     @State private var isStock = true
     // 編集可能状態の切り替えフラグ
     @State private var isEditing = true
+    // データ編集アラートのフラグ
+    @State private var editAlert = false
+    // 保存完了アラートのフラグ
+    @State private var savedAlert = false
     // 新規登録データか登録済みデータかの判定
     var isFolderItem: Bool
     // 画像のサイズ
     private let imageSize = CGFloat(UIScreen.main.bounds.width) / 3
+    //　効果音を扱うクラスのインスタンス
+    private let soundPlayer = SoundPlayer()
     // MARK: - View
     var body: some View {
         VStack {
@@ -43,16 +53,15 @@ struct ItemDataView: View {
             .pickerStyle(.segmented)
             .disabled(isEditing == false)
             .onChange(of: isStock, perform: { changed in
-                // 変更されたとき保存先フォルダも変更する
-                if changed {
-                    itemData.folder = stockFolders[0]
-                } else {
-                    // 画面起動時の変更ではフォルダを切り替えない
-                    if changed != itemData.folder?.isStock {
-                        itemData.folder = buyFolders[0]
-                        // 在庫リストから買い物リストに変更したとき通知を無効にする
-                        itemData.notificationDate = nil
-                    }
+                // 画面起動時の変更では値をを切り替えない
+                if changed != itemData.folder?.isStock {
+                    // デフォルトの値をセットする
+                    let defaultData = defaultValue(changed: changed)
+                    itemData.folder = defaultData.folder
+                    itemData.isHurry = defaultData.isHurry
+                    itemData.deadLine = defaultData.deadLine
+                    itemData.notificationDate = defaultData.notificationDate
+                    itemData.status = defaultData.status
                 }
             })
             List {
@@ -78,26 +87,26 @@ struct ItemDataView: View {
                 HStack {
                     Text("商品名:")
                     TextField("入力してください（必須）", text: $itemData.name)
-                    .disabled(isEditing == false)
+                        .disabled(isEditing == false)
                 }
                 // 期限と通知は在庫リストのみ表示
                 if isStock {
                     // 期限
                     HStack {
                         Text("期限:")
-                        if itemData.deadLine == nil {
-                            // 期限無し
-                            Text("無し")
-                        } else {
-                            DatePicker("", selection: Binding<Date>(get: {itemData.deadLine ?? Date()},
-                                                                    set: {itemData.deadLine = $0}),
-                                       displayedComponents: .date)
-                            .labelsHidden()
-                            .disabled(isEditing == false)
-                        }
-                        Spacer()
                         // 編集可能な場合のみ表示
                         if isEditing {
+                            if itemData.deadLine == nil {
+                                // 期限無し
+                                Text("無し")
+                            } else {
+                                DatePicker("", selection: Binding<Date>(get: {itemData.deadLine ?? Date()},
+                                                                        set: {itemData.deadLine = $0}),
+                                           displayedComponents: .date)
+                                .labelsHidden()
+                                .disabled(isEditing == false)
+                            }
+                            Spacer()
                             // 期限の有り無しを選択するボタン
                             Image(systemName: deadLineIcon())
                                 .foregroundColor(itemData.deadLine == nil ? .orange : .gray)
@@ -111,6 +120,8 @@ struct ItemDataView: View {
                                         itemData.notificationDate = nil
                                     }
                                 }
+                        } else {
+                            Text(dateText(date: itemData.deadLine))
                         }
                     }
                     // 通知の日付
@@ -188,7 +199,7 @@ struct ItemDataView: View {
                                 }
                             }
                         }
-                        .pickerStyle(.menu)
+                                                              .pickerStyle(.menu)
                     } else {
                         Text((itemData.folder?.name!)!)
                     }
@@ -201,6 +212,39 @@ struct ItemDataView: View {
             }// List
             .listStyle(.plain)
         }// VStack
+        // 編集終了アラート
+        .alert("データに変更があります", isPresented: $editAlert, actions: {
+            Button("キャンセル") {
+                // idが一致しているデータのインデックス番号を取得
+                if let index = items.firstIndex(where: {$0.id == itemData.id}) {
+                    // 変更されたデータを元に戻す
+                    isStock = items[index].folder!.isStock
+                    itemData = changeCancel(item: items[index])
+                }
+            }
+            Button("保存") {
+                // idが一致しているデータのインデックス番号を取得
+                if let index = items.firstIndex(where: {$0.id == itemData.id}) {
+                    // 変更をCoreDataに保存する
+                    saveItem(item: items[index], itemData: itemData)
+                    // 登録日の表示を更新
+                    itemData.registrationDate = items[index].registrationDate!
+                    // 保存完了アラート表示
+                    savedAlert.toggle()
+                    // 効果音再生
+                    soundPlayer.saveSoundPlay()
+                }
+            }
+        }, message: {
+            Text("この状態で保存しますか？")
+        })
+        // 保存完了アラート
+        .alert("変更を保存しました", isPresented: $savedAlert, actions: {
+            // 処理無し
+        }, message: {
+            Text("登録日も更新されました。")
+        })
+        // タイトル
         .navigationBarTitleDisplayMode(.inline)
         // ツールバー
         .toolbar(content: {
@@ -208,6 +252,15 @@ struct ItemDataView: View {
                 // 登録済みのデータの場合は編集切り替えボタンを表示する
                 if isFolderItem {
                     Button(editButtonText()) {
+                        // 編集を終了するときアラート表示
+                        if isEditing {
+                            if let index = items.firstIndex(where: {$0.id == itemData.id}) {
+                                // 変更がある場合のみアラートを表示
+                                if isDataChange(item: items[index], itemData: itemData) {
+                                    editAlert.toggle()
+                                }
+                            }
+                        }
                         withAnimation {
                             isEditing.toggle()
                         }
@@ -218,10 +271,9 @@ struct ItemDataView: View {
         // 画面起動時
         .onAppear {
             // 在庫リストかどうかの判定
-            if let itemFolder = itemData.folder?.isStock {
-                isStock = itemFolder
+            if let folderType = itemData.folder?.isStock {
+                isStock = folderType
             }
-            print("登録済みデータ: \(isFolderItem)")
             if isFolderItem {
                 // 登録済みのデータなら編集不可状態にする
                 isEditing = false
@@ -232,13 +284,36 @@ struct ItemDataView: View {
     // 日付フォーマットの関数
     private func dateText(date: Date?) -> String {
         guard let date = date else {
-            return "なし"
+            return "無し"
         }
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateStyle = .medium
         dateFormatter.dateFormat = "yyyy/MM/dd"
         return dateFormatter.string(from: date)
+    }
+    // 在庫データ買い物データを切り替えた時の関数
+    private func defaultValue(changed: Bool) -> ItemData {
+        // 初期値
+        var value = ItemData()
+        // 変更されたとき保存先フォルダを変更する
+        if changed {
+            // 在庫のフォルダを代入
+            value.folder = stockFolders[0]
+        } else {
+            // 買い物のフォルダを代入
+            value.folder = buyFolders[0]
+        }
+        // 既に登録されているデータかつ
+        if let index = items.firstIndex(where: {$0.id == itemData.id}) {
+            let savedData = changeCancel(item: items[index])
+            // 元のタイプに戻った時
+            if savedData.folder?.isStock == changed {
+                // 登録されている値を代入
+                value = savedData
+            }
+        }
+        return value
     }
     // 期限がある場合とない場合で違う画像を返す関数
     private func deadLineIcon() -> String {
@@ -255,6 +330,58 @@ struct ItemDataView: View {
         } else {
             return "編集"
         }
+    }
+    // データが変更されているか判定する関数
+    private func isDataChange(item: Item, itemData: ItemData) -> Bool {
+        // 登録されたデータと一致しているか判定
+        if item.name == itemData.name
+            && item.image == itemData.image
+            && item.notificationDate == itemData.notificationDate
+            && item.deadLine == itemData.deadLine
+            && item.status == itemData.status
+            && item.isHurry == itemData.isHurry
+            && item.numberOfItems == itemData.numberOfItems
+            && item.folder == itemData.folder {
+            // 変更無し
+            return false
+        }
+        // 変更あり
+        return true
+    }
+    // データの変更を保存する関数
+    private func saveItem(item: Item, itemData: ItemData) {
+        // 上書き
+        item.name = itemData.name
+        item.image = itemData.image
+        item.notificationDate = itemData.notificationDate
+        item.deadLine = itemData.deadLine
+        item.status = itemData.status
+        item.isHurry = itemData.isHurry
+        item.numberOfItems = itemData.numberOfItems
+        item.folder = itemData.folder
+        // 登録日も更新
+        item.registrationDate = Date()
+        // 保存
+        do {
+            try context.save()
+        } catch {
+            print(error)
+        }
+    }
+    // データの変更を破棄する関数
+    private func changeCancel(item: Item) -> ItemData {
+        var returnData = ItemData()
+        // 変更前の状態に戻す（登録日は変更できないので割愛）
+        returnData.id = item.id!
+        returnData.name = item.name!
+        returnData.image = item.image
+        returnData.notificationDate = item.notificationDate
+        returnData.deadLine = item.deadLine
+        returnData.status = item.status!
+        returnData.isHurry = item.isHurry
+        returnData.numberOfItems = item.numberOfItems
+        returnData.folder = item.folder
+        return returnData
     }
 }
 

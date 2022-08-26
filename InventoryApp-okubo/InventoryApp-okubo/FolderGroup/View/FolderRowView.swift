@@ -16,7 +16,7 @@ struct FolderRowView: View {
     // 選択したフォルダのID
     @Binding var folderID: UUID?
     // 表示するフォルダ
-    var folder: Folder
+    @ObservedObject var folder: Folder
     // MARK: - View
     var body: some View {
         if isEditing {

@@ -32,7 +32,6 @@ struct RegisterView: View {
     // MARK: - View
     var body: some View {
         NavigationView {
-            
             VStack {
                 ZStack {
                     VStack {
