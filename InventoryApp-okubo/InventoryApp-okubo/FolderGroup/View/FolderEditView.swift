@@ -220,12 +220,9 @@ struct FolderEditView: View {
             // １つしかない場合は削除やタイプを変更をできないようにする
             if searchedFolders.count == 1 {
                 return true
-            } else {
-                return false
             }
-        } else {
-            return false
         }
+        return false
     }
     // 編集フォルダに変更がない時は保存ボタンを無効化する関数
     private func isNoChange() -> Bool {
@@ -237,14 +234,10 @@ struct FolderEditView: View {
                 && folders[index].icon == editIcon {
                 // 変更無し
                 return true
-            } else {
-                // 変更有り
-                return false
             }
-        } else {
-            // 新規作成なので関係なし
-            return false
         }
+        // 新規作成 or 変更点あり
+        return false
     }
 }
 
