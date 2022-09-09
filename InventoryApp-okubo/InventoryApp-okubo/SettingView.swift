@@ -13,12 +13,18 @@ struct SettingView: View {
         NavigationView {
             Form {
                 Section {
-                    Text("通知の許可")
-                    Text("期限通知の時刻")
+                    Button("通知の許可") {
+                        let url = URL(string: UIApplication.openSettingsURLString)
+                        UIApplication.shared.open(url!)
+                    }
+                } header: {
+                    Text("通知設定")
                 }
                 Section {
                     Text("iCloudの使用")
                     Text("ファミリー共有")
+                } header: {
+                    Text("iCloud設定")
                 }
                 Section {
                     Text("広告の非表示")

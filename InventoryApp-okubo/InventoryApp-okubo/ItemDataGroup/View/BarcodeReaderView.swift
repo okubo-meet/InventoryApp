@@ -194,8 +194,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     }
     /// 商品検索終了時に呼び出される関数 クロージャの引数として扱う
     private func searchFinished(result: SearchResult) {
-        // 非同期処理
-        Task {
+        // 非同期処理(メインスレッドで実行)
+        Task { @MainActor in
             isLoading = false
             switch result {
             case .success:
@@ -209,13 +209,7 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
                         itemData.name = rakutenAPI.resultItemName
                         itemData.image = rakutenAPI.resultImageData
                     }
-//                    let resultItem = ItemData(name: rakutenAPI.resultItemName,
-//                                              image: rakutenAPI.resultImageData,
-//                                              folder: "食品")
-//                    let resultItem = Item()
-//                    resultItem.name = rakutenAPI.resultItemName
-//                    resultItem.image = rakutenAPI.resultImageData
-//                    RakutenAPI.resultItems.append()
+                    // 登録画面に渡す配列に加える
                     RakutenAPI.resultItems.append((name: rakutenAPI.resultItemName, image: rakutenAPI.resultImageData))
                 }
                 successAlert()

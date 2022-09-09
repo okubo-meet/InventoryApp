@@ -27,6 +27,8 @@ struct RegisterView: View {
     @State private var newItems: [ItemData] = []
     //　効果音を扱うクラスのインスタンス
     private let soundPlayer = SoundPlayer()
+    // 通知を扱うクラスのインスタンス
+    private let notificationManager = NotificationManager()
     // 新規登録データの上限値
     private let maxItems = 10
     // MARK: - View
@@ -180,6 +182,11 @@ struct RegisterView: View {
             item.numberOfItems = newItem.numberOfItems
             item.registrationDate = newItem.registrationDate
             item.folder = newItem.folder
+            // 通知日時が設定されている場合
+            if item.notificationDate != nil {
+                // 通知作成
+                notificationManager.makeNotification(item: item)
+            }
         }
         do {
             // 保存

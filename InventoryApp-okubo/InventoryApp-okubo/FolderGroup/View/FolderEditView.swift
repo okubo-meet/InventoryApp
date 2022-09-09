@@ -31,6 +31,8 @@ struct FolderEditView: View {
     @State private var deleteAlert = false
     // 効果音を扱うクラスのインスタンス
     private let soundPlayer = SoundPlayer()
+    // 通知を扱うクラスのインスタンス
+    private let notificationManager = NotificationManager()
     // MARK: - View
     var body: some View {
         NavigationView {
@@ -143,7 +145,7 @@ struct FolderEditView: View {
         if let index = folders.firstIndex(where: {$0.id == folderID}) {
             return index
         } else {
-            print("IDが一致するフォルダがありません")
+            //            print("IDが一致するフォルダがありません")
             return nil
         }
     }
@@ -181,7 +183,13 @@ struct FolderEditView: View {
         guard let index = folderIndex() else {
             return
         }
-        // 削除
+        // フォルダ内の商品データを取得
+        let items = folderItems(items: folders[index].items)
+        for item in items {
+            // 通知を削除
+            notificationManager.removeNotification(item: item)
+        }
+        // フォルダ削除
         context.delete(folders[index])
         do {
             // 保存
@@ -189,6 +197,16 @@ struct FolderEditView: View {
             print("フォルダ削除完了")
         } catch {
             print(error)
+        }
+    }
+    // フォルダ内の商品を検索して返す関数
+    private func folderItems(items: NSSet?) -> [Item] {
+        // NSSet? を [Item]に変換
+        if let setItems = items as? Set<Item> {
+            // 通知が設定されている商品の配列を返す
+            return setItems.sorted(by: {$0.registrationDate! < $1.registrationDate!})
+        } else {
+            return []
         }
     }
     // 編集しているフォルダと同じ種類のフォルダの存在をチェックする関数

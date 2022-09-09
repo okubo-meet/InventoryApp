@@ -25,6 +25,8 @@ struct ItemListView: View {
     @State private var selectedItemID: [UUID] = []
     // 遷移先に渡す商品データ
     @State private var selectItem = ItemData()
+    // 通知を扱うクラスのインスタンス
+    private let notificationManager = NotificationManager()
     // MARK: - View
     var body: some View {
         ZStack {
@@ -91,6 +93,7 @@ struct ItemListView: View {
                     for uuid in selectedItemID {
                         // 検索してデータを削除する
                         if let removeItem = folderItems(items: folder.items).first(where: {$0.id == uuid}) {
+                            notificationManager.removeNotification(item: removeItem)
                             context.delete(removeItem)
                         }
                     }
@@ -183,7 +186,11 @@ struct ItemListView: View {
     // navigationTitleに表示する文字列を返す関数
     private func navigationTitleString() -> String {
         if selectedItemID.isEmpty {
-            return folder.name!
+            if let name = folder.name {
+                return name
+            } else {
+                return ""
+            }
         } else {
             return "\(selectedItemID.count)個選択"
         }
