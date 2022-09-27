@@ -35,6 +35,48 @@ struct RegisterView: View {
     var body: some View {
         NavigationView {
             VStack {
+                // メニューバー
+                HStack {
+                    Spacer()
+                    // 空のデータ追加ボタン
+                    Button("作成") {
+                        withAnimation {
+                            addNewItem()
+                        }
+                    }
+                    .disabled(newItems.count == maxItems)
+                    Spacer()
+                    // バーコードリーダー呼び出しボタン
+                    Button(action: {
+                        // 配列の最後尾が空のデータでないときは新規データを作成してシートを起動
+                        if newItems.isEmpty {
+                            addNewItem()
+                        } else if newItems.last?.name != "" || newItems.last?.image != nil {
+                            addNewItem()
+                        }
+                        // 読み取り上限を設定 リストの最後尾はBindingで渡すのでカウントしない
+                        let number = newItems.count - 1
+                        RakutenAPI.readLimit = maxItems - number
+                        RakutenAPI.resultItems.removeAll()
+                        showSheet.toggle()
+                    }, label: {
+                        Image(systemName: "barcode.viewfinder")
+                    })
+                    .disabled(newItems.count == maxItems)
+                    Spacer()
+                    // 登録ボタン
+                    Button("登録") {
+                        // 名前が入力されていないデータがあるときはアラート表示
+                        if newItems.allSatisfy({$0.name != ""}) {
+                            // 商品登録
+                            saveItem()
+                        } else {
+                            noNameAlert.toggle()
+                        }
+                    }
+                    .disabled(newItems.isEmpty)
+                    Spacer()
+                }// HStack
                 ZStack {
                     VStack {
                         List {
@@ -55,8 +97,9 @@ struct RegisterView: View {
                             Text("登録するデータがありません")
                                 .font(.title)
                                 .padding(.bottom)
-                            Text("「追加」を押してデータを作成する。")
+                            Text("「作成」を押してデータを作成する。")
                             Text(Image(systemName: "barcode.viewfinder")) + Text("バーコードを読み取って作成する。")
+                            Text("データは左スワイプで削除できる。")
                             Spacer()
                         }
                         .foregroundColor(.gray)
@@ -100,55 +143,6 @@ struct RegisterView: View {
             // MARK: - ナビゲーションバー
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("商品登録")
-            .toolbar {
-                // 画面右上
-                ToolbarItem(placement: .navigationBarTrailing, content: {
-                    Button("登録") {
-                        // 名前が入力されていないデータがあるときはアラート表示
-                        if newItems.allSatisfy({$0.name != ""}) {
-                            // 商品登録
-                            saveItem()
-                        } else {
-                            noNameAlert.toggle()
-                        }
-                    }
-                    .disabled(newItems.isEmpty)
-                })
-                // ボトムバー
-                ToolbarItem(placement: .bottomBar, content: {
-                    HStack {
-                        // 編集モード起動ボタン
-                        EditButton()
-                            .disabled(newItems.isEmpty)
-                        Spacer()
-                        // バーコードリーダー呼び出しボタン
-                        Button(action: {
-                            // 配列の最後尾が空のデータでないときは新規データを作成してシートを起動
-                            if newItems.isEmpty {
-                                addNewItem()
-                            } else if newItems.last?.name != "" || newItems.last?.image != nil {
-                                addNewItem()
-                            }
-                            // 読み取り上限を設定 リストの最後尾はBindingで渡すのでカウントしない
-                            let number = newItems.count - 1
-                            RakutenAPI.readLimit = maxItems - number
-                            RakutenAPI.resultItems.removeAll()
-                            showSheet.toggle()
-                        }, label: {
-                            Image(systemName: "barcode.viewfinder")
-                        })
-                        .disabled(newItems.count == maxItems)
-                        Spacer()
-                        Button("作成") {
-                            // 空のデータ追加
-                            withAnimation {
-                                addNewItem()
-                            }
-                        }
-                        .disabled(newItems.count == maxItems)
-                    }// HStack
-                })
-            }// toolbar
         }
     }
     // MARK: - メソッド

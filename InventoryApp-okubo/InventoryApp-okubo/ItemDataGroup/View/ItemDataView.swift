@@ -37,6 +37,8 @@ struct ItemDataView: View {
     @State private var editAlert = false
     // 保存完了アラートのフラグ
     @State private var savedAlert = false
+    // TextFieldのフォーカスを制御する変数
+    @FocusState private var focusState: Bool
     // 新規登録データか登録済みデータかの判定
     var isFolderItem: Bool
     // 画像のサイズ
@@ -90,15 +92,18 @@ struct ItemDataView: View {
                     Text("商品名:")
                     TextField("入力してください（必須）", text: $itemData.name)
                         .disabled(isEditing == false)
+                        .focused($focusState)
                 }
                 // 期限と通知は在庫リストのみ表示
                 if isStock {
                     // 期限
-                    DatePickerRow(itemData: $itemData, isEditing: $isEditing, isDeadLine: true)
+                    DatePickerRow(itemData: $itemData, isEditing: $isEditing,
+                                  isDeadLine: true)
                     // 期限が設定されているときのみ表示
                     if itemData.deadLine != nil {
                         // 通知の日付
-                        DatePickerRow(itemData: $itemData, isEditing: $isEditing, isDeadLine: false)
+                        DatePickerRow(itemData: $itemData, isEditing: $isEditing,
+                                      isDeadLine: false)
                     }
                 }
                 // 個数
@@ -159,7 +164,7 @@ struct ItemDataView: View {
                                 }
                             }
                         }
-                                                              .pickerStyle(.menu)
+                        .pickerStyle(.menu)
                     } else {
                         Text((itemData.folder?.name!)!)
                     }
@@ -217,7 +222,9 @@ struct ItemDataView: View {
                             if let index = items.firstIndex(where: {$0.id == itemData.id}) {
                                 // 変更がある場合のみアラートを表示
                                 if isDataChange(item: items[index], itemData: itemData) {
-                                    editAlert.toggle()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                        editAlert.toggle()
+                                    }
                                 }
                             }
                         }
@@ -225,6 +232,16 @@ struct ItemDataView: View {
                             isEditing.toggle()
                         }
                     }
+                }
+            })
+            // キーボードを閉じるボタン
+            ToolbarItem(placement: .keyboard, content: {
+                HStack {
+                    Spacer()
+                    Button("閉じる") {
+                        focusState = false
+                    }
+                    .foregroundColor(.blue)
                 }
             })
         })// toolbar

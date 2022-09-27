@@ -29,6 +29,8 @@ struct FolderEditView: View {
     @State private var saveAlert = false
     // フォルダ削除アラートのフラグ
     @State private var deleteAlert = false
+    // フォルダ名のTextFieldのフォーカス
+    @FocusState private var focusState: Bool
     // 効果音を扱うクラスのインスタンス
     private let soundPlayer = SoundPlayer()
     // 通知を扱うクラスのインスタンス
@@ -42,6 +44,7 @@ struct FolderEditView: View {
                         Text("フォルダ名")
                         TextField("入力してください", text: $editName)
                             .textFieldStyle(.roundedBorder)
+                            .focused($focusState)
                     }
                     Picker("タイプ", selection: $editStock, content: {
                         Text("在庫リスト").tag(true)
@@ -62,6 +65,7 @@ struct FolderEditView: View {
                             // 削除アラート起動
                             deleteAlert.toggle()
                             soundPlayer.deleteVibrationPlay()
+                            focusState = false
                         }, label: {
                             HStack {
                                 Image(systemName: "trash.fill")
@@ -124,6 +128,16 @@ struct FolderEditView: View {
                         soundPlayer.saveSoundPlay()
                     }
                     .disabled(editName == "" || isNoChange())// フォルダ名が無いか、どの項目にも変更がない場合無効化
+                })
+                // キーボードを閉じるボタン
+                ToolbarItem(placement: .keyboard, content: {
+                    HStack {
+                        Spacer()
+                        Button("閉じる") {
+                            focusState = false
+                        }
+                        .foregroundColor(.blue)
+                    }
                 })
             })// toolbar
         }// NavigationView
