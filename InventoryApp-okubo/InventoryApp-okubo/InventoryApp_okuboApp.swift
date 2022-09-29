@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct InventoryApp_okuboApp: App {
+    // AppDelegate設定
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     // NSPersistentContainerの初期化
     let persistenceController = PersistenceController.shared
     var body: some Scene {

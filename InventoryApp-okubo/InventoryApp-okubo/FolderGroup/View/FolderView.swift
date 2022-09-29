@@ -30,31 +30,37 @@ struct FolderView: View {
     // MARK: - View
     var body: some View {
         NavigationView {
-            Form {
-                // 在庫リストのフォルダ
-                Section {
-                    ForEach(stockFolders) { folder in
-                        FolderRowView(isEditing: $isEditing, showSheet: $showSheet,
-                                      folderID: $folderID, folder: folder)
-                    }// ForEach
-                } header: {
-                    Text("在庫リスト")
+            VStack {
+                Form {
+                    // 在庫リストのフォルダ
+                    Section {
+                        ForEach(stockFolders) { folder in
+                            FolderRowView(isEditing: $isEditing, showSheet: $showSheet,
+                                          folderID: $folderID, folder: folder)
+                        }// ForEach
+                    } header: {
+                        Text("在庫リスト")
+                    }
+                    // 買い物リストのフォルダ
+                    Section {
+                        ForEach(buyFolders) { folder in
+                            FolderRowView(isEditing: $isEditing, showSheet: $showSheet,
+                                          folderID: $folderID, folder: folder)
+                        }// ForEach
+                    } header: {
+                        Text("買い物リスト")
+                    }
+                }// Form
+                // フォルダが無い場合の表示
+                if stockFolders.isEmpty && buyFolders.isEmpty {
+                    NoFolderView()
                 }
-                // 買い物リストのフォルダ
-                Section {
-                    ForEach(buyFolders) { folder in
-                        FolderRowView(isEditing: $isEditing, showSheet: $showSheet,
-                                      folderID: $folderID, folder: folder)
-                    }// ForEach
-                } header: {
-                    Text("買い物リスト")
-                }
-            }// Form
+            }
             .sheet(isPresented: $showSheet, content: {
                 // 設定画面
                 FolderEditView(folderID: $folderID)
             })
-            .navigationTitle("フォルダ")
+            .navigationTitle(titleText())
             .toolbar {
                 // 編集ボタン
                 ToolbarItem(placement: .navigationBarTrailing, content: {
@@ -69,6 +75,7 @@ struct FolderView: View {
                             Text("編集")
                         }
                     })
+                    .disabled(stockFolders.isEmpty && buyFolders.isEmpty)
                 })
                 // 新規作成ボタン
                 ToolbarItem(placement: .bottomBar, content: {
@@ -85,6 +92,15 @@ struct FolderView: View {
                 })
             }// toolbar
         }// NavigationView
+    }
+    // MARK: - メソッド
+    // navigationTitleの文字列を返す関数
+    private func titleText() -> String {
+        if isEditing {
+            return "編集中"
+        } else {
+            return "フォルダ"
+        }
     }
 }
 
