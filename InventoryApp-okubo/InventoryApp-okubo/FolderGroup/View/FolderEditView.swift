@@ -200,8 +200,11 @@ struct FolderEditView: View {
         // フォルダ内の商品データを取得
         let items = folderItems(items: folders[index].items)
         for item in items {
-            // 通知を削除
-            notificationManager.removeNotification(item: item)
+            // ローカル通知の識別ID
+            if let identifier = item.id?.uuidString {
+                // 通知を削除
+                notificationManager.removeNotification(identifier: identifier)
+            }
         }
         // フォルダ削除
         context.delete(folders[index])
