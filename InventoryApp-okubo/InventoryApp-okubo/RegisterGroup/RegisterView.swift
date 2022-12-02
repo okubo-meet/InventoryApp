@@ -11,12 +11,11 @@ struct RegisterView: View {
     // MARK: - プロパティ
     // 被管理オブジェクトコンテキスト（ManagedObjectContext）の取得
     @Environment(\.managedObjectContext) private var context
-    // 在庫リストのフォルダのみ取得（新規作成の初期値に使う）
+    // フォルダデータの取得
     @FetchRequest(entity: Folder.entity(),
                   sortDescriptors: [NSSortDescriptor(keyPath: \Folder.id, ascending: false)],
-                  predicate: NSPredicate(format: "isStock == %@", NSNumber(value: true)),
                   animation: .default)
-    private var stockFolders: FetchedResults<Folder>
+    private var folders: FetchedResults<Folder>
     // 登録完了アラートのフラグ
     @State private var saveAlert = false
     // 名前のないデータに対するアラートのフラグ
@@ -44,7 +43,7 @@ struct RegisterView: View {
                             addNewItem()
                         }
                     }
-                    .disabled(newItems.count == maxItems)
+                    .disabled(newItems.count == maxItems || folders.isEmpty)
                     Spacer()
                     // バーコードリーダー呼び出しボタン
                     Button(action: {
@@ -62,7 +61,7 @@ struct RegisterView: View {
                     }, label: {
                         Image(systemName: "barcode.viewfinder")
                     })
-                    .disabled(newItems.count == maxItems)
+                    .disabled(newItems.count == maxItems || folders.isEmpty)
                     Spacer()
                     // 登録ボタン
                     Button("登録") {
@@ -79,6 +78,7 @@ struct RegisterView: View {
                 }// HStack
                 ZStack {
                     VStack {
+                        // 新規作成データリスト
                         List {
                             ForEach(0..<newItems.count, id: \.self) { index in
                                 NavigationLink(destination: ItemDataView(itemData: $newItems[index],
@@ -88,23 +88,31 @@ struct RegisterView: View {
                             }
                             .onDelete(perform: rowRemove)
                         }// List
-                        Text("\(newItems.count)/\(maxItems)")
-                            .font(.callout)
+                        if folders.count != 0 {
+                            Text("\(newItems.count)/\(maxItems)")
+                                .font(.callout)
+                        }
                     }
                     if newItems.isEmpty {
-                        VStack {
-                            Spacer()
-                            Text("登録するデータがありません")
-                                .font(.title)
-                                .padding(.bottom)
-                            Text("「作成」を押してデータを作成する。")
-                            Text(Image(systemName: "barcode.viewfinder")) + Text("バーコードを読み取って作成する。")
-                            Text("データは左スワイプで削除できる。")
-                            Spacer()
+                        if folders.isEmpty {
+                            // フォルダが一つもない場合の表示
+                            NoFolderView()
+                        } else {
+                            // 新規作成可能
+                            VStack {
+                                Spacer()
+                                Text("登録するデータがありません")
+                                    .font(.title)
+                                    .padding(.bottom)
+                                Text("「作成」を押してデータを作成する。")
+                                Text(Image(systemName: "barcode.viewfinder")) + Text("バーコードを読み取って作成する。")
+                                Text("データは左スワイプで削除できる。")
+                                Spacer()
+                            }
+                            .foregroundColor(.gray)
+                            .frame(minWidth: 0, maxWidth: .infinity,
+                                   minHeight: 0, maxHeight: .infinity, alignment: .center)
                         }
-                        .foregroundColor(.gray)
-                        .frame(minWidth: 0, maxWidth: .infinity,
-                               minHeight: 0, maxHeight: .infinity, alignment: .center)
                     }
                 }// ZStack
             }// VStack
@@ -132,7 +140,7 @@ struct RegisterView: View {
                         var resultItemData = ItemData()
                         resultItemData.name = item.name
                         resultItemData.image = item.image
-                        resultItemData.folder = stockFolders[0]
+                        resultItemData.folder = newItemFolder()
                         newItems.append(resultItemData)
                     }
                 }
@@ -150,11 +158,17 @@ struct RegisterView: View {
     private func rowRemove(offsets: IndexSet) {
         newItems.remove(atOffsets: offsets)
     }
+    // 新規作成データのデフォルトフォルダを返す関数
+    private func newItemFolder() -> Folder {
+        // 在庫フォルダの先頭を返す
+        let stockFolders = folders.filter({ $0.isStock == true })
+        return stockFolders[0]
+    }
     // 空のデータを作成する関数
     private func addNewItem() {
         var newItem = ItemData()
         // フォルダの初期値設定
-        newItem.folder = stockFolders[0]
+        newItem.folder = newItemFolder()
         print("\(newItem)")
         // 配列に加える
         newItems.append(newItem)

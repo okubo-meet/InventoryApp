@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CloudKit
 // 設定画面　TabViewで扱うView
 struct SettingView: View {
     // MARK: - View
@@ -32,6 +33,28 @@ struct SettingView: View {
             }// Form
             .navigationTitle("設定")
         }// NavigationView
+    }
+    // iCloudアカウントの状態をチェックする関数
+    func accountRequest() {
+        CKContainer.default().accountStatus { status, error in
+            if let error = error {
+                print("iCloudアカウントの状態確認に失敗: \(error.localizedDescription)")
+            }
+            switch status {
+            case .available:
+                print("iCloudアカウントが利用可能")
+            case .couldNotDetermine:
+                print("状態を判断できなかった")
+            case .restricted:
+                print("iCloudアカウントへのアクセスを拒否")
+            case .noAccount:
+                print("iCloudアカウントにログインされていない")
+            case .temporarilyUnavailable:
+                print("iCloudアカウントは一時的に利用できません")
+            @unknown default:
+                print("iCloudアカウントの不明なエラー")
+            }
+        }
     }
 }
 

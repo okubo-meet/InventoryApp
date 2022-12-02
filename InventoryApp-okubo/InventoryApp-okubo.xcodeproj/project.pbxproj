@@ -12,6 +12,7 @@
 		7F0798FC27D9B630006BF1CF /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0798FB27D9B630006BF1CF /* ImagePickerView.swift */; };
 		7F0798FE27D9BF21006BF1CF /* ImageLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0798FD27D9BF21006BF1CF /* ImageLibraryView.swift */; };
 		7F1DC17F28328D1300992908 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1DC17E28328D1300992908 /* SearchResult.swift */; };
+		7F2F05062924D24200AEEF97 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2F05052924D24200AEEF97 /* AppDelegate.swift */; };
 		7F317B6727E1C84300E1C2E1 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F317B6627E1C84300E1C2E1 /* Color.swift */; };
 		7F46DCF12849D44800AB2715 /* RegisterRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F46DCF02849D44800AB2715 /* RegisterRowView.swift */; };
 		7F47C30127D742D9006343B4 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F47C30027D742D9006343B4 /* RegisterView.swift */; };
@@ -30,6 +31,7 @@
 		7F730DD528092600002EBD76 /* ItemImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F730DD428092600002EBD76 /* ItemImageView.swift */; };
 		7F7660F6283A2D9E009D6291 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7660F5283A2D9E009D6291 /* CameraManager.swift */; };
 		7F7CD3E727D8EA8A005A953B /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7CD3E627D8EA8A005A953B /* ItemListView.swift */; };
+		7F84416A28FE3ADB001E06CE /* NoFolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F84416928FE3ADB001E06CE /* NoFolderView.swift */; };
 		7F944CA72877ED72008894AE /* FolderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F944CA62877ED72008894AE /* FolderEditView.swift */; };
 		7F944CA92877EE44008894AE /* FolderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F944CA82877EE44008894AE /* FolderRowView.swift */; };
 		7F944CAB2877EEF9008894AE /* Urgency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F944CAA2877EEF9008894AE /* Urgency.swift */; };
@@ -52,6 +54,8 @@
 		7F0798FB27D9B630006BF1CF /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 		7F0798FD27D9BF21006BF1CF /* ImageLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLibraryView.swift; sourceTree = "<group>"; };
 		7F1DC17E28328D1300992908 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		7F27C36728E57C0F0025F181 /* InventoryApp-okubo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "InventoryApp-okubo.entitlements"; sourceTree = "<group>"; };
+		7F2F05052924D24200AEEF97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7F317B6627E1C84300E1C2E1 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		7F46DCF02849D44800AB2715 /* RegisterRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterRowView.swift; sourceTree = "<group>"; };
 		7F47C30027D742D9006343B4 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
@@ -72,6 +76,7 @@
 		7F730DD428092600002EBD76 /* ItemImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemImageView.swift; sourceTree = "<group>"; };
 		7F7660F5283A2D9E009D6291 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		7F7CD3E627D8EA8A005A953B /* ItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListView.swift; sourceTree = "<group>"; };
+		7F84416928FE3ADB001E06CE /* NoFolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoFolderView.swift; sourceTree = "<group>"; };
 		7F944CA62877ED72008894AE /* FolderEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderEditView.swift; sourceTree = "<group>"; };
 		7F944CA82877EE44008894AE /* FolderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderRowView.swift; sourceTree = "<group>"; };
 		7F944CAA2877EEF9008894AE /* Urgency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Urgency.swift; sourceTree = "<group>"; };
@@ -104,6 +109,7 @@
 			children = (
 				7F47C30027D742D9006343B4 /* RegisterView.swift */,
 				7F46DCF02849D44800AB2715 /* RegisterRowView.swift */,
+				7F84416928FE3ADB001E06CE /* NoFolderView.swift */,
 			);
 			path = RegisterGroup;
 			sourceTree = "<group>";
@@ -185,7 +191,9 @@
 		7F70E1CC27D1E55900C483B9 /* InventoryApp-okubo */ = {
 			isa = PBXGroup;
 			children = (
+				7F27C36728E57C0F0025F181 /* InventoryApp-okubo.entitlements */,
 				7F70E1CD27D1E55900C483B9 /* InventoryApp_okuboApp.swift */,
+				7F2F05052924D24200AEEF97 /* AppDelegate.swift */,
 				7F70E1CF27D1E55900C483B9 /* ContentView.swift */,
 				7F18DA8528111A30005472AC /* RegisterGroup */,
 				7F18DA8628111B6A005472AC /* FolderGroup */,
@@ -321,12 +329,14 @@
 				7F0798FA27D9B268006BF1CF /* BarcodeReaderView.swift in Sources */,
 				7F944CA92877EE44008894AE /* FolderRowView.swift in Sources */,
 				7FF951A8288150F700F7F7C1 /* Item+CoreDataProperties.swift in Sources */,
+				7F84416A28FE3ADB001E06CE /* NoFolderView.swift in Sources */,
 				7FE8968327E4463B002E80B1 /* ListRowView.swift in Sources */,
 				7F7660F6283A2D9E009D6291 /* CameraManager.swift in Sources */,
 				7F067E0928A93D03000FA713 /* NotificationManager.swift in Sources */,
 				7F5A6B9327E2EC6900DCCE81 /* Icon.swift in Sources */,
 				7FF951A6288150F700F7F7C1 /* Folder+CoreDataProperties.swift in Sources */,
 				7F46DCF12849D44800AB2715 /* RegisterRowView.swift in Sources */,
+				7F2F05062924D24200AEEF97 /* AppDelegate.swift in Sources */,
 				7F5BA4D327D64CE800338C12 /* SettingView.swift in Sources */,
 				7F4EFA5727EA187C0005461E /* ItemDataView.swift in Sources */,
 				7F70E1D027D1E55900C483B9 /* ContentView.swift in Sources */,
@@ -477,6 +487,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "InventoryApp-okubo/InventoryApp-okubo.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -496,7 +507,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.icloud.slow-dancer-815.InventoryApp-okubo";
+				PRODUCT_BUNDLE_IDENTIFIER = "slow-dancer-815.InventoryApp-okubo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -510,6 +521,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "InventoryApp-okubo/InventoryApp-okubo.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -529,7 +541,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.icloud.slow-dancer-815.InventoryApp-okubo";
+				PRODUCT_BUNDLE_IDENTIFIER = "slow-dancer-815.InventoryApp-okubo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
