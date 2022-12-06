@@ -24,46 +24,60 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         print("ユーザーデフォルト: \(didCreateQuerySubscription)")
         // ユーザーデフォルトの値がfalseの時の処理（サブスクリプション作成）
         if !didCreateQuerySubscription {
-            // データベース
-            let containerIdentifier = "iCloud.InventoryApp-okubo"
-            let ckContainer = CKContainer(identifier: containerIdentifier)
-            let cloudDatabase = ckContainer.privateCloudDatabase
-            // cloud変更のサブスクリプション作成
-            let subscriptionID = "com.apple.coredata.cloudkit.private.subscription"
-            let ckSubscription = CKQuerySubscription(recordType: "CD_Item",
-                                                     predicate: NSPredicate(value: true),
-                                                     subscriptionID: subscriptionID,
-                                                     options: [.firesOnRecordCreation,
-                                                               .firesOnRecordUpdate,
-                                                               .firesOnRecordDeletion])
-            let recordZoneName = "com.apple.coredata.cloudkit.zone"
-            let recordZone = CKRecordZone(zoneName: recordZoneName)
-            ckSubscription.zoneID = recordZone.zoneID
-            // 通知設定
-            let notification = CKSubscription.NotificationInfo()
-            notification.shouldSendContentAvailable = true
-            // 通知されるデータを設定
-            notification.desiredKeys = ["CD_name", "CD_id", "CD_notificationDate"]
-            ckSubscription.notificationInfo = notification
-            // iCloudアカウントのチェック
-            CKContainer.default().accountStatus { status, error in
-                if let error = error {
-                    print("iCloudアカウントの状態確認に失敗: \(error.localizedDescription)")
+            Task {
+                // データベース
+                let containerIdentifier = "iCloud.InventoryApp-okubo"
+                let ckContainer = CKContainer(identifier: containerIdentifier)
+                let cloudDatabase = ckContainer.privateCloudDatabase
+                // レコードゾーン
+                let recordZoneName = "com.apple.coredata.cloudkit.zone"
+                let recordZone = CKRecordZone(zoneName: recordZoneName)
+                // データベースにあるレコードゾーンを全て取得
+                let zones = try await cloudDatabase.allRecordZones()
+                for zone in zones {
+                    // デフォルトゾーンだけを削除する
+                    if zone.zoneID == recordZone.zoneID {
+                        print("保持するゾーン：　\(zone)")
+                    } else {
+                        try await cloudDatabase.deleteRecordZone(withID: zone.zoneID)
+                        print("不要なレコードゾーン削除：　\(zone)")
+                    }
                 }
-                // iCloudアカウントが利用可能な場合にサブスクリプションを作成する
-                if status == .available {
-                    // データベースにサブスクリプションを登録
-                    cloudDatabase.save(ckSubscription) { subscription, error in
-                        if let error = error {
-                            print("サブスクリプション失敗： \(error.localizedDescription)")
-                        } else {
-                            print("サブスクリプション開始： \(String(describing: subscription))")
-                            // ユーザーデフォルト更新
-                            UserDefaults.standard.set(true, forKey: "didCreateQuerySubscription")
+                // cloud変更のサブスクリプション作成
+                let subscriptionID = "com.apple.coredata.cloudkit.private.subscription"
+                let ckSubscription = CKQuerySubscription(recordType: "CD_Item",
+                                                         predicate: NSPredicate(value: true),
+                                                         subscriptionID: subscriptionID,
+                                                         options: [.firesOnRecordCreation,
+                                                                   .firesOnRecordUpdate,
+                                                                   .firesOnRecordDeletion])
+                ckSubscription.zoneID = recordZone.zoneID
+                // 通知設定
+                let notification = CKSubscription.NotificationInfo()
+                notification.shouldSendContentAvailable = true
+                // 通知されるデータを設定
+                notification.desiredKeys = ["CD_name", "CD_id", "CD_notificationDate"]
+                ckSubscription.notificationInfo = notification
+                // iCloudアカウントのチェック
+                CKContainer.default().accountStatus { status, error in
+                    if let error = error {
+                        print("iCloudアカウントの状態確認に失敗: \(error.localizedDescription)")
+                    }
+                    // iCloudアカウントが利用可能な場合にサブスクリプションを作成する
+                    if status == .available {
+                        // データベースにサブスクリプションを登録
+                        cloudDatabase.save(ckSubscription) { subscription, error in
+                            if let error = error {
+                                print("サブスクリプション失敗： \(error.localizedDescription)")
+                            } else {
+                                print("サブスクリプション開始： \(String(describing: subscription))")
+                                // ユーザーデフォルト更新
+                                UserDefaults.standard.set(true, forKey: "didCreateQuerySubscription")
+                            }
                         }
                     }
                 }
-            }
+            }// Task
         } else {
             print("サブスクリプション作成済み")
         }

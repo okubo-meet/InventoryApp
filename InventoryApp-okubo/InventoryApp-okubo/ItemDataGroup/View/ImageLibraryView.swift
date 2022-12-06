@@ -20,7 +20,7 @@ struct ImageLibraryView: View {
     private let gridSize = UIScreen.main.bounds.width / 3.5
     // MARK: - View
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 // 背景色
                 Color.backgroundGray.ignoresSafeArea()
@@ -72,7 +72,7 @@ struct ImageLibraryView: View {
                     }
                 }
             }// ZStack
-        }// NavigationView
+        }// NavigationStack
     }// body
 }
 

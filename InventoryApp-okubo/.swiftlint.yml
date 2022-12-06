@@ -8,3 +8,5 @@ disabled_rules:
  - identifier_name
  # 関数本体の長さ違反
  - function_body_length
+ # 一行の長さ
+ - line_length

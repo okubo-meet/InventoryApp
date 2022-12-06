@@ -9,6 +9,15 @@ import SwiftUI
 import AVFoundation
 
 class CameraManager {
+    /// カメラのアクセス許可を確認する文字列を返す関数
+    static func accessText() -> String {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        if status == .authorized {
+            return "使用可能"
+        } else {
+            return "使用不可"
+        }
+    }
     /// カメラのアクセス許可を確認して拒否されているときアラートを返す関数
     static func cameraRequest(viewController: UIViewController, dismiss: DismissAction) {
         // 非同期処理

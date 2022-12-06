@@ -33,6 +33,8 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     private let captureSession = AVCaptureSession()
     // カメラ映像のプレビューレイヤー
     private let previewLayer = AVCaptureVideoPreviewLayer()
+    // カメラセットアップとフレームキャプチャを処理する為のDispathQueue
+    private let sessionQueue = DispatchQueue(label: "camera_frame_processing_queue")
     // 商品検索終了時の振動のインスタンス
     private let finishImpact = UINotificationFeedbackGenerator()
     // 楽天APIを扱うクラス
@@ -164,11 +166,13 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
         let videoDataOutput = AVCaptureVideoDataOutput()
         // AVCaptureVideoDataOutputSampleBufferDelegateを呼び出す設定
         videoDataOutput.setSampleBufferDelegate(context.coordinator,
-                                                queue: DispatchQueue(label: "camera_frame_processing_queue"))
+                                                queue: sessionQueue)
         // 映像からメタデータを出力できるよう設定
         captureSession.addOutput(videoDataOutput)
-        // キャプチャーセッション開始
-        captureSession.startRunning()
+        // キャプチャーセッション開始(セッション開始はバックグラウンドで行うよう警告がでたので修正)
+        sessionQueue.async {
+            captureSession.startRunning()
+        }
         return viewController
     }
     // 画面更新時
@@ -242,7 +246,9 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
             dismiss()
         })
         let continuation = UIAlertAction(title: "続ける", style: .default, handler: { _ in
-            self.captureSession.startRunning()
+            sessionQueue.async {
+                self.captureSession.startRunning()
+            }
             self.guideLabel.text = "バーコードを写してください"
         })
         alert.addAction(ok)
@@ -258,7 +264,9 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     private func failureAlert() {
         let alert = UIAlertController(title: "商品が見つかりませんでした", message: "楽天市場では扱っていない可能性があります。", preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default, handler: { _ in
-            self.captureSession.startRunning()
+            sessionQueue.async {
+                self.captureSession.startRunning()
+            }
             self.guideLabel.text = "バーコードを写してください"
         })
         alert.addAction(ok)
@@ -271,7 +279,9 @@ struct BarcodeReaderView: UIViewControllerRepresentable {
     private func errorAlert() {
         let alert = UIAlertController(title: "エラーが発生しました", message: "通信環境をご確認のうえ、再度実行してください。", preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default, handler: { _ in
-            self.captureSession.startRunning()
+            sessionQueue.async {
+                self.captureSession.startRunning()
+            }
             self.guideLabel.text = "バーコードを写してください"
         })
         alert.addAction(ok)

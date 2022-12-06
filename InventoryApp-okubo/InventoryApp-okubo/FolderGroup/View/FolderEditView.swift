@@ -37,14 +37,15 @@ struct FolderEditView: View {
     private let notificationManager = NotificationManager()
     // MARK: - View
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section {
                     HStack {
-                        Text("フォルダ名")
+                        Text("フォルダ名:")
                         TextField("入力してください", text: $editName)
                             .textFieldStyle(.roundedBorder)
                             .focused($focusState)
+                            .fontWeight(.medium)
                     }
                     Picker("タイプ", selection: $editStock, content: {
                         Text("在庫リスト").tag(true)
@@ -82,6 +83,7 @@ struct FolderEditView: View {
                             Text("このフォルダは削除及び、タイプ変更できません。")
                             Text("各タイプのフォルダが１つ以上存在している必要があります。")
                         }
+                        .fontWeight(.medium)
                     }
                 }
             }// Form
@@ -130,17 +132,15 @@ struct FolderEditView: View {
                     .disabled(editName == "" || isNoChange())// フォルダ名が無いか、どの項目にも変更がない場合無効化
                 })
                 // キーボードを閉じるボタン
-                ToolbarItem(placement: .keyboard, content: {
-                    HStack {
-                        Spacer()
-                        Button("閉じる") {
-                            focusState = false
-                        }
-                        .foregroundColor(.blue)
+                ToolbarItemGroup(placement: .keyboard, content: {
+                    Spacer()
+                    Button("閉じる") {
+                        focusState = false
                     }
+                    .foregroundColor(.blue)
                 })
             })// toolbar
-        }// NavigationView
+        }// NavigationStack
         .onAppear {
             // 入力欄にIDが一致したフォルダの値を代入する
             if let index = folderIndex() {
@@ -205,6 +205,8 @@ struct FolderEditView: View {
                 // 通知を削除
                 notificationManager.removeNotification(identifier: identifier)
             }
+            // 商品データ削除
+            context.delete(item)
         }
         // フォルダ削除
         context.delete(folders[index])

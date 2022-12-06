@@ -24,32 +24,42 @@ struct RegisterRowView: View {
                 .border(Color.gray, width: 1)
             VStack {
                 Spacer()
-                if itemData.name == "" {
-                    // 商品名に入力がないとき
-                    Text("商品名がありません")
-                        .font(.body)
-                        .fontWeight(.semibold)
-                } else {
-                    // 商品名
-                    Text(itemData.name)
-                        .font(.body)
-                        .fontWeight(.semibold)
-                }
+                Text(itemNameText())
+                    .font(.body)
+                    .fontWeight(.semibold)
                 Spacer()
-                if let folderName = itemData.folder?.name {
-                    Text("登録先：" + folderName)
+                HStack {
+                    Text("登録先：" + folderText())
                         .font(.callout)
-                } else {
-                    Text("登録先: なし")
-                        .font(.callout)
-                }
-            }
+                        .fontWeight(.medium)
+                        .padding(.leading)
+                    Spacer()
+                }// HStack
+            }// VStack
             Spacer()
             // 個数
             Text("×\(itemData.numberOfItems)")
+                .font(.body)
+                .fontWeight(.medium)
         }
     }
     // MARK: - メソッド
+    // 商品名の有無を判定して文字列を返す関数
+    private func itemNameText() -> String {
+        if itemData.name == "" {
+            return "商品名がありません"
+        } else {
+            return itemData.name
+        }
+    }
+    // フォルダ名を返す関数
+    private func folderText() -> String {
+        if let folderName = itemData.folder?.name {
+            return folderName
+        } else {
+            return "なし"
+        }
+    }
 }
 
 struct RegisterRowView_Previews: PreviewProvider {
