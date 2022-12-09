@@ -330,13 +330,18 @@ struct ItemDataView: View {
         item.folder = itemData.folder
         // 登録日も更新
         item.registrationDate = Date()
-        // 通知日に応じて通知を編集
-        if item.notificationDate == nil {
-            // 通知削除
-            notificationManager.removeNotification(item: item)
-        } else {
-            // 通知作成/上書き
-            notificationManager.makeNotification(item: item)
+        // ローカル通知の識別ID
+        if let identifier = item.id?.uuidString {
+            // 通知日に応じて通知を編集
+            if item.notificationDate == nil {
+                // 通知削除
+                notificationManager.removeNotification(identifier: identifier)
+            } else {
+                // 通知作成/上書き
+                notificationManager.makeNotification(name: item.name!,
+                                                     notificationDate: item.notificationDate!,
+                                                     identifier: identifier)
+            }
         }
         // 保存
         do {

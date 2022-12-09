@@ -191,9 +191,12 @@ struct RegisterView: View {
             item.registrationDate = newItem.registrationDate
             item.folder = newItem.folder
             // 通知日時が設定されている場合
-            if item.notificationDate != nil {
-                // 通知作成
-                notificationManager.makeNotification(item: item)
+            if let date = item.notificationDate,
+               let identifier = item.id?.uuidString {
+                    // 通知作成
+                    notificationManager.makeNotification(name: item.name!,
+                                                         notificationDate: date,
+                                                         identifier: identifier)
             }
         }
         do {

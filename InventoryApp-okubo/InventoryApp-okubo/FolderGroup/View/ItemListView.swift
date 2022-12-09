@@ -98,8 +98,11 @@ struct ItemListView: View {
             // 削除するデータ
             let removeItem = folderItems(items: folder.items)[index]
             print("削除するデータ：\(String(describing: removeItem.name))")
-            // 通知を削除
-            notificationManager.removeNotification(item: removeItem)
+            // ローカル通知の識別ID
+            if let identifier = removeItem.id?.uuidString {
+                // 通知を削除
+                notificationManager.removeNotification(identifier: identifier)
+            }
             // データを削除する
             context.delete(removeItem)
         }
