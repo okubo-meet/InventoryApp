@@ -18,21 +18,24 @@ struct NoFolderView: View {
                   animation: .default)
     private var folders: FetchedResults<Folder>
     // iCloudのデータをロード中の判定
-    @State private var importing = false
-    // iCloudの同期状態を通知するパブリッシャー
-    @State private var publisher = NotificationCenter.default.publisher(for: NSPersistentCloudKitContainer.eventChangedNotification)
+//    @State private var importing = false
+//    // iCloudの同期状態を通知するパブリッシャー
+//    @State private var publisher = NotificationCenter.default.publisher(for: NSPersistentCloudKitContainer.eventChangedNotification)
+    // iCloudの同期イベントを通知するクラス
+    @ObservedObject var eventManager = EventManager()
     // MARK: - View
     var body: some View {
         VStack {
             Spacer()
             // 同期中の表示
-            if importing {
+            if eventManager.isImporting {
                 Text("iCloudに同期中…")
                     .font(.title)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.center)
                     .padding(.bottom)
                 ProgressView()
+                    .tint(.orange)
             } else {
                 Text("フォルダがありません。")
                     .font(.title)
@@ -60,19 +63,19 @@ struct NoFolderView: View {
         .frame(minWidth: 0, maxWidth: .infinity,
                minHeight: 0, maxHeight: .infinity, alignment: .center)
         // 同期ステータスが変更された時の処理
-        .onReceive(publisher) { notification in
-            if let userInfo = notification.userInfo {
-                if let event = userInfo["event"] as? NSPersistentCloudKitContainer.Event {
-                    if event.type == .import {
-                        // データのインポート中
-                        importing = true
-                    } else {
-                        // 同期なし or データのインポート終了
-                        importing = false
-                    }
-                }
-            }
-        }
+//        .onReceive(publisher) { notification in
+//            if let userInfo = notification.userInfo {
+//                if let event = userInfo["event"] as? NSPersistentCloudKitContainer.Event {
+//                    if event.type == .import {
+//                        // データのインポート中
+//                        importing = true
+//                    } else {
+//                        // 同期なし or データのインポート終了
+//                        importing = false
+//                    }
+//                }
+//            }
+//        }
     }
     // MARK: - メソッド
     // フォルダの初期値を設定する関数（アプリ初回起動を想定）

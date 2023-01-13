@@ -29,6 +29,8 @@ struct ItemDataView: View {
     private var items: FetchedResults<Item>
     // 表示するデータ
     @Binding var itemData: ItemData
+    // 商品名入力欄で扱う文字列
+    @State private var itemName = ""
     // 在庫か買い物かの判定
     @State private var isStock = true
     // 編集可能状態の切り替えフラグ
@@ -82,7 +84,7 @@ struct ItemDataView: View {
                         // 編集可能な場合のみ表示
                         if isEditing {
                             // 画像追加ボタン
-                            AddImageButton(itemData: $itemData)
+                            AddImageButton(itemData: $itemData, itemName: $itemName)
                         }
                     }// VStack
                     Spacer()
@@ -90,9 +92,12 @@ struct ItemDataView: View {
                 // 商品名
                 HStack {
                     Text("商品名:")
-                    TextField("入力してください（必須）", text: $itemData.name)
+                    TextField("入力してください（必須）", text: $itemName)
                         .disabled(isEditing == false)
                         .focused($focusState)
+                        .onChange(of: itemName, perform: { value in
+                            itemData.name = value
+                        })
                 }
                 // 期限と通知は在庫リストのみ表示
                 if isStock {
@@ -185,6 +190,7 @@ struct ItemDataView: View {
                     // 変更されたデータを元に戻す
                     isStock = items[index].folder!.isStock
                     itemData = changeCancel(item: items[index])
+                    itemName = itemData.name
                 }
             }
             Button("保存") {
@@ -204,9 +210,7 @@ struct ItemDataView: View {
             Text("この状態で保存しますか？")
         })
         // 保存完了アラート
-        .alert("変更を保存しました", isPresented: $savedAlert, actions: {
-            // 処理なし
-        }, message: {
+        .alert("変更を保存しました", isPresented: $savedAlert, actions: {}, message: {
             Text("登録日も更新されました。")
         })
         // タイトル
@@ -232,21 +236,22 @@ struct ItemDataView: View {
                             isEditing.toggle()
                         }
                     }
+                    .disabled(itemName == "") // 商品名が空欄の場合は保存できない
                 }
             })
             // キーボードを閉じるボタン
-            ToolbarItem(placement: .keyboard, content: {
-                HStack {
-                    Spacer()
-                    Button("閉じる") {
-                        focusState = false
-                    }
-                    .foregroundColor(.blue)
+            ToolbarItemGroup(placement: .keyboard, content: {
+                Spacer()
+                Button("閉じる") {
+                    focusState = false
                 }
+                .foregroundColor(.blue)
             })
         })// toolbar
         // 画面起動時
         .onAppear {
+            // TextFieldに商品名を代入
+            itemName = itemData.name
             // 在庫リストかどうかの判定
             if let folderType = itemData.folder?.isStock {
                 isStock = folderType

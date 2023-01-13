@@ -13,12 +13,12 @@ struct FolderView: View {
     @Environment(\.managedObjectContext) private var context
     // 在庫リストのフォルダのみ取得
     @FetchRequest(entity: Folder.entity(),
-                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.id, ascending: false)],
+                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.name, ascending: false)],
                   predicate: NSPredicate(format: "isStock == %@", NSNumber(value: true)),
                   animation: .default) private var stockFolders: FetchedResults<Folder>
     // 買い物リストのフォルダのみ取得
     @FetchRequest(entity: Folder.entity(),
-                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.id, ascending: false)],
+                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.name, ascending: false)],
                   predicate: NSPredicate(format: "isStock == %@", NSNumber(value: false)),
                   animation: .default) private var buyFolders: FetchedResults<Folder>
     // 編集モードのフラグ
@@ -29,7 +29,7 @@ struct FolderView: View {
     @State var folderID: UUID?
     // MARK: - View
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 Form {
                     // 在庫リストのフォルダ
@@ -61,6 +61,7 @@ struct FolderView: View {
                 FolderEditView(folderID: $folderID)
             })
             .navigationTitle(titleText())
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 // 編集ボタン
                 ToolbarItem(placement: .navigationBarTrailing, content: {
@@ -78,20 +79,19 @@ struct FolderView: View {
                     .disabled(stockFolders.isEmpty && buyFolders.isEmpty)
                 })
                 // 新規作成ボタン
-                ToolbarItem(placement: .bottomBar, content: {
+                ToolbarItemGroup(placement: .bottomBar, content: {
                     if isEditing {
-                        HStack {
-                            Spacer()
-                            Button("新規フォルダ作成") {
-                                // フォルダ設定画面を呼び出す
-                                folderID = nil
-                                showSheet.toggle()
-                            }
+                        Spacer()
+                        Button("新規フォルダ作成") {
+                            // フォルダ設定画面を呼び出す
+                            folderID = nil
+                            showSheet.toggle()
                         }
+                        .font(.headline)
                     }
                 })
             }// toolbar
-        }// NavigationView
+        }// NavigationStack
     }
     // MARK: - メソッド
     // navigationTitleの文字列を返す関数

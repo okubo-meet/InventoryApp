@@ -27,45 +27,65 @@ struct ListRowView: View {
                 .background(Color.white)
                 .border(Color.gray, width: 1)
             VStack {
+                Spacer()
                 // 商品名
                 if let itemName = item.name {
                     Text(itemName)
-                        .fontWeight(.bold)
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity,
-                               alignment: .leading)
+                        .font(.body)
+                        .fontWeight(.semibold)
                 }
-                if isStock {
-                    // 在庫リストの表示
-                    Text("期限：" + dateText(date: item.deadLine))
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                } else {
-                    // 買い物リストの表示
-                    Text("登録日：" + dateText(date: item.registrationDate))
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                Spacer()
+                HStack {
+                    if isStock {
+                        // 在庫リストの表示
+                        Text("期限：" + dateText(date: item.deadLine))
+                            .font(.callout)
+                            .fontWeight(.regular)
+                            .foregroundColor(deadLineOver() ? .red : .primary)
+                    } else {
+                        // 買い物リストの表示
+                        Text("登録日：" + dateText(date: item.registrationDate))
+                            .font(.callout)
+                            .fontWeight(.medium)
+                    }
+                    Spacer()
                 }
             }// VStack
             Spacer()
             VStack {
+                // 商品の状態
                 if isStock {
                     if let itemStatus = item.status {
                         // 在庫リストの表示
                         Text(itemStatus)
+                            .font(.caption)
+                            .fontWeight(.medium)
                             .foregroundColor(ItemStatus(rawValue: itemStatus)?.toStatusColor())
+                            .multilineTextAlignment(.trailing)
                     }
                 } else {
                     // 買い物リストの表示
                     Text(Urgency(isHurry: item.isHurry).rawValue)
+                        .font(.caption)
+                        .fontWeight(.medium)
                         .foregroundColor(Urgency(isHurry: item.isHurry).color())
                 }
                 Spacer()
-                // 個数
-                Text("×\(item.numberOfItems)")
+                HStack {
+                    // 個数
+                    Text("×\(item.numberOfItems)")
+                        .font(.body)
+                        .fontWeight(.medium)
+                    // 画面遷移を表すアイコン
+                    Image(systemName: "chevron.right")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                }// HStack
+                .padding(.leading)
                 Spacer()
                 Spacer()
             }// VStack
-            .padding(.trailing)
         }// HStack
-        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: rowHeight, alignment: .leading)
         .contentShape(Rectangle())
     }
     // MARK: - メソッド
@@ -79,6 +99,16 @@ struct ListRowView: View {
         dateFormatter.dateStyle = .medium
         dateFormatter.dateFormat = "yyyy/MM/dd"
         return dateFormatter.string(from: date)
+    }
+    // 期限表示の色を切り替えるBoolを返す関数
+    private func deadLineOver() -> Bool {
+        // 期限が現在もしくは過ぎている場合trueを返す
+        if let deadLine = item.deadLine {
+            if deadLine <= Date() {
+                return true
+            }
+        }
+        return false
     }
 }
 

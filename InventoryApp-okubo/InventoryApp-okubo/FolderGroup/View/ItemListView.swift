@@ -13,10 +13,12 @@ struct ItemListView: View {
     @Environment(\.managedObjectContext) private var context
     // どのカテゴリのリストかを受け取る変数
     @ObservedObject var folder: Folder
+    // リストに表示するデータ
+    @State private var listItems: [Item] = []
     // 遷移先で表示するデータのインデックス番号
     @State private var indexNum = 0
     // リストから遷移するフラグ
-    @State private var isActive = false
+    @State private var isPresented = false
     // 遷移先に渡す商品データ
     @State private var selectItemData = ItemData()
     // 通知を扱うクラスのインスタンス
@@ -26,27 +28,21 @@ struct ItemListView: View {
         ZStack {
             VStack {
                 List {
-                    ForEach(folderItems(items: folder.items)) { item in
-                        HStack {
-                            // 同じフォルダに登録されたデータリスト
-                            ListRowView(item: item, isStock: folder.isStock)
-                                .onTapGesture {
-                                    // 遷移先で表示するデータを代入
-                                    selectItemData = setItemData(item: item)
-                                    // 画面遷移
-                                    isActive = true
-                                }
-                            // 画面遷移を表すアイコン
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.gray)
-                        }// HStack
+                    ForEach(listItems) { item in
+                        // 同じフォルダに登録されたデータリスト
+                        ListRowView(item: item, isStock: folder.isStock)
+                            .onTapGesture {
+                                // 遷移先で表示するデータを代入
+                                selectItemData = setItemData(item: item)
+                                // 画面遷移
+                                isPresented = true
+                            }
                     }// ForEach
                     .onDelete(perform: removeItem)
                 }// List
-                .listStyle(.plain)
             }// VStack
             // 商品データが無い場合の表示
-            if folderItems(items: folder.items).isEmpty {
+            if listItems.isEmpty {
                 VStack {
                     Spacer()
                     Text("データがありません")
@@ -54,27 +50,47 @@ struct ItemListView: View {
                         .foregroundColor(.gray)
                     Spacer()
                 }
-            } else {
-                // 商品データがある場合のみリンクを生成
-                NavigationLink(destination: ItemDataView(itemData: $selectItemData,
-                                                         isFolderItem: true), isActive: $isActive) {
-                    EmptyView()
-                }
             }
         }// ZStack
+        // 画面起動時
+        .onAppear {
+            // リストにソートしたデータを代入
+            listItems = folderItems(items: folder.items)
+        }
         .navigationTitle(navigationTitleString())
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.large)
+        // 遷移先
+        .navigationDestination(isPresented: $isPresented) {
+            ItemDataView(itemData: $selectItemData, isFolderItem: true)
+        }
     }
     // MARK: - メソッド
     // フォルダ名から商品リストを検索して返す関数
     private func folderItems(items: NSSet?) -> [Item] {
+        var sortedItems: [Item] = []
         // NSSet? を [Item]に変換
         if let setItems = items as? Set<Item> {
-            // 日付でソートした配列を返す
-            return setItems.sorted(by: {$0.registrationDate! < $1.registrationDate!})
-        } else {
-            return []
+            // 在庫データの場合
+            if folder.isStock {
+                // 期限で降順にソート（nilは後ろ）
+                sortedItems = setItems.sorted { first, second in
+                    if let firstDate = first.deadLine {
+                        if second.deadLine == nil {
+                            return true
+                        } else if second.deadLine! > firstDate {
+                            return true
+                        } else if second.deadLine! < firstDate {
+                            return false
+                        }
+                    }
+                    return false
+                }
+            } else {
+                // 登録した日付でソートした配列を返す
+                sortedItems = setItems.sorted(by: {$0.registrationDate! < $1.registrationDate!})
+            }
         }
+        return sortedItems
     }
     // Itemの値をItemDataに変換して返す関数
     private func setItemData(item: Item) -> ItemData {
@@ -96,13 +112,15 @@ struct ItemListView: View {
         // IndexSetからIndex番号を取得
         for index in offsets {
             // 削除するデータ
-            let removeItem = folderItems(items: folder.items)[index]
+            let removeItem = listItems[index]
             print("削除するデータ：\(String(describing: removeItem.name))")
             // ローカル通知の識別ID
             if let identifier = removeItem.id?.uuidString {
                 // 通知を削除
                 notificationManager.removeNotification(identifier: identifier)
             }
+            // リストから削除
+            listItems.remove(at: index)
             // データを削除する
             context.delete(removeItem)
         }

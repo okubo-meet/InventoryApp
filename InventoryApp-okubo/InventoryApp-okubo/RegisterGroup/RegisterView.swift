@@ -32,7 +32,7 @@ struct RegisterView: View {
     private let maxItems = 10
     // MARK: - View
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 // メニューバー
                 HStack {
@@ -43,6 +43,8 @@ struct RegisterView: View {
                             addNewItem()
                         }
                     }
+                    .font(.title3)
+                    .fontWeight(.medium)
                     .disabled(newItems.count == maxItems || folders.isEmpty)
                     Spacer()
                     // バーコードリーダー呼び出しボタン
@@ -61,6 +63,8 @@ struct RegisterView: View {
                     }, label: {
                         Image(systemName: "barcode.viewfinder")
                     })
+                    .font(.title3)
+                    .fontWeight(.medium)
                     .disabled(newItems.count == maxItems || folders.isEmpty)
                     Spacer()
                     // 登録ボタン
@@ -73,6 +77,8 @@ struct RegisterView: View {
                             noNameAlert.toggle()
                         }
                     }
+                    .font(.title3)
+                    .fontWeight(.medium)
                     .disabled(newItems.isEmpty)
                     Spacer()
                 }// HStack
@@ -81,8 +87,9 @@ struct RegisterView: View {
                         // 新規作成データリスト
                         List {
                             ForEach(0..<newItems.count, id: \.self) { index in
-                                NavigationLink(destination: ItemDataView(itemData: $newItems[index],
-                                                                         isFolderItem: false)) {
+                                NavigationLink {
+                                    ItemDataView(itemData: $newItems[index], isFolderItem: false)
+                                } label: {
                                     RegisterRowView(itemData: newItems[index])
                                 }
                             }
@@ -105,8 +112,11 @@ struct RegisterView: View {
                                     .font(.title)
                                     .padding(.bottom)
                                 Text("「作成」を押してデータを作成する。")
-                                Text(Image(systemName: "barcode.viewfinder")) + Text("バーコードを読み取って作成する。")
+                                    .font(.body)
+                                Text(Image(systemName: "barcode.viewfinder")).font(.body) + Text("バーコードを読み取って作成する。")
+                                    .font(.body)
                                 Text("データは左スワイプで削除できる。")
+                                    .font(.body)
                                 Spacer()
                             }
                             .foregroundColor(.gray)
@@ -124,9 +134,7 @@ struct RegisterView: View {
                     }
                 }
             })
-            .alert("商品名のないデータがあります", isPresented: $noNameAlert, actions: {
-                // 処理無し
-            }, message: {
+            .alert("商品名のないデータがあります", isPresented: $noNameAlert, actions: {}, message: {
                 Text("商品名を設定するか、データを削除してください")
             })
             // MARK: - シート
@@ -151,7 +159,7 @@ struct RegisterView: View {
             // MARK: - ナビゲーションバー
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("商品登録")
-        }
+        }// NavigationStack
     }
     // MARK: - メソッド
     // ForEachの.onDeleteに渡す関数
@@ -169,7 +177,7 @@ struct RegisterView: View {
         var newItem = ItemData()
         // フォルダの初期値設定
         newItem.folder = newItemFolder()
-        print("\(newItem)")
+//        print("\(newItem)")
         // 配列に加える
         newItems.append(newItem)
     }

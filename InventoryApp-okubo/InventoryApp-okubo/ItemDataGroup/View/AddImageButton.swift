@@ -11,6 +11,8 @@ struct AddImageButton: View {
     // MARK: - プロパティ
     // 編集する商品データ
     @Binding var itemData: ItemData
+    // テキストフィールドで扱う文字列
+    @Binding var itemName: String
     // ダイアログ表示トリガー
     @State private var showDialog = false
     // バーコードリーダー表示トリガー
@@ -24,6 +26,7 @@ struct AddImageButton: View {
         Button("画像を設定する") {
             showDialog.toggle()
         }
+        .fontWeight(.medium)
         .foregroundColor(.orange)
         // ダイアログ
         .confirmationDialog("画像を追加", isPresented: $showDialog, titleVisibility: .visible) {
@@ -40,9 +43,12 @@ struct AddImageButton: View {
         } message: {
             Text("画像を追加する方法を選択してください")
         }
-        .sheet(isPresented: $showBarcodeReader) {
+        .sheet(isPresented: $showBarcodeReader, onDismiss: {
+            // バーコードリーダーを閉じた時、商品名をテキストフィールドに代入
+            itemName = itemData.name
+        }, content: {
             BarcodeReaderView(itemData: $itemData, isItemEdit: true)
-        }
+        })
         .sheet(isPresented: $showImagePicker) {
             ImagePickerView(itemData: $itemData)
         }
@@ -54,6 +60,6 @@ struct AddImageButton: View {
 
 struct AddImageButton_Previews: PreviewProvider {
     static var previews: some View {
-        AddImageButton(itemData: .constant(ItemData()))
+        AddImageButton(itemData: .constant(ItemData()), itemName: .constant(""))
     }
 }

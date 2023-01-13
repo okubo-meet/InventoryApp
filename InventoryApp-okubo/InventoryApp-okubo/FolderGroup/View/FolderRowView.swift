@@ -40,7 +40,9 @@ struct FolderRowView: View {
                 }
             })
         } else {
-            NavigationLink(destination: ItemListView(folder: folder)) {
+            NavigationLink {
+                ItemListView(folder: folder)
+            } label: {
                 HStack {
                     if let icon = folder.icon {
                         Image(systemName: icon)
