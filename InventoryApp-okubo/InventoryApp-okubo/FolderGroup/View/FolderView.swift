@@ -13,12 +13,12 @@ struct FolderView: View {
     @Environment(\.managedObjectContext) private var context
     // 在庫リストのフォルダのみ取得
     @FetchRequest(entity: Folder.entity(),
-                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.name, ascending: false)],
+                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.name, ascending: true)],
                   predicate: NSPredicate(format: "isStock == %@", NSNumber(value: true)),
                   animation: .default) private var stockFolders: FetchedResults<Folder>
     // 買い物リストのフォルダのみ取得
     @FetchRequest(entity: Folder.entity(),
-                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.name, ascending: false)],
+                  sortDescriptors: [NSSortDescriptor(keyPath: \Folder.name, ascending: true)],
                   predicate: NSPredicate(format: "isStock == %@", NSNumber(value: false)),
                   animation: .default) private var buyFolders: FetchedResults<Folder>
     // 編集モードのフラグ
