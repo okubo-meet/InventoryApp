@@ -46,7 +46,7 @@ struct ListRowView: View {
                         // 買い物リストの表示
                         Text("登録日：" + dateText(date: item.registrationDate))
                             .font(.callout)
-                            .fontWeight(.medium)
+                            .fontWeight(.regular)
                     }
                     Spacer()
                 }

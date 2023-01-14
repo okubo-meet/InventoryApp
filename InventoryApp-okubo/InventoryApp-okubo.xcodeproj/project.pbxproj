@@ -111,9 +111,7 @@
 		7F18DA8528111A30005472AC /* RegisterGroup */ = {
 			isa = PBXGroup;
 			children = (
-				7F47C30027D742D9006343B4 /* RegisterView.swift */,
-				7F46DCF02849D44800AB2715 /* RegisterRowView.swift */,
-				7F84416928FE3ADB001E06CE /* NoFolderView.swift */,
+				7FC5104929728F21000ACE89 /* View */,
 				7F4E51B12954A4DA006A5DF6 /* EventManager.swift */,
 			);
 			path = RegisterGroup;
@@ -231,6 +229,16 @@
 				7F70E1D427D1E55A00C483B9 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		7FC5104929728F21000ACE89 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7F47C30027D742D9006343B4 /* RegisterView.swift */,
+				7F46DCF02849D44800AB2715 /* RegisterRowView.swift */,
+				7F84416928FE3ADB001E06CE /* NoFolderView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		7FF9519D28814C9600F7F7C1 /* CoreData */ = {
