@@ -16,6 +16,8 @@ enum Icon: String, CaseIterable {
     case cart = "cart.fill"
     // フォークとナイフ
     case food = "fork.knife"
+    // マグカップ
+    case mug = "mug.fill"
     // 鞄
     case bag = "bag.fill"
     // ペン
