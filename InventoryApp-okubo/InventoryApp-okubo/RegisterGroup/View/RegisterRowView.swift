@@ -30,7 +30,7 @@ struct RegisterRowView: View {
                 Spacer()
                 HStack {
                     Text("登録先：" + folderText())
-                        .font(.callout)
+                        .font(.footnote)
                         .fontWeight(.medium)
                         .padding(.leading)
                     Spacer()

@@ -13,7 +13,7 @@ struct ItemListView: View {
     @Environment(\.managedObjectContext) private var context
     // どのカテゴリのリストかを受け取る変数
     @ObservedObject var folder: Folder
-    // リストに表示するデータ
+    // リストに表示するデータの配列
     @State private var listItems: [Item] = []
     // 遷移先で表示するデータのインデックス番号
     @State private var indexNum = 0
@@ -23,6 +23,49 @@ struct ItemListView: View {
     @State private var selectItemData = ItemData()
     // 通知を扱うクラスのインスタンス
     private let notificationManager = NotificationManager()
+    // フォルダ内の商品データの配列
+    private var folderItems: [Item] {
+        var sortedItems: [Item] = []
+        // NSSet? を [Item]に変換
+        if let setItems = folder.items as? Set<Item> {
+            // 在庫データの場合
+            if folder.isStock {
+                // 期限で降順にソート（nilは後ろ）
+                sortedItems = setItems.sorted { first, second in
+                    if let firstDate = first.deadLine {
+                        if second.deadLine == nil {
+                            return true
+                        } else if second.deadLine! > firstDate {
+                            return true
+                        } else if second.deadLine! < firstDate {
+                            return false
+                        }
+                    }
+                    return false
+                }
+            } else {
+                // 緊急性の高いものから並べる
+                sortedItems = setItems.sorted { first, second in
+                    // 緊急性が同じ場合は日付順
+                    if first.isHurry == second.isHurry {
+                        if first.registrationDate! < second.registrationDate! {
+                            return true
+                        } else {
+                            return false
+                        }
+                    } else {
+                        // 緊急性の高いものから並べる
+                        if first.isHurry {
+                            return true
+                        } else {
+                            return false
+                        }
+                    }
+                }
+            }
+        }
+        return sortedItems
+    }
     // MARK: - View
     var body: some View {
         ZStack {
@@ -40,6 +83,7 @@ struct ItemListView: View {
                     }// ForEach
                     .onDelete(perform: removeItem)
                 }// List
+                .listStyle(.plain)
             }// VStack
             // 商品データが無い場合の表示
             if listItems.isEmpty {
@@ -55,7 +99,7 @@ struct ItemListView: View {
         // 画面起動時
         .onAppear {
             // リストにソートしたデータを代入
-            listItems = folderItems(items: folder.items)
+            listItems = folderItems
         }
         .navigationTitle(navigationTitleString())
         .navigationBarTitleDisplayMode(.large)
@@ -65,33 +109,6 @@ struct ItemListView: View {
         }
     }
     // MARK: - メソッド
-    // フォルダ名から商品リストを検索して返す関数
-    private func folderItems(items: NSSet?) -> [Item] {
-        var sortedItems: [Item] = []
-        // NSSet? を [Item]に変換
-        if let setItems = items as? Set<Item> {
-            // 在庫データの場合
-            if folder.isStock {
-                // 期限で降順にソート（nilは後ろ）
-                sortedItems = setItems.sorted { first, second in
-                    if let firstDate = first.deadLine {
-                        if second.deadLine == nil {
-                            return true
-                        } else if second.deadLine! > firstDate {
-                            return true
-                        } else if second.deadLine! < firstDate {
-                            return false
-                        }
-                    }
-                    return false
-                }
-            } else {
-                // 登録した日付でソートした配列を返す
-                sortedItems = setItems.sorted(by: {$0.registrationDate! < $1.registrationDate!})
-            }
-        }
-        return sortedItems
-    }
     // Itemの値をItemDataに変換して返す関数
     private func setItemData(item: Item) -> ItemData {
         var data = ItemData()
