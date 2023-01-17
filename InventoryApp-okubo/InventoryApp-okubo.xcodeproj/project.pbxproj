@@ -523,7 +523,7 @@
 				INFOPLIST_FILE = "InventoryApp-okubo/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "うちの在庫";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSCameraUsageDescription = "カメラを使用します";
+				INFOPLIST_KEY_NSCameraUsageDescription = "このアプリは写真撮影・バーコード読み取り機能のためにカメラを使用します";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -562,7 +562,7 @@
 				INFOPLIST_FILE = "InventoryApp-okubo/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "うちの在庫";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSCameraUsageDescription = "カメラを使用します";
+				INFOPLIST_KEY_NSCameraUsageDescription = "このアプリは写真撮影・バーコード読み取り機能のためにカメラを使用します";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
