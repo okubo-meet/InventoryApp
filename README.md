@@ -11,6 +11,9 @@ iCloudに対応しているので、同じアカウントでログインして�
 ## 2.機能
 ### 商品登録
 #### データ作成・登録画面
+<kbd><img src="https://user-images.githubusercontent.com/53589421/213456867-c4c32a3b-1e56-4db0-a3f2-0aa30b33d538.PNG" /></kbd>
+<kbd><img src="https://user-images.githubusercontent.com/53589421/213458614-37a3814c-0d5e-473c-a436-cb9957581a6f.PNG" /></kbd>
+
 - "作成"ボタンで空のデータを生成し、それを編集することでデータを作成する。（最大10個）
 
 - バーコードのアイコンを押すとバーコードリーダーが起動し、読み取った商品の名前と画像が入ったデータが作成される。
