@@ -94,6 +94,7 @@ CoreDataモデル
 - Xcode 14.2
 - macOS Ventura 13.1
 - iOS16.0
+- CoreData + CloudKit
 
 ## 5.画像素材
 [フリーイラスト素材集 ジャパクリップ](https://japaclip.com/)
