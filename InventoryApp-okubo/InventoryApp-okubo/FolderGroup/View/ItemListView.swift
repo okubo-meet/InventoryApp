@@ -23,6 +23,8 @@ struct ItemListView: View {
     @State private var selectItemData = ItemData()
     // 通知を扱うクラスのインスタンス
     private let notificationManager = NotificationManager()
+    // 検索結果の配列
+    @State private var searchText = ""
     // フォルダ内の商品データの配列
     private var folderItems: [Item] {
         var sortedItems: [Item] = []
@@ -69,23 +71,34 @@ struct ItemListView: View {
     // MARK: - View
     var body: some View {
         ZStack {
-            VStack {
-                List {
-                    ForEach(listItems) { item in
-                        // 同じフォルダに登録されたデータリスト
-                        ListRowView(item: item, isStock: folder.isStock)
-                            .onTapGesture {
-                                // 遷移先で表示するデータを代入
-                                selectItemData = setItemData(item: item)
-                                // 画面遷移
-                                isPresented = true
-                            }
-                    }// ForEach
-                    .onDelete(perform: removeItem)
-                }// List
-                .listStyle(.plain)
-            }// VStack
-            // 商品データが無い場合の表示
+            List {
+                ForEach(searchResults, id: \.self) { item in
+                    // 同じフォルダに登録されたデータリスト
+                    ListRowView(item: item, isStock: folder.isStock)
+                        .onTapGesture {
+                            // 遷移先で表示するデータを代入
+                            selectItemData = setItemData(item: item)
+                            // 画面遷移
+                            isPresented = true
+                        }
+                }// ForEach
+                .onDelete(perform: removeItem)
+            }// List
+            .listStyle(.plain)
+            // 画面起動時
+            .onAppear {
+                // リストにソートしたデータを代入
+                listItems = folderItems
+            }
+            .navigationTitle(navigationTitleString())
+            .navigationBarTitleDisplayMode(.large)
+            // 遷移先
+            .navigationDestination(isPresented: $isPresented) {
+                ItemDataView(itemData: $selectItemData, isFolderItem: true)
+            }
+            // 検索バー
+            .searchable(text: $searchText)
+            
             if listItems.isEmpty {
                 VStack {
                     Spacer()
@@ -95,19 +108,17 @@ struct ItemListView: View {
                     Spacer()
                 }
             }
-        }// ZStack
-        // 画面起動時
-        .onAppear {
-            // リストにソートしたデータを代入
-            listItems = folderItems
-        }
-        .navigationTitle(navigationTitleString())
-        .navigationBarTitleDisplayMode(.large)
-        // 遷移先
-        .navigationDestination(isPresented: $isPresented) {
-            ItemDataView(itemData: $selectItemData, isFolderItem: true)
         }
     }
+    
+    var searchResults: [Item] {
+        if searchText.isEmpty {
+            return listItems
+        } else {
+            return listItems.filter { $0.name?.contains(searchText) ?? false }
+        }
+    }
+    
     // MARK: - メソッド
     // Itemの値をItemDataに変換して返す関数
     private func setItemData(item: Item) -> ItemData {
